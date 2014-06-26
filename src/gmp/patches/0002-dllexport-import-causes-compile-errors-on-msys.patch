@@ -1,0 +1,31 @@
+From 0946c0b14e1a3848e28d313adad771d7d95fdacf Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 26 Jun 2014 15:16:06 +0900
+Subject: [PATCH 2/2] dllexport/import causes compile errors on msys
+
+---
+ gmp-h.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/gmp-h.in b/gmp-h.in
+index 32f63d9..9c74121 100644
+--- a/gmp-h.in
++++ b/gmp-h.in
+@@ -102,9 +102,14 @@ see https://www.gnu.org/licenses/.  */
+    make use of that.  Probably more trouble than it's worth.  */
+ 
+ #if defined (__GNUC__)
++#if defined (__MSYS__)
++#define __GMP_DECLSPEC_EXPORT
++#define __GMP_DECLSPEC_IMPORT
++#else
+ #define __GMP_DECLSPEC_EXPORT  __declspec(__dllexport__)
+ #define __GMP_DECLSPEC_IMPORT  __declspec(__dllimport__)
+ #endif
++#endif
+ #if defined (_MSC_VER) || defined (__BORLANDC__)
+ #define __GMP_DECLSPEC_EXPORT  __declspec(dllexport)
+ #define __GMP_DECLSPEC_IMPORT  __declspec(dllimport)
+-- 
+2.0.0
+
