@@ -1,0 +1,25 @@
+From 7d8e0e83a7b044b64bd41b28acd758dfbb3d9988 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Mon, 30 Jun 2014 15:21:27 +0900
+Subject: [PATCH 4/4] Create missing stdint.h
+
+---
+ configure.ac | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/configure.ac b/configure.ac
+index e18e641..ba7c5f7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -231,6 +231,8 @@ PACKAGE_NAME="cloog-isl"
+ PACKAGE_CFLAGS="-DCLOOG_INT_GMP=1"
+ AX_CREATE_PKGCONFIG_INFO
+ 
++AX_CREATE_STDINT_H(include/stdint.h)
++
+ AC_CONFIG_FILES(Makefile test/Makefile)
+ AC_CONFIG_FILES(autoconf/Doxyfile)
+ AC_CONFIG_FILES(doc/Makefile)
+-- 
+2.0.0
+

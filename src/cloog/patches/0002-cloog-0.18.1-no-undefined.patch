@@ -1,0 +1,68 @@
+From 833c70688dbb93563da221eab6305ba9626b9164 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 26 Jun 2014 13:54:07 +0900
+Subject: [PATCH 2/4] cloog-0.18.1-no-undefined
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/cloog/cloog-0.18.1-no-undefined.patch
+---
+ Makefile.am     | 2 +-
+ Makefile.in     | 2 +-
+ isl/Makefile.am | 2 +-
+ isl/Makefile.in | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 49b413d..db3836f 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -90,7 +90,7 @@ SOURCES_CORE = \
+ AM_CPPFLAGS = -I. -I$(top_builddir)/include -I$(top_srcdir)/include
+ AM_CFLAGS = $(CFLAGS_WARN)
+ libcloog_isl_la_CPPFLAGS = -I. -I$(top_builddir)/include -I$(top_srcdir)/include @ISL_CPPFLAGS@ @OSL_CPPFLAGS@
+-libcloog_isl_la_LDFLAGS = -version-info @versioninfo@ \
++libcloog_isl_la_LDFLAGS = -version-info @versioninfo@ -no-undefined \
+ 	-rpath $(libdir) @ISL_LDFLAGS@ @OSL_LDFLAGS@
+ libcloog_isl_la_LIBADD = @ISL_LIBS@ @OSL_LIBS@ $(ISL_LA) $(OSL_LA)
+ libcloog_isl_la_SOURCES = \
+diff --git a/Makefile.in b/Makefile.in
+index a196935..6a8d48e 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -444,7 +444,7 @@ SOURCES_CORE = \
+ AM_CPPFLAGS = -I. -I$(top_builddir)/include -I$(top_srcdir)/include
+ AM_CFLAGS = $(CFLAGS_WARN)
+ libcloog_isl_la_CPPFLAGS = -I. -I$(top_builddir)/include -I$(top_srcdir)/include @ISL_CPPFLAGS@ @OSL_CPPFLAGS@
+-libcloog_isl_la_LDFLAGS = -version-info @versioninfo@ \
++libcloog_isl_la_LDFLAGS = -version-info @versioninfo@ -no-undefined \
+ 	-rpath $(libdir) @ISL_LDFLAGS@ @OSL_LDFLAGS@
+ 
+ libcloog_isl_la_LIBADD = @ISL_LIBS@ @OSL_LIBS@ $(ISL_LA) $(OSL_LA)
+diff --git a/isl/Makefile.am b/isl/Makefile.am
+index 834b7e8..d3c953a 100644
+--- a/isl/Makefile.am
++++ b/isl/Makefile.am
+@@ -154,7 +154,7 @@ EXTRA_libisl_la_SOURCES = \
+ 	isl_sample_piplib.h \
+ 	isl_piplib.c
+ libisl_la_LIBADD = @PIPLIB_LIBS@ @GMP_LIBS@
+-libisl_la_LDFLAGS = -version-info @versioninfo@ \
++libisl_la_LDFLAGS = -version-info @versioninfo@ -no-undefined \
+ 	@PIPLIB_LDFLAGS@ @GMP_LDFLAGS@
+ libisl_la_CPPFLAGS = $(INCLUDES) @PIPLIB_CPPFLAGS@ @GMP_CPPFLAGS@
+ 
+diff --git a/isl/Makefile.in b/isl/Makefile.in
+index 6aadc5e..f58ffde 100644
+--- a/isl/Makefile.in
++++ b/isl/Makefile.in
+@@ -645,7 +645,7 @@ EXTRA_libisl_la_SOURCES = \
+ 	isl_piplib.c
+ 
+ libisl_la_LIBADD = @PIPLIB_LIBS@ @GMP_LIBS@
+-libisl_la_LDFLAGS = -version-info @versioninfo@ \
++libisl_la_LDFLAGS = -version-info @versioninfo@ -no-undefined \
+ 	@PIPLIB_LDFLAGS@ @GMP_LDFLAGS@
+ 
+ libisl_la_CPPFLAGS = $(INCLUDES) @PIPLIB_CPPFLAGS@ @GMP_CPPFLAGS@
+-- 
+2.0.0
+

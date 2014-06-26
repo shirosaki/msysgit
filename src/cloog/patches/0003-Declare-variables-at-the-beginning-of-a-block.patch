@@ -1,0 +1,90 @@
+From e8eef71c483f7da63c49195f390e6839745b7c61 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Mon, 30 Jun 2014 15:08:16 +0900
+Subject: [PATCH 3/4] Declare variables at the beginning of a block
+
+This fixes compile errors with gcc 2.95.3.
+---
+ source/clast.c      | 10 +++++-----
+ source/isl/domain.c |  3 ++-
+ source/loop.c       |  8 +++++---
+ 3 files changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/source/clast.c b/source/clast.c
+index 78143c3..d98fcfb 100644
+--- a/source/clast.c
++++ b/source/clast.c
+@@ -1995,6 +1995,11 @@ void clast_filter(struct clast_stmt *node,
+     int num_next_stmts, num_next_loops, ret, *stmts_next;
+     struct clast_for **loops_next;
+ 
++    ClastFilterType filter_type = filter.filter_type;
++    const char *iter = filter.iter;
++    int nstmts_filter = filter.nstmts_filter;
++    const int *stmts_filter = filter.stmts_filter;
++
+     *loops = NULL;
+     *nloops = 0;
+     *nstmts = 0;
+@@ -2004,11 +2009,6 @@ void clast_filter(struct clast_stmt *node,
+         return;
+     }
+ 
+-    ClastFilterType filter_type = filter.filter_type;
+-    const char *iter = filter.iter;
+-    int nstmts_filter = filter.nstmts_filter;
+-    const int *stmts_filter = filter.stmts_filter;
+-
+     if (CLAST_STMT_IS_A(node, stmt_root)) {
+         // printf("root stmt\n");
+         struct clast_root *root = (struct clast_root *) node;
+diff --git a/source/isl/domain.c b/source/isl/domain.c
+index d11da7b..4182a04 100644
+--- a/source/isl/domain.c
++++ b/source/isl/domain.c
+@@ -535,10 +535,11 @@ static struct isl_basic_set *isl_basic_set_read_from_matrix(struct isl_ctx *ctx,
+ 	struct isl_basic_set *bset;
+ 	int i;
+ 	unsigned nrows, ncolumns;
++	int nvariables;
+ 
+ 	nrows = matrix->NbRows;
+ 	ncolumns = matrix->NbColumns;
+-	int nvariables = ncolumns - 2 - nparam;
++	nvariables = ncolumns - 2 - nparam;
+ 
+ 	dim = isl_space_set_alloc(ctx, nparam, nvariables);
+ 
+diff --git a/source/loop.c b/source/loop.c
+index 9592503..0259454 100644
+--- a/source/loop.c
++++ b/source/loop.c
+@@ -1806,10 +1806,10 @@ CloogLoop *cloog_loop_recurse(CloogLoop *loop,
+ void cloog_statement_get_fl(CloogStatement *s, int *f, int *l,
+         CloogOptions *options)
+ {
+-    if (s == NULL) return;
+-
+     int fs, ls;
+ 
++    if (s == NULL) return;
++
+     if (options->fs != NULL && options->ls != NULL) {
+         fs = options->fs[s->number-1];
+         ls = options->ls[s->number-1];
+@@ -1828,9 +1828,11 @@ void cloog_statement_get_fl(CloogStatement *s, int *f, int *l,
+ void cloog_loop_get_fl(CloogLoop *loop, int *f, int *l,
+         CloogOptions *options)
+ {
++    CloogBlock *block;
++
+     if (loop == NULL)   return;
+ 
+-    CloogBlock *block = loop->block;
++    block = loop->block;
+ 
+     if (block != NULL && block->statement != NULL) {
+         cloog_statement_get_fl(block->statement, f, l, options);
+-- 
+2.0.0
+
