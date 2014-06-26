@@ -1,0 +1,40 @@
+From f1e4268ddae6f9af06f74fd4c49e131ee277e7fe Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 26 Jun 2014 14:04:50 +0900
+Subject: [PATCH 2/3] isl-0.12.1-no-undefined
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/isl/isl-0.12.1-no-undefined.patch
+---
+ Makefile.am | 2 +-
+ Makefile.in | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 834b7e8..b0de267 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -155,7 +155,7 @@ EXTRA_libisl_la_SOURCES = \
+ 	isl_piplib.c
+ libisl_la_LIBADD = @PIPLIB_LIBS@ @GMP_LIBS@
+ libisl_la_LDFLAGS = -version-info @versioninfo@ \
+-	@PIPLIB_LDFLAGS@ @GMP_LDFLAGS@
++	@PIPLIB_LDFLAGS@ @GMP_LDFLAGS@ -no-undefined
+ libisl_la_CPPFLAGS = $(INCLUDES) @PIPLIB_CPPFLAGS@ @GMP_CPPFLAGS@
+ 
+ isl_test_CPPFLAGS = $(INCLUDES) @GMP_CPPFLAGS@
+diff --git a/Makefile.in b/Makefile.in
+index 6aadc5e..1ca45f2 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -646,7 +646,7 @@ EXTRA_libisl_la_SOURCES = \
+ 
+ libisl_la_LIBADD = @PIPLIB_LIBS@ @GMP_LIBS@
+ libisl_la_LDFLAGS = -version-info @versioninfo@ \
+-	@PIPLIB_LDFLAGS@ @GMP_LDFLAGS@
++	@PIPLIB_LDFLAGS@ @GMP_LDFLAGS@ -no-undefined
+ 
+ libisl_la_CPPFLAGS = $(INCLUDES) @PIPLIB_CPPFLAGS@ @GMP_CPPFLAGS@
+ isl_test_CPPFLAGS = $(INCLUDES) @GMP_CPPFLAGS@
+-- 
+2.0.0.msysgit.0
+

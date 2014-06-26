@@ -1,0 +1,26 @@
+From 834c647d976d51a3946628cfa863a7624f82d5ff Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Fri, 27 Jun 2014 16:13:04 +0900
+Subject: [PATCH 3/3] Fix error: field `p' has incomplete type
+
+isl_polynomial_private.h:26: field `p' has incomplete type
+---
+ isl_polynomial_private.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/isl_polynomial_private.h b/isl_polynomial_private.h
+index 7370731..1bc0ff5 100644
+--- a/isl_polynomial_private.h
++++ b/isl_polynomial_private.h
+@@ -23,7 +23,7 @@ struct isl_upoly_rec {
+ 	int n;
+ 
+ 	size_t size;
+-	struct isl_upoly *p[];
++	struct isl_upoly **p;
+ };
+ 
+ /* dim represents the domain space.
+-- 
+2.0.0.msysgit.0
+
