@@ -1,0 +1,40 @@
+From c89182ef6f1c30dc71321513a0b79ba6f0376d53 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Fri, 27 Jun 2014 02:08:40 +0900
+Subject: [PATCH 2/2] Add msys to config.guess and config.sub
+
+---
+ build-aux/config.guess | 3 +++
+ build-aux/config.sub   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/build-aux/config.guess b/build-aux/config.guess
+index 187cd54..6253f99 100644
+--- a/build-aux/config.guess
++++ b/build-aux/config.guess
+@@ -804,6 +804,9 @@ EOF
+     i*:CYGWIN*:*)
+ 	echo ${UNAME_MACHINE}-pc-cygwin
+ 	exit ;;
++    i*:MSYS*:*)
++	echo ${UNAME_MACHINE}-pc-msys
++	exit ;;
+     *:MINGW*:*)
+ 	echo ${UNAME_MACHINE}-pc-mingw32
+ 	exit ;;
+diff --git a/build-aux/config.sub b/build-aux/config.sub
+index 0ef29b0..e3caaa6 100644
+--- a/build-aux/config.sub
++++ b/build-aux/config.sub
+@@ -1315,7 +1315,7 @@ case $os in
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* | -cegcc* \
+-	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
++	      | -cygwin* | -msys* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-android* \
+ 	      | -linux-newlib* | -linux-uclibc* \
+ 	      | -uxpv* | -beos* | -mpeix* | -udk* \
+-- 
+1.9.4.msysgit.0
+
