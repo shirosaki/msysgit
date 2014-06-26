@@ -1,0 +1,66 @@
+From a52e1f9cf17dbecf44018dd56526bf9aff5c2bd1 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Fri, 27 Jun 2014 02:04:42 +0900
+Subject: [PATCH 1/2] m4-msys
+
+The patches in the source file.
+http://sourceforge.net/projects/mingw/files/MSYS/Extension/m4/m4-1.4.16-2/m4-1.4.16-2-msys-1.0.17-src.tar.lzma/download
+---
+ src/freeze.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/src/freeze.c b/src/freeze.c
+index bf47376..86c33ab 100644
+--- a/src/freeze.c
++++ b/src/freeze.c
+@@ -242,6 +242,17 @@ reload_frozen_state (const char *name)
+         }                                                       \
+     }                                                           \
+   while (character == '\n')
++#ifdef __MSYS__
++# define SKIP_CARRIAGE_RETURNS                                 \
++  do                                                           \
++    {                                                          \
++      while (character == '\r')                                \
++       GET_CHARACTER;                                          \
++    }                                                          \
++  while (0)
++#else /* ! __MSYS__ */
++# define SKIP_CARRIAGE_RETURNS do { } while (0)
++#endif /* ! __MSYS__ */
+ 
+ #define GET_STRING(i)                                                   \
+   do                                                                    \
+@@ -290,6 +301,7 @@ reload_frozen_state (const char *name)
+   else if (number[0] < 1)
+     M4ERROR ((EXIT_FAILURE, 0,
+               "ill-formed frozen file, version directive expected"));
++  SKIP_CARRIAGE_RETURNS;
+   VALIDATE ('\n');
+ 
+   GET_DIRECTIVE;
+@@ -321,12 +333,14 @@ reload_frozen_state (const char *name)
+           VALIDATE (',');
+           GET_CHARACTER;
+           GET_NUMBER (number[1], false);
++	  SKIP_CARRIAGE_RETURNS;
+           VALIDATE ('\n');
+ 
+           if (operation != 'D')
+             GET_STRING (0);
+           GET_STRING (1);
+           GET_CHARACTER;
++	  SKIP_CARRIAGE_RETURNS;
+           VALIDATE ('\n');
+ 
+           /* Act according to operation letter.  */
+@@ -394,5 +408,6 @@ reload_frozen_state (const char *name)
+ #undef GET_DIRECTIVE
+ #undef GET_NUMBER
+ #undef VALIDATE
++#undef SKIP_CARRIAGE_RETURNS
+ #undef GET_STRING
+ }
+-- 
+1.9.4.msysgit.0
+
