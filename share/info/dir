@@ -21,3 +21,6 @@ Individual utilities
 * libtool-invocation: (libtool)Invoking libtool.
                                                 Running the `libtool' script.
 * libtoolize: (libtool)Invoking libtoolize.     Adding libtool support.
+
+GNU libraries
+* gmp: (gmp).                   GNU Multiple Precision Arithmetic Library.
