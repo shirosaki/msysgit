@@ -1,0 +1,38 @@
+From 936cef35dd826bf68412c94f58d5ce7b6f3e9c54 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Mon, 30 Jun 2014 10:45:25 +0900
+Subject: [PATCH 4/4] libtool-2.4.2-include-process-h
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/libtool/libtool-2.4.2-include-process-h.patch
+---
+ libltdl/config/ltmain.m4sh | 1 +
+ libltdl/config/ltmain.sh   | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/libltdl/config/ltmain.m4sh b/libltdl/config/ltmain.m4sh
+index 50d1b36..85aa777 100644
+--- a/libltdl/config/ltmain.m4sh
++++ b/libltdl/config/ltmain.m4sh
+@@ -3376,6 +3376,7 @@ EOF
+ # include <unistd.h>
+ # include <stdint.h>
+ # ifdef __CYGWIN__
++#  include <process.h>
+ #  include <io.h>
+ # endif
+ #endif
+diff --git a/libltdl/config/ltmain.sh b/libltdl/config/ltmain.sh
+index 00ca858..7753c20 100644
+--- a/libltdl/config/ltmain.sh
++++ b/libltdl/config/ltmain.sh
+@@ -4163,6 +4163,7 @@ EOF
+ # include <unistd.h>
+ # include <stdint.h>
+ # ifdef __CYGWIN__
++#  include <process.h>
+ #  include <io.h>
+ # endif
+ #endif
+-- 
+2.0.0
+

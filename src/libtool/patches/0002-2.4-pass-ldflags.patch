@@ -1,0 +1,27 @@
+From 9bd2c987b364ada864ec7b966798c714786020bd Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Mon, 30 Jun 2014 10:43:24 +0900
+Subject: [PATCH 2/4] 2.4-pass-ldflags
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/libtool/2.4-pass-ldflags.patch
+---
+ libltdl/config/ltmain.m4sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libltdl/config/ltmain.m4sh b/libltdl/config/ltmain.m4sh
+index cce19e9..d4e6993 100644
+--- a/libltdl/config/ltmain.m4sh
++++ b/libltdl/config/ltmain.m4sh
+@@ -5101,7 +5101,8 @@ func_mode_link ()
+       # -O*, -flto*, -fwhopr*, -fuse-linker-plugin GCC link-time optimization
+       -64|-mips[0-9]|-r[0-9][0-9]*|-xarch=*|-xtarget=*|+DA*|+DD*|-q*|-m*| \
+       -t[45]*|-txscale*|-p|-pg|--coverage|-fprofile-*|-F*|@*|-tp=*|--sysroot=*| \
+-      -O*|-flto*|-fwhopr*|-fuse-linker-plugin)
++      -O*|-flto*|-fwhopr*|-fuse-linker-plugin|-fstack-protector*|-fgnu-tm| \
++      -shared-libgcc|-static-libgcc|-static-libgfortran|-static-libstdc++)
+         func_quote_for_eval "$arg"
+ 	arg="$func_quote_for_eval_result"
+         func_append compile_command " $arg"
+-- 
+2.0.0
+
