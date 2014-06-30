@@ -16,7 +16,7 @@ File: dir,	Node: Top	This is the top of the INFO tree
 
 Individual utilities
 * aclocal: (automake)Invoking aclocal.          Generating aclocal.m4.
-* autoconf: (autoconf)autoconf Invocation.
+* autoconf-invocation: (autoconf)autoconf Invocation.
                                 How to create configuration scripts
 * autoheader: (autoconf)autoheader Invocation.
                                 How to create configuration templates
@@ -40,7 +40,7 @@ Software development
 * Automake: (automake).         Making GNU standards-compliant Makefiles.
 
 GNU organization
-* Standards: (standards).        GNU coding standards.
+* Standards: (standards).       GNU coding standards.
 
 GNU programming tools
 * Libtool: (libtool).           Generic shared library support script.

@@ -1,0 +1,5 @@
+/bin/ifnames
+/share/autoconf/Autom4te/Getopt.pm
+/share/autoconf/autoconf/go.m4
+/share/autoconf/autotest/specific.m4
+/share/autoconf/m4sugar/foreach.m4
