@@ -44,3 +44,6 @@ GNU organization
 
 GNU programming tools
 * Libtool: (libtool).           Generic shared library support script.
+
+Text creation and manipulation
+* M4: (m4).                     A powerful macro processor.
