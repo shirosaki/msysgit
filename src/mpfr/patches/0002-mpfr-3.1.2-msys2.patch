@@ -1,0 +1,69 @@
+From 0d5c1939741a1c17842b4c9fce4ac0b3f129df0d Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Mon, 30 Jun 2014 17:28:19 +0900
+Subject: [PATCH 2/2] mpfr-3.1.2-msys2
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/mpfr/mpfr-3.1.2-msys2.patch
+---
+ acinclude.m4 | 2 +-
+ compile      | 2 +-
+ config.guess | 3 +++
+ configure.ac | 2 +-
+ 4 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/acinclude.m4 b/acinclude.m4
+index d412273..0165dfc 100644
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -783,7 +783,7 @@ AC_DEFUN([MPFR_CHECK_LIBM],
+ [AC_REQUIRE([AC_CANONICAL_HOST])
+ AC_SUBST(MPFR_LIBM,'')
+ case $host in
+-  *-*-beos* | *-*-cygwin* | *-*-pw32*)
++  *-*-beos* | *-*-cygwin* | *-*-msys* | *-*-pw32*)
+     # According to libtool AC CHECK LIBM, these systems don't have libm
+     ;;
+   *-*-solaris*)
+diff --git a/compile b/compile
+index 862a14e..d534dcc 100644
+--- a/compile
++++ b/compile
+@@ -54,7 +54,7 @@ func_file_conv ()
+ 	  MINGW*)
+ 	    file_conv=mingw
+ 	    ;;
+-	  CYGWIN*)
++	  CYGWIN* | MSYS*)
+ 	    file_conv=cygwin
+ 	    ;;
+ 	  *)
+diff --git a/config.guess b/config.guess
+index d622a44..484647f 100644
+--- a/config.guess
++++ b/config.guess
+@@ -844,6 +844,9 @@ EOF
+     amd64:CYGWIN*:*:* | x86_64:CYGWIN*:*:*)
+ 	echo x86_64-unknown-cygwin
+ 	exit ;;
++    amd64:MSYS*:*:* | x86_64:MSYS*:*:*)
++	echo x86_64-unknown-msys
++	exit ;;
+     p*:CYGWIN*:*)
+ 	echo powerpcle-unknown-cygwin
+ 	exit ;;
+diff --git a/configure.ac b/configure.ac
+index 8e38986..dba062d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -359,7 +359,7 @@ AC_SUBST(MPFR_LDFLAGS)
+ AC_SUBST(LIBMPFR_LDFLAGS)
+ AC_LIBTOOL_WIN32_DLL
+ case $host in
+-  *-*-cygwin* | *-*-mingw* | *-*-pw32* | *-*-os2*)
++  *-*-cygwin* | *-*-msys* | *-*-mingw* | *-*-pw32* | *-*-os2*)
+    AC_MSG_CHECKING(for DLL/static GMP)
+    if test "$enable_shared" = yes; then
+      MPFR_LDFLAGS="$MPFR_LDFLAGS -no-undefined"
+-- 
+2.0.0
+
