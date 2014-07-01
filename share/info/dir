@@ -29,6 +29,7 @@ GNU libraries
 
 Software development
 * Automake: (automake).         Making GNU standards-compliant Makefiles.
+* Make: (make).            Remake files automatically.
 
 Software libraries
 * mpfr: (mpfr).                 Multiple Precision Floating-Point Reliable Library.

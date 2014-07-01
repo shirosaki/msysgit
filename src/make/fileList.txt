@@ -1,0 +1,5 @@
+/include/gnumake.h
+/share/info/make.info
+/share/info/make.info-1
+/share/info/make.info-2
+/share/man/man1/make.1
