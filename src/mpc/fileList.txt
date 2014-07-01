@@ -1,0 +1,5 @@
+/bin/msys-mpc-3.dll
+/include/mpc.h
+/lib/libmpc.dll.a
+/lib/libmpc.la
+/share/info/mpc.info

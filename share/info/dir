@@ -32,3 +32,6 @@ Software development
 
 Software libraries
 * mpfr: (mpfr).                 Multiple Precision Floating-Point Reliable Library.
+
+GNU Packages
+* mpc: (mpc)Multiple Precision Complex Library.
