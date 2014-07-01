@@ -10,10 +10,9 @@ url=ftp://ftp.gnu.org/pub/gnu/$package/
 d=$package-$version
 tar=$d.tar.bz2
 
-opt_flags="-O3 -march=i386"
-export CFLAGS=${CFLAGS:-"${opt_flags}"}
 export CPPFLAGS="${CPPFLAGS} -D__CYGWIN__"
 export LDFLAGS="${LDFLAGS} -s -Wl,--enable-auto-import"
+export CONFIG_SITE=/dev/null
 
 configure_options="--prefix=/usr \
 	 ac_cv_dos_paths=yes --without-libintl-prefix --without-libiconv-prefix"
