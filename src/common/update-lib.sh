@@ -81,7 +81,7 @@ apply_patches () {
 	 git commit -m initial &&
 	 for p in "$patchdir"/*.patch
 	 do
-		git am "$p" || exit
+		git am --whitespace=fix "$p" || exit
 	 done) ||
 	exit
 }
