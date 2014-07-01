@@ -1,0 +1,33 @@
+From 6eebe2068da9822b0a12bc5f4b7892f4976de2ba Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 09:28:59 +0900
+Subject: [PATCH 2/6] Declare variables on the beginning of the block
+
+---
+ bfd/peXXigen.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/bfd/peXXigen.c b/bfd/peXXigen.c
+index 6d95827..debeaf7 100644
+--- a/bfd/peXXigen.c
++++ b/bfd/peXXigen.c
+@@ -2531,6 +2531,7 @@ rsrc_count_entries (bfd *          abfd,
+   if (is_name)
+     {
+       bfd_byte * name;
++      unsigned int len;
+ 
+       entry = (long) bfd_get_32 (abfd, data);
+ 
+@@ -2542,7 +2543,7 @@ rsrc_count_entries (bfd *          abfd,
+       if (name + 2 >= dataend)
+ 	return dataend + 1;
+ 
+-      unsigned int len = bfd_get_16 (abfd, name);
++      len = bfd_get_16 (abfd, name);
+       if (len == 0 || len > 256)
+ 	return dataend + 1;
+ 
+-- 
+2.0.0.msysgit.0
+

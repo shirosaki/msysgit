@@ -1,0 +1,52 @@
+From 1e72586efa094f0e1cee262a092fb9a17f47101d Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 3 Jul 2014 03:28:14 +0900
+Subject: [PATCH 4/6] Fix variable declaration at the beginning of the block
+
+---
+ binutils/objcopy.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/binutils/objcopy.c b/binutils/objcopy.c
+index 6215919..9c35858 100644
+--- a/binutils/objcopy.c
++++ b/binutils/objcopy.c
+@@ -1839,6 +1839,9 @@ copy_object (bfd *ibfd, bfd *obfd, const bfd_arch_info_type *input_arch)
+       for (pdump = dump_sections; pdump != NULL; pdump = pdump->next)
+ 	{
+ 	  asection * sec;
++	  FILE * f;
++	  bfd_size_type size;
++	  bfd_byte * contents;
+ 
+ 	  sec = bfd_get_section_by_name (ibfd, pdump->name);
+ 	  if (sec == NULL)
+@@ -1856,7 +1859,7 @@ copy_object (bfd *ibfd, bfd *obfd, const bfd_arch_info_type *input_arch)
+ 	      continue;
+ 	    }
+ 	  
+-	  bfd_size_type size = bfd_get_section_size (sec);
++	  size = bfd_get_section_size (sec);
+ 	  if (size == 0)
+ 	    {
+ 	      bfd_nonfatal_message (NULL, ibfd, sec,
+@@ -1864,7 +1867,6 @@ copy_object (bfd *ibfd, bfd *obfd, const bfd_arch_info_type *input_arch)
+ 	      continue;
+ 	    }
+ 
+-	  FILE * f;
+ 	  f = fopen (pdump->filename, FOPEN_WB);
+ 	  if (f == NULL)
+ 	    {
+@@ -1873,7 +1875,7 @@ copy_object (bfd *ibfd, bfd *obfd, const bfd_arch_info_type *input_arch)
+ 	      continue;
+ 	    }
+ 
+-	  bfd_byte * contents = xmalloc (size);
++	  contents = xmalloc (size);
+ 	  if (bfd_get_section_contents (ibfd, sec, contents, 0, size))
+ 	    {
+ 	      if (fwrite (contents, 1, size, f) != size)
+-- 
+2.0.0.msysgit.0
+

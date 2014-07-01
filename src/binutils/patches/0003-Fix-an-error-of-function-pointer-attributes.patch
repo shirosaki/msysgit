@@ -1,0 +1,37 @@
+From 2e4bcaf442e185f7dc476a2c118db4e7dcda0f95 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 3 Jul 2014 03:14:40 +0900
+Subject: [PATCH 3/6] Fix an error of function pointer attributes
+
+---
+ gas/as.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/gas/as.h b/gas/as.h
+index df04dce..404c744 100644
+--- a/gas/as.h
++++ b/gas/as.h
+@@ -449,12 +449,20 @@ typedef struct _pseudo_type pseudo_typeS;
+ #define __format__ format
+ #endif
+ 
++#if __GNUC__ < 4 || __GNUC__ == 4 && __GNUC_MINOR__ < 1
++/* https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3481 */
++#define PRINTF_LIKE(FCN)	void FCN (const char *format, ...)
++#define PRINTF_WHERE_LIKE(FCN)	void FCN (char *file, \
++					  unsigned int line, \
++					  const char *format, ...)
++#else
+ #define PRINTF_LIKE(FCN) \
+   void FCN (const char *format, ...) \
+     __attribute__ ((__format__ (__printf__, 1, 2)))
+ #define PRINTF_WHERE_LIKE(FCN) \
+   void FCN (char *file, unsigned int line, const char *format, ...) \
+     __attribute__ ((__format__ (__printf__, 3, 4)))
++#endif
+ 
+ #else /* __GNUC__ < 2 || defined(VMS) */
+ 
+-- 
+2.0.0.msysgit.0
+

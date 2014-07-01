@@ -1,0 +1,66 @@
+From 75dcfdedfbca76b6e05d1726a7b4d989b09906c4 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 3 Jul 2014 03:31:29 +0900
+Subject: [PATCH 5/6] Add missing stdint.h
+
+---
+ config/override.m4   | 2 +-
+ configure.ac         | 9 +++++++++
+ include/plugin-api.h | 2 ++
+ 3 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/config/override.m4 b/config/override.m4
+index 52bd1c3..8b954d3 100644
+--- a/config/override.m4
++++ b/config/override.m4
+@@ -29,7 +29,7 @@ m4_copy_force([_AC_PREREQ], [AC_PREREQ])
+ 
+ dnl Ensure exactly this Autoconf version is used
+ m4_ifndef([_GCC_AUTOCONF_VERSION],
+-  [m4_define([_GCC_AUTOCONF_VERSION], [2.64])])
++  [m4_define([_GCC_AUTOCONF_VERSION], [2.69])])
+ 
+ dnl Test for the exact version when AC_INIT is expanded.
+ dnl This allows to update the tree in steps (for testing)
+diff --git a/configure.ac b/configure.ac
+index ac13dd7..1cd2ea5 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -30,11 +30,20 @@ m4_include([ltversion.m4])
+ m4_include([lt~obsolete.m4])
+ m4_include([config/isl.m4])
+ m4_include([config/cloog.m4])
++m4_include([ax_create_stdint_h.m4])
+ 
+ AC_INIT(move-if-change)
+ AC_PREREQ(2.64)
+ AC_DISABLE_OPTION_CHECKING
+ 
++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[ #include <stdint.h> ]],
++  [[ uint8_t a; uint16_t b; uint32_t c; a = b = c = 1;]])],
++  [ac_cv_have_stdint_h=yes],
++  [ac_cv_have_stdint_h=no])
++if test x"$ac_cv_have_stdint_h" != "xyes"; then
++  AX_CREATE_STDINT_H(include/stdint.h)
++fi
++
+ progname=$0
+ # if PWD already has a value, it is probably wrong.
+ if test -n "$PWD" ; then PWD=`${PWDCMD-pwd}`; fi
+diff --git a/include/plugin-api.h b/include/plugin-api.h
+index 5797d4d..dddf319 100644
+--- a/include/plugin-api.h
++++ b/include/plugin-api.h
+@@ -27,7 +27,9 @@
+ #define PLUGIN_API_H
+ 
+ #ifdef HAVE_STDINT_H
++#undef HAVE_STDINT_H
+ #include <stdint.h>
++#define HAVE_STDINT_H 1
+ #elif defined(HAVE_INTTYPES_H)
+ #include <inttypes.h>
+ #endif
+-- 
+2.0.0.msysgit.0
+
