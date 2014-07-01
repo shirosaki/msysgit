@@ -1,0 +1,26 @@
+From 3183bd0a0c44716d2339c5f3a6caa5f16501068a Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 1 Jul 2014 10:19:56 +0900
+Subject: [PATCH 3/3] Define va_copy on msys
+
+---
+ output.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/output.c b/output.c
+index fa757b0..31598dd 100644
+--- a/output.c
++++ b/output.c
+@@ -59,6 +59,9 @@ unsigned int stdio_traced = 0;
+ #ifdef __VMS
+ # define va_copy(_d, _s) ((_d) = (_s))
+ #endif
++#ifdef __MSYS__
++# define va_copy(_d, _s) ((_d) = (_s))
++#endif
+ #ifdef _MSC_VER
+ # define va_copy(_d, _s) ((_d) = (_s))
+ # define snprintf msc_vsnprintf
+-- 
+2.0.0
+

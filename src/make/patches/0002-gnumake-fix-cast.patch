@@ -1,0 +1,48 @@
+From c5359d30629fe8895e36858e2e5e44a61129ec43 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 1 Jul 2014 10:05:39 +0900
+Subject: [PATCH 2/3] gnumake-fix-cast
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/make/gnumake-fix-cast.patch
+---
+ makeint.h               |  2 +-
+ tests/scripts/misc/utf8 | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+ create mode 100644 tests/scripts/misc/utf8
+
+diff --git a/makeint.h b/makeint.h
+index 3e22296..7677af0 100644
+--- a/makeint.h
++++ b/makeint.h
+@@ -409,7 +409,7 @@ extern int unixy_shell;
+ # define MAP_VMSCOMMA   0x0000
+ #endif
+ 
+-#define STOP_SET(_v,_m) ANY_SET (stopchar_map[(int)(_v)],(_m))
++#define STOP_SET(_v,_m) ANY_SET (stopchar_map[(unsigned char)(_v)],(_m))
+ 
+ #if defined(HAVE_SYS_RESOURCE_H) && defined(HAVE_GETRLIMIT) && defined(HAVE_SETRLIMIT)
+ # define SET_STACK_SIZE
+diff --git a/tests/scripts/misc/utf8 b/tests/scripts/misc/utf8
+new file mode 100644
+index 0000000..2adcd07
+--- /dev/null
++++ b/tests/scripts/misc/utf8
+@@ -0,0 +1,14 @@
++#                                                                    -*-perl-*-
++$description = "Test utf8 handling.";
++
++$details = "";
++
++# Variable names containing UTF8 characters
++run_make_test("
++\xe2\x96\xaa := hello
++\$(info \$(\xe2\x96\xaa))
++all:
++",
++              '', "hello\n#MAKE#: Nothing to be done for 'all'.");
++
++1;
+-- 
+2.0.0
+
