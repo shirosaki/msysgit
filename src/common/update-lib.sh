@@ -48,7 +48,7 @@ download () {
 		die "Script did not specify an archive"
 	test -f "$tar" || {
 		echo "Downloading $tar ..."
-		curl $url/$tar -o $tar || exit
+		curl -L $url/$tar -o $tar || exit
 	}
 }
 
