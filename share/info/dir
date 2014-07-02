@@ -27,6 +27,10 @@ Individual utilities
 GNU libraries
 * gmp: (gmp).                   GNU Multiple Precision Arithmetic Library.
 
+Programming
+* flex: (flex).                 Fast lexical analyzer generator (lex 
+                                  replacement).
+
 Software development
 * Automake: (automake).         Making GNU standards-compliant Makefiles.
 * Make: (make).            Remake files automatically.
