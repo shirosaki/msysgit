@@ -1,0 +1,42 @@
+From 915f3cd9d111c8911e02679d9b4d4e1f36ba2933 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 10:16:43 +0900
+Subject: [PATCH 4/6] no-w32-stuff.msys2
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/texinfo/0004-no-w32-stuff.msys2.patch
+---
+ install-info/Makefile.am | 3 ---
+ util/Makefile.am         | 3 ---
+ 2 files changed, 6 deletions(-)
+
+diff --git a/install-info/Makefile.am b/install-info/Makefile.am
+index 7ac5ca5..41fe047 100644
+--- a/install-info/Makefile.am
++++ b/install-info/Makefile.am
+@@ -15,9 +15,6 @@ SUBDIRS = tests
+ bin_PROGRAMS = ginstall-info
+ 
+ w32_script = ginstall-info.exe.manifest
+-if HOST_IS_WINDOWS
+- dist_bin_SCRIPTS = $(w32_script)
+-endif
+ 
+ # Use `ginstall-info' in the definition of PROGRAMS and in dependencies
+ # because automake generates an install-info target in every Makefile
+diff --git a/util/Makefile.am b/util/Makefile.am
+index 6d960d4..777f1db 100644
+--- a/util/Makefile.am
++++ b/util/Makefile.am
+@@ -18,9 +18,6 @@ bin_SCRIPTS = texi2dvi texi2pdf pdftexi2dvi
+ nodist_noinst_SCRIPTS = txixml2texi
+ 
+ w32_bat = makeinfo.bat pod2texi.bat texi2any.bat
+-if HOST_IS_WINDOWS
+- bin_SCRIPTS += $(w32_bat)
+-endif
+ 
+ # for auctex.
+ pdftexi2dvi: texi2pdf
+-- 
+2.0.0.msysgit.0
+

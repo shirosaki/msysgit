@@ -1,0 +1,239 @@
+From ba9875ba5fef3ed8c95305a2fcda242ef77f7dad Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 10:11:43 +0900
+Subject: [PATCH 2/6] texinfo-5.1-msys2
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/texinfo/0001-texinfo-5.1-msys2.patch
+---
+ build-aux/compile          |  4 ++--
+ build-aux/config.guess     |  3 +++
+ build-aux/config.rpath     | 10 +++++-----
+ configure                  |  8 ++++----
+ gnulib/lib/Makefile.am     |  2 +-
+ gnulib/lib/Makefile.in     |  2 +-
+ gnulib/m4/argz.m4          |  2 +-
+ gnulib/m4/btowc.m4         |  2 +-
+ gnulib/m4/malloc.m4        |  2 +-
+ install-info/tests/defs.in |  2 +-
+ util/texi2dvi              |  2 +-
+ 11 files changed, 21 insertions(+), 18 deletions(-)
+
+diff --git a/build-aux/compile b/build-aux/compile
+index 531136b..0e33c55 100644
+--- a/build-aux/compile
++++ b/build-aux/compile
+@@ -53,7 +53,7 @@ func_file_conv ()
+ 	  MINGW*)
+ 	    file_conv=mingw
+ 	    ;;
+-	  CYGWIN*)
++	  CYGWIN* | MSYS*)
+ 	    file_conv=cygwin
+ 	    ;;
+ 	  *)
+@@ -67,7 +67,7 @@ func_file_conv ()
+ 	mingw/*)
+ 	  file=`cmd //C echo "$file " | sed -e 's/"\(.*\) " *$/\1/'`
+ 	  ;;
+-	cygwin/*)
++	cygwin/* | msys/*)
+ 	  file=`cygpath -m "$file" || echo "$file"`
+ 	  ;;
+ 	wine/*)
+diff --git a/build-aux/config.guess b/build-aux/config.guess
+index b79252d..143a875 100644
+--- a/build-aux/config.guess
++++ b/build-aux/config.guess
+@@ -866,6 +866,9 @@ EOF
+     amd64:CYGWIN*:*:* | x86_64:CYGWIN*:*:*)
+ 	echo x86_64-unknown-cygwin
+ 	exit ;;
++    amd64:MSYS*:*:* | x86_64:MSYS*:*:*)
++	echo x86_64-unknown-msys
++	exit ;;
+     p*:CYGWIN*:*)
+ 	echo powerpcle-unknown-cygwin
+ 	exit ;;
+diff --git a/build-aux/config.rpath b/build-aux/config.rpath
+index c38b914..bd8409e 100644
+--- a/build-aux/config.rpath
++++ b/build-aux/config.rpath
+@@ -57,7 +57,7 @@ else
+     aix*)
+       wl='-Wl,'
+       ;;
+-    mingw* | cygwin* | pw32* | os2* | cegcc*)
++    mingw* | cygwin* | msys* | pw32* | os2* | cegcc*)
+       ;;
+     hpux9* | hpux10* | hpux11*)
+       wl='-Wl,'
+@@ -149,7 +149,7 @@ hardcode_direct=no
+ hardcode_minus_L=no
+ 
+ case "$host_os" in
+-  cygwin* | mingw* | pw32* | cegcc*)
++  cygwin* | msys* | mingw* | pw32* | cegcc*)
+     # FIXME: the MSVC++ port hasn't been tested in a loooong time
+     # When not using gcc, we currently assume that we are using
+     # Microsoft Visual C++.
+@@ -198,7 +198,7 @@ if test "$with_gnu_ld" = yes; then
+         ld_shlibs=no
+       fi
+       ;;
+-    cygwin* | mingw* | pw32* | cegcc*)
++    cygwin* | msys* | mingw* | pw32* | cegcc*)
+       # hardcode_libdir_flag_spec is actually meaningless, as there is
+       # no search path for DLLs.
+       hardcode_libdir_flag_spec='-L$libdir'
+@@ -348,7 +348,7 @@ else
+       ;;
+     bsdi[45]*)
+       ;;
+-    cygwin* | mingw* | pw32* | cegcc*)
++    cygwin* | msys* | mingw* | pw32* | cegcc*)
+       # When not using gcc, we currently assume that we are using
+       # Microsoft Visual C++.
+       # hardcode_libdir_flag_spec is actually meaningless, as there is
+@@ -537,7 +537,7 @@ case "$host_os" in
+   bsdi[45]*)
+     library_names_spec='$libname$shrext'
+     ;;
+-  cygwin* | mingw* | pw32* | cegcc*)
++  cygwin* | msys* | mingw* | pw32* | cegcc*)
+     shrext=.dll
+     library_names_spec='$libname.dll.a $libname.lib'
+     ;;
+diff --git a/configure b/configure
+index 52cd220..0a8d77f 100644
+--- a/configure
++++ b/configure
+@@ -10852,7 +10852,7 @@ else
+   case "$host_os" in
+           # Guess yes on platforms where we know the result.
+           *-gnu* | freebsd* | netbsd* | openbsd* \
+-          | hpux* | solaris* | cygwin* | mingw*)
++          | hpux* | solaris* | cygwin* | msys* | mingw*)
+             ac_cv_func_malloc_0_nonnull=yes ;;
+           # If we don't know, assume the worst.
+           *) ac_cv_func_malloc_0_nonnull=no ;;
+@@ -13652,7 +13652,7 @@ if ${lt_cv_sys_argz_works+:} false; then :
+   $as_echo_n "(cached) " >&6
+ else
+   case $host_os in #(
+-         *cygwin*)
++         *cygwin* | *msys*)
+            lt_cv_sys_argz_works=no
+            if test "$cross_compiling" != no; then
+              lt_cv_sys_argz_works="guessing no"
+@@ -13739,7 +13739,7 @@ else
+ 
+            case "$host_os" in
+                       # Guess no on Cygwin.
+-             cygwin*) gl_cv_func_btowc_nul="guessing no" ;;
++             cygwin* | msys*) gl_cv_func_btowc_nul="guessing no" ;;
+                       # Guess yes otherwise.
+              *)       gl_cv_func_btowc_nul="guessing yes" ;;
+            esac
+@@ -15167,7 +15167,7 @@ else
+   case "$host_os" in
+           # Guess yes on platforms where we know the result.
+           *-gnu* | freebsd* | netbsd* | openbsd* \
+-          | hpux* | solaris* | cygwin* | mingw*)
++          | hpux* | solaris* | cygwin* | msys* | mingw*)
+             ac_cv_func_malloc_0_nonnull=yes ;;
+           # If we don't know, assume the worst.
+           *) ac_cv_func_malloc_0_nonnull=no ;;
+diff --git a/gnulib/lib/Makefile.am b/gnulib/lib/Makefile.am
+index 5c64ede..dc16da2 100644
+--- a/gnulib/lib/Makefile.am
++++ b/gnulib/lib/Makefile.am
+@@ -378,7 +378,7 @@ install-exec-localcharset: all-local
+ 	  case '$(host_os)' in \
+ 	    darwin[56]*) \
+ 	      need_charset_alias=true ;; \
+-	    darwin* | cygwin* | mingw* | pw32* | cegcc*) \
++	    darwin* | cygwin* | msys* | mingw* | pw32* | cegcc*) \
+ 	      need_charset_alias=false ;; \
+ 	    *) \
+ 	      need_charset_alias=true ;; \
+diff --git a/gnulib/lib/Makefile.in b/gnulib/lib/Makefile.in
+index 3f4df92..43f84ef 100644
+--- a/gnulib/lib/Makefile.in
++++ b/gnulib/lib/Makefile.in
+@@ -1729,7 +1729,7 @@ install-exec-localcharset: all-local
+ 	  case '$(host_os)' in \
+ 	    darwin[56]*) \
+ 	      need_charset_alias=true ;; \
+-	    darwin* | cygwin* | mingw* | pw32* | cegcc*) \
++	    darwin* | cygwin* | msys* | mingw* | pw32* | cegcc*) \
+ 	      need_charset_alias=false ;; \
+ 	    *) \
+ 	      need_charset_alias=true ;; \
+diff --git a/gnulib/m4/argz.m4 b/gnulib/m4/argz.m4
+index 6c54fbf..bf5e5db 100644
+--- a/gnulib/m4/argz.m4
++++ b/gnulib/m4/argz.m4
+@@ -43,7 +43,7 @@ AS_IF([test -z "$ARGZ_H"],
+         [if argz actually works],
+         [lt_cv_sys_argz_works],
+         [[case $host_os in #(
+-         *cygwin*)
++         *cygwin* | *msys*)
+            lt_cv_sys_argz_works=no
+            if test "$cross_compiling" != no; then
+              lt_cv_sys_argz_works="guessing no"
+diff --git a/gnulib/m4/btowc.m4 b/gnulib/m4/btowc.m4
+index 978a06e..ca0f77f 100644
+--- a/gnulib/m4/btowc.m4
++++ b/gnulib/m4/btowc.m4
+@@ -49,7 +49,7 @@ int main ()
+ changequote(,)dnl
+            case "$host_os" in
+                       # Guess no on Cygwin.
+-             cygwin*) gl_cv_func_btowc_nul="guessing no" ;;
++             cygwin* | msys*) gl_cv_func_btowc_nul="guessing no" ;;
+                       # Guess yes otherwise.
+              *)       gl_cv_func_btowc_nul="guessing yes" ;;
+            esac
+diff --git a/gnulib/m4/malloc.m4 b/gnulib/m4/malloc.m4
+index 4b24a0b..fff5e55 100644
+--- a/gnulib/m4/malloc.m4
++++ b/gnulib/m4/malloc.m4
+@@ -30,7 +30,7 @@ AC_DEFUN([_AC_FUNC_MALLOC_IF],
+        [case "$host_os" in
+           # Guess yes on platforms where we know the result.
+           *-gnu* | freebsd* | netbsd* | openbsd* \
+-          | hpux* | solaris* | cygwin* | mingw*)
++          | hpux* | solaris* | cygwin* | msys* | mingw*)
+             ac_cv_func_malloc_0_nonnull=yes ;;
+           # If we don't know, assume the worst.
+           *) ac_cv_func_malloc_0_nonnull=no ;;
+diff --git a/install-info/tests/defs.in b/install-info/tests/defs.in
+index 1b3979e..fc67276 100644
+--- a/install-info/tests/defs.in
++++ b/install-info/tests/defs.in
+@@ -59,7 +59,7 @@ fi
+ # directories in TEXINPUTS -- except for Cygwin et al., where COMSPEC
+ # might be inherited, but : is used.
+ if test -n "$COMSPEC$ComSpec" \
+-   && uname | $EGREP -iv 'cygwin|mingw|djgpp' >/dev/null; then
++   && uname | $EGREP -iv 'cygwin|msys|mingw|djgpp' >/dev/null; then
+   path_sep=";"
+ else
+   path_sep=":"
+diff --git a/util/texi2dvi b/util/texi2dvi
+index 1d2bb8b..e5974bc 100644
+--- a/util/texi2dvi
++++ b/util/texi2dvi
+@@ -88,7 +88,7 @@ IFS="$space$tab$newline"
+ # directories in TEXINPUTS -- except for Cygwin et al., where COMSPEC
+ # might be inherited, but : is used.
+ if test -n "$COMSPEC$ComSpec" \
+-   && uname | $EGREP -iv 'cygwin|mingw|djgpp' >/dev/null; then
++   && uname | $EGREP -iv 'cygwin|msys|mingw|djgpp' >/dev/null; then
+   path_sep=";"
+ else
+   path_sep=":"
+-- 
+2.0.0.msysgit.0
+

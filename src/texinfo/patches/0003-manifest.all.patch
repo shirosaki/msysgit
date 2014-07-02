@@ -1,0 +1,82 @@
+From cd847728dafa670f41670b3bac71bb35497e381d Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 10:12:46 +0900
+Subject: [PATCH 3/6] manifest.all
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/texinfo/0002-manifest.all.patch
+---
+ configure.ac                       |  2 ++
+ install-info/Makefile.am           |  8 +++++++-
+ install-info/install-info.manifest | 16 ++++++++++++++++
+ install-info/install-info.rc       |  1 +
+ 4 files changed, 26 insertions(+), 1 deletion(-)
+ create mode 100644 install-info/install-info.manifest
+ create mode 100644 install-info/install-info.rc
+
+diff --git a/configure.ac b/configure.ac
+index 7238d7f..d404baa 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -94,6 +94,8 @@ AC_PROG_MAKE_SET
+ AC_PROG_LN_S
+ AC_PROG_MKDIR_P
+ 
++AC_CHECK_TOOL([WINDRES],[windres],[windres])
++
+ # gettext Makefiles may still need MKINSTALLDIRS.
+ MKINSTALLDIRS="\$(top_srcdir)/build-aux/install-sh -d"
+ AC_SUBST([MKINSTALLDIRS])
+diff --git a/install-info/Makefile.am b/install-info/Makefile.am
+index ba09c86..7ac5ca5 100644
+--- a/install-info/Makefile.am
++++ b/install-info/Makefile.am
+@@ -28,10 +28,16 @@ ginstall_info_SOURCES = install-info.c
+ # user-specified name transformations.
+ transform = s/ginstall-info/install-info/; $(program_transform_name)
+ 
++install_info_DEPENDENCIES = install-info.res
++
+ localedir = $(datadir)/locale
+ AM_CPPFLAGS = 					\
+   -I$(top_srcdir)				\
+   -I$(top_srcdir)/gnulib/lib			\
+   -I$(top_builddir)/gnulib/lib			\
+   -DLOCALEDIR=\"$(localedir)\"
+-LDADD = $(top_builddir)/gnulib/lib/libgnu.a $(LIBINTL)
++LDADD = $(top_builddir)/gnulib/lib/libgnu.a $(LIBINTL) $(install_info_DEPENDENCIES)
++
++
++install-info.res: install-info.rc install-info.manifest
++	$(WINDRES) --input $< --output $@ --output-format=coff
+diff --git a/install-info/install-info.manifest b/install-info/install-info.manifest
+new file mode 100644
+index 0000000..592137f
+--- /dev/null
++++ b/install-info/install-info.manifest
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
++<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
++  <assemblyIdentity version="1.0.0.0"
++     processorArchitecture="x86"
++     name="GNU.texinfo.install-info"
++     type="win32"/>
++
++  <!-- Identify the application security requirements. -->
++  <v3:trustInfo xmlns:v3="urn:schemas-microsoft-com:asm.v3">
++    <v3:security>
++      <v3:requestedPrivileges>
++	<v3:requestedExecutionLevel level="asInvoker" uiAccess="false" />
++      </v3:requestedPrivileges>
++    </v3:security>
++  </v3:trustInfo>
++</assembly>
+diff --git a/install-info/install-info.rc b/install-info/install-info.rc
+new file mode 100644
+index 0000000..8a3267e
+--- /dev/null
++++ b/install-info/install-info.rc
+@@ -0,0 +1 @@
++1 24 install-info.manifest
+-- 
+2.0.0.msysgit.0
+

@@ -1,0 +1,22 @@
+From 53586ad658786f5ceadc2a7640ef4e56730121e5 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 11:34:55 +0900
+Subject: [PATCH 6/6] Change windres arguments to fix an error
+
+---
+ install-info/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/install-info/Makefile.am b/install-info/Makefile.am
+index 41fe047..78c5bc2 100644
+--- a/install-info/Makefile.am
++++ b/install-info/Makefile.am
+@@ -37,4 +37,4 @@ LDADD = $(top_builddir)/gnulib/lib/libgnu.a $(LIBINTL) $(install_info_DEPENDENCI
+ 
+ 
+ install-info.res: install-info.rc install-info.manifest
+-	$(WINDRES) --input $< --output $@ --output-format=coff
++	$(WINDRES) $< $@ --output-format=coff
+-- 
+2.0.0.msysgit.0
+

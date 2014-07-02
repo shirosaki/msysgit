@@ -1,0 +1,26 @@
+From 9fb4b5fdd4e918c4383709e2795ba1218e32f9ad Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 10:17:34 +0900
+Subject: [PATCH 5/6] fix-makeinfo-exeext.msys2
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/texinfo/0005-fix-makeinfo-exeext.msys2.patch
+---
+ tp/Makefile.am | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tp/Makefile.am b/tp/Makefile.am
+index 263b8aa..88b1f5a 100644
+--- a/tp/Makefile.am
++++ b/tp/Makefile.am
+@@ -52,6 +52,8 @@ makeinfo: texi2any
+ 	rm -f $@
+ 	-$(LN_S) texi2any $@
+ 
++makeinfo.exe: makeinfo
++
+ modulesdir = $(pkgdatadir)/Texinfo
+ dist_modules_DATA = \
+  Texinfo/Parser.pm \
+-- 
+2.0.0.msysgit.0
+

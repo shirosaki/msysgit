@@ -1,0 +1,25 @@
+From 29ccc179c1227a11ceaa35ea167110ee948bf80d Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 10:10:28 +0900
+Subject: [PATCH 1/6] texinfo-5.2-C-n-fix
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/texinfo/texinfo-5.2-C-n-fix.patch
+---
+ info/infomap.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/info/infomap.c b/info/infomap.c
+index b1be694..749a020 100644
+--- a/info/infomap.c
++++ b/info/infomap.c
+@@ -297,6 +297,7 @@ static unsigned char default_emacs_like_info_keys[] =
+   CONTROL('f'), NUL,              A_info_forward_char,
+   CONTROL('h'), NUL,              A_info_get_help_window,
+   CONTROL('l'), NUL,              A_info_redraw_display,
++  CONTROL('n'), NUL,              A_info_next_line,
+   CONTROL('p'), NUL,              A_info_prev_line,
+   CONTROL('r'), NUL,              A_isearch_backward,
+   CONTROL('s'), NUL,              A_isearch_forward,
+-- 
+2.0.0.msysgit.0
+
