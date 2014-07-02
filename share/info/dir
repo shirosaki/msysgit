@@ -34,6 +34,7 @@ Programming
 Software development
 * Automake: (automake).         Making GNU standards-compliant Makefiles.
 * Make: (make).            Remake files automatically.
+* bison: (bison).               GNU parser generator (Yacc replacement).
 
 Software libraries
 * mpfr: (mpfr).                 Multiple Precision Floating-Point Reliable Library.
