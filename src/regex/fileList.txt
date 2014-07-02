@@ -1,0 +1,6 @@
+/bin/libgnurx-0.dll
+/include/regex.h
+/lib/libgnurx.dll.a
+/lib/libregex.a
+/man/man3/regex.3.gz
+/man/man7/regex.7.gz
