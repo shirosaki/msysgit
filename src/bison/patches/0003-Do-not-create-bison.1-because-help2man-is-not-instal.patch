@@ -1,0 +1,25 @@
+From e0edb780bbbaacc7d19e6f0cf8a998f739590ca9 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 3 Jul 2014 02:38:37 +0900
+Subject: [PATCH 3/3] Do not create bison.1 because help2man is not installed
+
+---
+ doc/local.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/doc/local.mk b/doc/local.mk
+index 4fe0859..6e956f5 100644
+--- a/doc/local.mk
++++ b/doc/local.mk
+@@ -96,7 +96,7 @@ $(top_srcdir)/doc/bison.help: src/bison$(EXEEXT)
+ ## Man Pages.  ##
+ ## ----------- ##
+ 
+-dist_man_MANS = $(top_srcdir)/doc/bison.1
++dist_man_MANS =
+ 
+ EXTRA_DIST += $(dist_man_MANS:.1=.x)
+ MAINTAINERCLEANFILES += $(dist_man_MANS)
+-- 
+1.9.4.msysgit.0
+

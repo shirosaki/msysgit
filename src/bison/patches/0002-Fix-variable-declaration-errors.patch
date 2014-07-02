@@ -1,0 +1,212 @@
+From 3077b946c90c786b3f209ef04bb25c521e34dd1f Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 3 Jul 2014 02:20:48 +0900
+Subject: [PATCH 2/3] Fix variable declaration errors
+
+---
+ src/AnnotationList.c |  2 +-
+ src/complain.c       |  2 +-
+ src/getargs.c        |  2 +-
+ src/ielr.c           |  2 +-
+ src/muscle-tab.c     | 11 +++++++----
+ src/scan-gram.l      |  5 +++--
+ src/symlist.c        |  3 ++-
+ src/symtab.c         |  3 ++-
+ src/uniqstr.c        |  3 ++-
+ 9 files changed, 20 insertions(+), 13 deletions(-)
+
+diff --git a/src/AnnotationList.c b/src/AnnotationList.c
+index 31d8a99..92d7cba 100644
+--- a/src/AnnotationList.c
++++ b/src/AnnotationList.c
+@@ -233,9 +233,9 @@ AnnotationList__computePredecessorAnnotations (AnnotationList *self, state *s,
+       AnnotationList *annotation_node =
+         AnnotationList__alloc_on_obstack (
+           self->inadequacyNode->contributionCount, annotations_obstackp);
+-      annotation_node->inadequacyNode = self->inadequacyNode;
+       bool potential_contribution = false;
+       bitset *lookaheads = NULL;
++      annotation_node->inadequacyNode = self->inadequacyNode;
+       {
+         ContributionIndex ci;
+         for (ci = 0; ci < self->inadequacyNode->contributionCount; ++ci)
+diff --git a/src/complain.c b/src/complain.c
+index e767490..ebb0600 100644
+--- a/src/complain.c
++++ b/src/complain.c
+@@ -106,6 +106,7 @@ warning_argmatch (char const *arg, size_t no, size_t err)
+ {
+   int value = XARGMATCH ("--warning", arg + no + err,
+                          warnings_args, warnings_types);
++  size_t b;
+ 
+   /* -Wnone == -Wno-everything, and -Wno-none == -Weverything.  */
+   if (!value)
+@@ -114,7 +115,6 @@ warning_argmatch (char const *arg, size_t no, size_t err)
+       no = !no;
+     }
+ 
+-  size_t b;
+   for (b = 0; b < warnings_size; ++b)
+     if (value & 1 << b)
+       {
+diff --git a/src/getargs.c b/src/getargs.c
+index 1fd9cfa..b692b78 100644
+--- a/src/getargs.c
++++ b/src/getargs.c
+@@ -257,6 +257,7 @@ usage (int status)
+                 ^  -S, --long[=ARGS] (whitespace)
+          A --long option is required.
+          Otherwise, add exceptions to ../build-aux/cross-options.pl.  */
++      const char *lc_messages = setlocale (LC_MESSAGES, NULL);
+ 
+       printf (_("Usage: %s [OPTION]... FILE\n"), program_name);
+       fputs (_("\
+@@ -363,7 +364,6 @@ FEATURE is a list of comma separated words that can include:\n\
+       /* Don't output this redundant message for English locales.
+          Note we still output for 'C' so that it gets included in the
+          man page.  */
+-      const char *lc_messages = setlocale (LC_MESSAGES, NULL);
+       if (lc_messages && !STREQ (lc_messages, "en_"))
+         /* TRANSLATORS: Replace LANG_CODE in this URL with your language
+            code <http://translationproject.org/team/LANG_CODE.html> to
+diff --git a/src/ielr.c b/src/ielr.c
+index 5500523..38156b3 100644
+--- a/src/ielr.c
++++ b/src/ielr.c
+@@ -1032,9 +1032,9 @@ ielr_split_states (bitsetv follow_kernel_items, bitsetv always_follows,
+      lookahead sets.  */
+   if (!annotation_lists)
+     {
++      state_list *node;
+       timevar_push (TV_IELR_PHASE4);
+       initialize_LA ();
+-      state_list *node;
+       for (node = first_state; node; node = node->next)
+         if (!node->state->consistent)
+           {
+diff --git a/src/muscle-tab.c b/src/muscle-tab.c
+index 71a79b4..3df0ae3 100644
+--- a/src/muscle-tab.c
++++ b/src/muscle-tab.c
+@@ -470,10 +470,11 @@ muscle_percent_variable_update (char const *variable, location variable_loc,
+         {
+           char *old = define_directive (c->obsolete, *value);
+           char *upd = define_directive (c->updated, *value);
++          char *res;
+           deprecated_directive (&variable_loc, old, upd);
+           free (old);
+           free (upd);
+-          char *res = xstrdup (c->updated);
++          res = xstrdup (c->updated);
+           {
+             char *eq2 = strchr (res, '=');
+             if (eq2)
+@@ -506,15 +507,16 @@ muscle_percent_define_insert (char const *var, location variable_loc,
+   if (how == MUSCLE_PERCENT_DEFINE_GRAMMAR_FILE
+       && muscle_find_const (name))
+     {
+-      muscle_percent_define_how how_old = atoi (muscle_find_const (how_name));
++      location loc;
+       unsigned i = 0;
++      muscle_percent_define_how how_old = atoi (muscle_find_const (how_name));
+       if (how_old == MUSCLE_PERCENT_DEFINE_F)
+         goto end;
+       complain_indent (&variable_loc, complaint, &i,
+                        _("%%define variable %s redefined"),
+                        quote (variable));
+       i += SUB_INDENT;
+-      location loc = muscle_percent_define_get_loc (variable);
++      loc = muscle_percent_define_get_loc (variable);
+       complain_indent (&loc, complaint, &i, _("previous definition"));
+     }
+ 
+@@ -657,8 +659,9 @@ muscle_percent_define_flag_if (char const *variable)
+         result = false;
+       else if (!muscle_find_const (invalid_boolean_name))
+         {
++          location loc;
+           muscle_insert (invalid_boolean_name, "");
+-          location loc = muscle_percent_define_get_loc (variable);
++          loc = muscle_percent_define_get_loc (variable);
+           complain (&loc, complaint,
+                     _("invalid value for %%define Boolean variable %s"),
+                     quote (variable));
+diff --git a/src/scan-gram.l b/src/scan-gram.l
+index 555e695..12ecad7 100644
+--- a/src/scan-gram.l
++++ b/src/scan-gram.l
+@@ -46,7 +46,7 @@
+ #define YY_DECL GRAM_LEX_DECL
+ 
+ #define YY_USER_INIT                                    \
+-   code_start = scanner_cursor = loc->start;            \
++   scanner_cursor = loc->start;            \
+ 
+ /* Location of scanner cursor.  */
+ static boundary scanner_cursor;
+@@ -946,10 +946,11 @@ handle_syncline (char *args, location loc)
+ static void
+ unexpected_end (boundary start, char const *msgid, char const *token_end)
+ {
++  size_t i;
+   location loc;
+   loc.start = start;
+   loc.end = scanner_cursor;
+-  size_t i = strlen (token_end);
++  i = strlen (token_end);
+ 
+ /* Adjust scanner cursor so that any later message does not count
+      the characters about to be inserted.  */
+diff --git a/src/symlist.c b/src/symlist.c
+index 50915c1..4fda8bc 100644
+--- a/src/symlist.c
++++ b/src/symlist.c
+@@ -121,9 +121,10 @@ symbol_list_prepend (symbol_list *list, symbol_list *node)
+ symbol_list *
+ symbol_list_append (symbol_list *list, symbol_list *node)
+ {
++  symbol_list *next;
+   if (!list)
+     return node;
+-  symbol_list *next = list;
++  next = list;
+   while (next->next)
+     next = next->next;
+   next->next = node;
+diff --git a/src/symtab.c b/src/symtab.c
+index 1c2372c..e14141c 100644
+--- a/src/symtab.c
++++ b/src/symtab.c
+@@ -1003,8 +1003,9 @@ init_prec_nodes (void)
+   prec_nodes = xcalloc (nsyms, sizeof *prec_nodes);
+   for (i = 0; i < nsyms; ++i)
+     {
++      symgraph *s;
+       prec_nodes[i] = xmalloc (sizeof *prec_nodes[i]);
+-      symgraph *s = prec_nodes[i];
++      s = prec_nodes[i];
+       s->id = i;
+       s->succ = 0;
+       s->pred = 0;
+diff --git a/src/uniqstr.c b/src/uniqstr.c
+index b460ea7..27e197b 100644
+--- a/src/uniqstr.c
++++ b/src/uniqstr.c
+@@ -59,11 +59,12 @@ uniqstr_vsprintf (char const *format, ...)
+ {
+   va_list args;
+   size_t length;
++  char *res;
+   va_start (args, format);
+   length = vsnprintf (NULL, 0, format, args);
+   va_end (args);
+ 
+-  char res[length + 1];
++  res = (char *)alloca(length + 1);
+   va_start (args, format);
+   vsprintf (res, format, args);
+   va_end (args);
+-- 
+1.9.4.msysgit.0
+
