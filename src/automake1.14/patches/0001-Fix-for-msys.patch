@@ -1,0 +1,36 @@
+From c8fe834f88bf4551838552f9ca908bc45b00282a Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 11:11:35 +0900
+Subject: [PATCH] Fix for msys
+
+---
+ lib/config.guess | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/lib/config.guess b/lib/config.guess
+index b79252d..9ff9c94 100644
+--- a/lib/config.guess
++++ b/lib/config.guess
+@@ -823,6 +823,9 @@ EOF
+     *:MINGW64*:*)
+ 	echo ${UNAME_MACHINE}-pc-mingw64
+ 	exit ;;
++    i*:MSYS*:*)
++	echo ${UNAME_MACHINE}-pc-msys
++	exit ;;
+     *:MINGW*:*)
+ 	echo ${UNAME_MACHINE}-pc-mingw32
+ 	exit ;;
+@@ -866,6 +869,9 @@ EOF
+     amd64:CYGWIN*:*:* | x86_64:CYGWIN*:*:*)
+ 	echo x86_64-unknown-cygwin
+ 	exit ;;
++    amd64:MSYS*:*:* | x86_64:MSYS*:*:*)
++	echo x86_64-unknown-msys
++	exit ;;
+     p*:CYGWIN*:*)
+ 	echo powerpcle-unknown-cygwin
+ 	exit ;;
+-- 
+2.0.0.msysgit.0
+
