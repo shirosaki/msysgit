@@ -1,0 +1,100 @@
+From 3f4699c79a228d79eeebc78e6bedbf291ca01fb2 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 15:10:04 +0900
+Subject: [PATCH 2/3] flex-2.5.38-msys2
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/flex/flex-2.5.38-msys2.patch
+---
+ compile      |  4 ++--
+ config.guess |  3 +++
+ config.rpath | 10 +++++-----
+ 3 files changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/compile b/compile
+index 862a14e..0d4a2da 100644
+--- a/compile
++++ b/compile
+@@ -54,7 +54,7 @@ func_file_conv ()
+ 	  MINGW*)
+ 	    file_conv=mingw
+ 	    ;;
+-	  CYGWIN*)
++	  CYGWIN*|MSYS*)
+ 	    file_conv=cygwin
+ 	    ;;
+ 	  *)
+@@ -68,7 +68,7 @@ func_file_conv ()
+ 	mingw/*)
+ 	  file=`cmd //C echo "$file " | sed -e 's/"\(.*\) " *$/\1/'`
+ 	  ;;
+-	cygwin/*)
++	cygwin/*|msys/*)
+ 	  file=`cygpath -m "$file" || echo "$file"`
+ 	  ;;
+ 	wine/*)
+diff --git a/config.guess b/config.guess
+index d622a44..484647f 100644
+--- a/config.guess
++++ b/config.guess
+@@ -844,6 +844,9 @@ EOF
+     amd64:CYGWIN*:*:* | x86_64:CYGWIN*:*:*)
+ 	echo x86_64-unknown-cygwin
+ 	exit ;;
++    amd64:MSYS*:*:* | x86_64:MSYS*:*:*)
++	echo x86_64-unknown-msys
++	exit ;;
+     p*:CYGWIN*:*)
+ 	echo powerpcle-unknown-cygwin
+ 	exit ;;
+diff --git a/config.rpath b/config.rpath
+index 17298f2..055f55a 100644
+--- a/config.rpath
++++ b/config.rpath
+@@ -64,7 +64,7 @@ else
+           ;;
+       esac
+       ;;
+-    mingw* | cygwin* | pw32* | os2* | cegcc*)
++    mingw* | cygwin* | msys* | pw32* | os2* | cegcc*)
+       ;;
+     hpux9* | hpux10* | hpux11*)
+       wl='-Wl,'
+@@ -138,7 +138,7 @@ hardcode_direct=no
+ hardcode_minus_L=no
+ 
+ case "$host_os" in
+-  cygwin* | mingw* | pw32* | cegcc*)
++  cygwin* | msys* | mingw* | pw32* | cegcc*)
+     # FIXME: the MSVC++ port hasn't been tested in a loooong time
+     # When not using gcc, we currently assume that we are using
+     # Microsoft Visual C++.
+@@ -188,7 +188,7 @@ if test "$with_gnu_ld" = yes; then
+         ld_shlibs=no
+       fi
+       ;;
+-    cygwin* | mingw* | pw32* | cegcc*)
++    cygwin* | msys* | mingw* | pw32* | cegcc*)
+       # hardcode_libdir_flag_spec is actually meaningless, as there is
+       # no search path for DLLs.
+       hardcode_libdir_flag_spec='-L$libdir'
+@@ -332,7 +332,7 @@ else
+       ;;
+     bsdi[45]*)
+       ;;
+-    cygwin* | mingw* | pw32* | cegcc*)
++    cygwin* | msys* | mingw* | pw32* | cegcc*)
+       # When not using gcc, we currently assume that we are using
+       # Microsoft Visual C++.
+       # hardcode_libdir_flag_spec is actually meaningless, as there is
+@@ -523,7 +523,7 @@ case "$host_os" in
+   bsdi[45]*)
+     library_names_spec='$libname$shrext'
+     ;;
+-  cygwin* | mingw* | pw32* | cegcc*)
++  cygwin* | msys* | mingw* | pw32* | cegcc*)
+     shrext=.dll
+     library_names_spec='$libname.dll.a $libname.lib'
+     ;;
+-- 
+2.0.0.msysgit.0
+

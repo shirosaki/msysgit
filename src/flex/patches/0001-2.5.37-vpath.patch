@@ -1,0 +1,26 @@
+From 883b2eff9b3d2e7049417e3d562c6dcf9d1c61ab Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 2 Jul 2014 15:09:09 +0900
+Subject: [PATCH 1/3] 2.5.37-vpath
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/flex/2.5.37-vpath.patch
+---
+ Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index fc51921..8a93f5c 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -127,7 +127,7 @@ AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" -I$(top_srcdir)/intl
+ LIBS = @LIBINTL@ @LIBS@
+ 
+ skel.c: flex.skl mkskel.sh flexint.h tables_shared.h
+-	sed 's/m4_/m4postproc_/g; s/m4preproc_/m4_/g' $(srcdir)/flex.skl | $(m4) -P -DFLEX_MAJOR_VERSION=`echo $(VERSION)|cut -f 1 -d .` -DFLEX_MINOR_VERSION=`echo $(VERSION)|cut -f 2 -d .` -DFLEX_SUBMINOR_VERSION=`echo $(VERSION)|cut -f 3 -d .` | sed 's/m4postproc_/m4_/g' | $(SHELL) $(srcdir)/mkskel.sh  >skel.c
++	sed 's/m4_/m4postproc_/g; s/m4preproc_/m4_/g' $(srcdir)/flex.skl | $(m4) -I $(srcdir) -P -DFLEX_MAJOR_VERSION=`echo $(VERSION)|cut -f 1 -d .` -DFLEX_MINOR_VERSION=`echo $(VERSION)|cut -f 2 -d .` -DFLEX_SUBMINOR_VERSION=`echo $(VERSION)|cut -f 3 -d .` | sed 's/m4postproc_/m4_/g' | $(SHELL) $(srcdir)/mkskel.sh  >skel.c
+ 
+ # Explicitly describe dependencies.
+ # You can recreate this with `gcc -I. -MM *.c'
+-- 
+2.0.0.msysgit.0
+
