@@ -1,7 +1,7 @@
-From dd51600c94bf6624c95fddbede23b502bbc4d766 Mon Sep 17 00:00:00 2001
+From a3d020e0c0b90b3ed569ddfd5f3c22c4ca8a5701 Mon Sep 17 00:00:00 2001
 From: Johannes Sixt <j6t@kdbg.org>
 Date: Tue, 29 Dec 2009 21:31:16 +0100
-Subject: [PATCH] Do not start the fstab observer thread.
+Subject: [PATCH 08/18] Do not start the fstab observer thread.
 
 To update mount points while an MSYS program is active, a thread is started
 on program startup that observes fstab changes. On program shutdown, this
@@ -22,8 +22,8 @@ This patch disables the watcher thread by default, but it can be enabled
 by setting the environment variable MSYS_WATCH_FSTAB to a non-empty string
 (that does not start with a zero).
 ---
- source/winsup/cygwin/path.cc |   13 ++++++++++++-
- 1 files changed, 12 insertions(+), 1 deletions(-)
+ msys/rt/src/winsup/cygwin/path.cc | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/msys/rt/src/winsup/cygwin/path.cc b/msys/rt/src/winsup/cygwin/path.cc
 index 1b84bf1..77b6a1e 100644
@@ -49,8 +49,8 @@ index 1b84bf1..77b6a1e 100644
 +	threadID = 0;
 +      }
  }
-
+ 
  /* read_mounts: Given a specific regkey, read mounts from under its
---
-1.6.6.1089.g733b565
+-- 
+1.9.4.msysgit.0
 

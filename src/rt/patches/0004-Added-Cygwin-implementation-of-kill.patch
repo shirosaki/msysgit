@@ -1,7 +1,7 @@
-From 7703f21b767e2cd2fb9089a3e17f18a541a3f491 Mon Sep 17 00:00:00 2001
+From 6e0b161c076216a8b2d6d54197c4a43860fdbb10 Mon Sep 17 00:00:00 2001
 From: Alexander Gavrilov <angavrilov@gmail.com>
 Date: Mon, 14 Jul 2008 22:44:47 +0400
-Subject: [PATCH] Added Cygwin implementation of kill.
+Subject: [PATCH 04/18] Added Cygwin implementation of kill.
 
 Cygwin uses a special implementation of kill, that supports
 terminating native Windows processes via the '-f' switch.
@@ -10,13 +10,13 @@ It is necessary for killing msysgit back-ends from Tcl/Tk.
 
 kill.cc: Revision 1.27 from Cygwin CVS
 ---
- source/winsup/utils/Makefile.in |   10 ++-
- source/winsup/utils/kill.cc     |  294 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 303 insertions(+), 1 deletions(-)
- create mode 100644 source/winsup/utils/kill.cc
+ msys/rt/src/winsup/utils/Makefile.in |  10 +-
+ msys/rt/src/winsup/utils/kill.cc     | 294 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 303 insertions(+), 1 deletion(-)
+ create mode 100644 msys/rt/src/winsup/utils/kill.cc
 
 diff --git a/msys/rt/src/winsup/utils/Makefile.in b/msys/rt/src/winsup/utils/Makefile.in
-index a59f3bb..af96c3d 100644
+index a59f3bb..7e76298 100644
 --- a/msys/rt/src/winsup/utils/Makefile.in
 +++ b/msys/rt/src/winsup/utils/Makefile.in
 @@ -64,7 +64,7 @@ MINGW_LDFLAGS:=-B/usr/lib/mingw $(MINGW_LIB)
@@ -344,5 +344,5 @@ index 0000000..e21646f
 +}
 +
 -- 
-1.5.6.2.1111.g806df
+1.9.4.msysgit.0
 

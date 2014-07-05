@@ -1,7 +1,7 @@
-From 2833c7769e59579d9ae7dc05f928a83817c54e2a Mon Sep 17 00:00:00 2001
+From 4e34511fd8da51fe070b939e31cc9a1f21a841ef Mon Sep 17 00:00:00 2001
 From: Karsten Blees <blees@dcon.de>
 Date: Thu, 5 Jul 2012 10:52:45 +0200
-Subject: [PATCH 16/17] msys.dll: backport multibyte support functions from
+Subject: [PATCH 16/18] msys.dll: backport multibyte support functions from
  newlib 1.20
 
 Unicode/UTF-8 support in bash and other utilities is based on the POSIX
@@ -17727,5 +17727,5 @@ index 715a49a..67e9fd4 100644
  
  /* Minimum and maximum values a `signed char' can hold.  */
 -- 
-1.7.10.rc1.5708.g87c2b
+1.9.4.msysgit.0
 

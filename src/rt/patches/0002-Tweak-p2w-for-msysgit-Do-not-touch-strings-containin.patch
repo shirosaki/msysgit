@@ -1,17 +1,18 @@
-From 33ce3226cb60c7a8a02a0f39baa1f8bea08661b1 Mon Sep 17 00:00:00 2001
+From 36b06837fb212034777f509bb2cf3bc97bb28bc1 Mon Sep 17 00:00:00 2001
 From: Steffen Prohaska <prohaska@zib.de>
 Date: Sat, 10 May 2008 20:29:10 +0200
-Subject: [PATCH] Tweak p2w for msysgit: Do not touch strings containing \n, \r, or \t
+Subject: [PATCH 02/18] Tweak p2w for msysgit: Do not touch strings containing
+ \n, \r, or \t
 
 ---
- msys/rt/src/winsup/cygwin/path.cc |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ msys/rt/src/winsup/cygwin/path.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/msys/rt/src/winsup/cygwin/path.cc b/msys/rt/src/winsup/cygwin/path.cc
-index 582ea77..59827e3 100644
+index 1886914..7439c5f 100644
 --- a/msys/rt/src/winsup/cygwin/path.cc
 +++ b/msys/rt/src/winsup/cygwin/path.cc
-@@ -3044,9 +3044,13 @@ msys_p2w (char const * const path)
+@@ -3025,9 +3025,13 @@ msys_p2w (char const * const path)
  
    //
    // Just return win32 paths and path lists.
@@ -26,5 +27,5 @@ index 582ea77..59827e3 100644
      {
        debug_printf("returning AbsWin32 path: %s", path);
 -- 
-1.5.5.1015.g9d258
+1.9.4.msysgit.0
 

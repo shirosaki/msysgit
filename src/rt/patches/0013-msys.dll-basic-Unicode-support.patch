@@ -1,7 +1,7 @@
-From 7ebac743dd92d54f1ecf770c00404382c0740e4b Mon Sep 17 00:00:00 2001
+From 044b7a6297afca1a62e9c361a3155ca96499ac9d Mon Sep 17 00:00:00 2001
 From: Karsten Blees <blees@dcon.de>
 Date: Wed, 20 Jul 2011 20:53:33 +0200
-Subject: [PATCH] msys.dll: basic Unicode support
+Subject: [PATCH 13/18] msys.dll: basic Unicode support
 
 The msys.dll currently uses Windows' *A APIs, i.e. all strings are in the
 default Windows ANSI encoding, which unfortunately depends on the installed
@@ -32,18 +32,17 @@ to the [f]write APIs may be split anywhere, even in the middle of a UTF-8
 byte sequence. Use a small buffer to store incomplete UTF-8 byte sequences
 until we get to print the remaining bytes.
 
-
 Still TODO:
 - handle console input
 - add wrappers for dynamically loaded *A functions (see autoload.cc 310ff)
 
 Signed-off-by: Karsten Blees <blees@dcon.de>
 ---
- msys/rt/src/winsup/cygwin/Makefile.in         |    2 +-
- msys/rt/src/winsup/cygwin/fhandler.h          |    1 +
- msys/rt/src/winsup/cygwin/fhandler_console.cc |   88 +++--
- msys/rt/src/winsup/cygwin/unicode.c           |  443 +++++++++++++++++++++++++
- msys/rt/src/winsup/cygwin/unicode.h           |   21 ++
+ msys/rt/src/winsup/cygwin/Makefile.in         |   2 +-
+ msys/rt/src/winsup/cygwin/fhandler.h          |   1 +
+ msys/rt/src/winsup/cygwin/fhandler_console.cc |  88 +++--
+ msys/rt/src/winsup/cygwin/unicode.c           | 443 ++++++++++++++++++++++++++
+ msys/rt/src/winsup/cygwin/unicode.h           |  21 ++
  5 files changed, 521 insertions(+), 34 deletions(-)
  create mode 100644 msys/rt/src/winsup/cygwin/unicode.c
  create mode 100644 msys/rt/src/winsup/cygwin/unicode.h
@@ -226,7 +225,7 @@ index 64ae840..233bf09 100644
  	    x = 0;
 diff --git a/msys/rt/src/winsup/cygwin/unicode.c b/msys/rt/src/winsup/cygwin/unicode.c
 new file mode 100644
-index 0000000..fcb7755
+index 0000000..2b4f585
 --- /dev/null
 +++ b/msys/rt/src/winsup/cygwin/unicode.c
 @@ -0,0 +1,443 @@
@@ -675,7 +674,7 @@ index 0000000..fcb7755
 +}
 diff --git a/msys/rt/src/winsup/cygwin/unicode.h b/msys/rt/src/winsup/cygwin/unicode.h
 new file mode 100644
-index 0000000..30ff8ce
+index 0000000..c5a5234
 --- /dev/null
 +++ b/msys/rt/src/winsup/cygwin/unicode.h
 @@ -0,0 +1,21 @@
@@ -701,5 +700,5 @@ index 0000000..30ff8ce
 +
 +#endif /* __UNICODE_H */
 -- 
-1.7.5.3810.gc7570.dirty
+1.9.4.msysgit.0
 

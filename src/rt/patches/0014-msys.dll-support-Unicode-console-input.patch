@@ -1,7 +1,7 @@
-From ddcfdc189bfc751c226962ace8c5812ba666b0b2 Mon Sep 17 00:00:00 2001
+From 13d34dd294b85089d962f009de6eb48227c07671 Mon Sep 17 00:00:00 2001
 From: Karsten Blees <blees@dcon.de>
 Date: Thu, 5 Jul 2012 10:18:33 +0200
-Subject: [PATCH 14/17] msys.dll: support Unicode console input
+Subject: [PATCH 14/18] msys.dll: support Unicode console input
 
 The msys.dll console handler still uses Windows system encoding for console
 input, while everything else in msys.dll has been switched to UTF-8.
@@ -14,7 +14,7 @@ pairs. I don't know if its even possible to enter CJK extended chars (i.e.
 
 Signed-off-by: Karsten Blees <blees@dcon.de>
 ---
- msys/rt/src/winsup/cygwin/fhandler_console.cc |   26 +++++++++++++++----------
+ msys/rt/src/winsup/cygwin/fhandler_console.cc | 26 ++++++++++++++++----------
  1 file changed, 16 insertions(+), 10 deletions(-)
 
 diff --git a/msys/rt/src/winsup/cygwin/fhandler_console.cc b/msys/rt/src/winsup/cygwin/fhandler_console.cc
@@ -90,5 +90,5 @@ index 233bf09..724db03 100644
  
    while (buflen)
 -- 
-1.7.10.rc1.5708.g87c2b
+1.9.4.msysgit.0
 

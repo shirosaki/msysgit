@@ -1,0 +1,26 @@
+From eac3479608f574dec82ae6fcd35f1a21dde3684c Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Sat, 5 Jul 2014 12:16:38 +0900
+Subject: [PATCH 18/18] msys.dll: increase heap
+
+Avoid out of memory error while building gcc.
+---
+ msys/rt/src/winsup/cygwin/shared.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/msys/rt/src/winsup/cygwin/shared.cc b/msys/rt/src/winsup/cygwin/shared.cc
+index b8dbac1..78d57c6 100644
+--- a/msys/rt/src/winsup/cygwin/shared.cc
++++ b/msys/rt/src/winsup/cygwin/shared.cc
+@@ -209,7 +209,7 @@ shared_info::heap_chunk_size ()
+       /* FIXME: We should not be restricted to a fixed size heap no matter
+       what the fixed size is. */
+ 
+-      heap_chunk_in_mb = reg.get_int ("heap_chunk_in_mb", 256);
++      heap_chunk_in_mb = reg.get_int ("heap_chunk_in_mb", 1024);
+       if (heap_chunk_in_mb < 2)
+ 	{
+ 	  heap_chunk_in_mb = 2;
+-- 
+1.9.4.msysgit.0
+

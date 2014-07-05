@@ -1,7 +1,8 @@
-From 423adb2ca25a4b3d62eba06cf2c590171ac28bfa Mon Sep 17 00:00:00 2001
+From 0a65e37ef2fd91bf79f4fa5b2ce56035e6feaa9f Mon Sep 17 00:00:00 2001
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 Date: Tue, 12 May 2009 00:14:17 +0200
-Subject: [PATCH] Ignore the "tty" option from the CYGWIN environment variable
+Subject: [PATCH 06/18] Ignore the "tty" option from the CYGWIN environment
+ variable
 
 There is no working pty emulation in MSys, so it makes no sense to
 allow asking for that emulation.  The symptoms are non-working vi,
@@ -15,8 +16,8 @@ This fixes msysGit issue 138, and possibly 96, 192, 227, 243, 246,
 
 Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
 ---
- source/winsup/cygwin/environ.cc |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ msys/rt/src/winsup/cygwin/environ.cc | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/msys/rt/src/winsup/cygwin/environ.cc b/msys/rt/src/winsup/cygwin/environ.cc
 index 64fcea4..9cf3e80 100644
@@ -31,5 +32,5 @@ index 64fcea4..9cf3e80 100644
    {NULL, {0}, justset, 0, {{0}, {0}}}
  };
 -- 
-1.6.3.msysgit.0
+1.9.4.msysgit.0
 

@@ -1,7 +1,8 @@
-From dafcd879e192bba15c9016e993231bbce48bda6a Mon Sep 17 00:00:00 2001
+From f625a26e00df961a53e8f29dcc4b917ff0487886 Mon Sep 17 00:00:00 2001
 From: Heiko Voigt <hvoigt@hvoigt.net>
 Date: Tue, 12 May 2009 16:23:51 +0200
-Subject: [PATCH] only override the variables HOMEPATH and HOMEDRIVE if they are not set
+Subject: [PATCH 07/18] only override the variables HOMEPATH and HOMEDRIVE if
+ they are not set
 
 It seems that in old windows systems these variables were quite unreliable.
 So they were overriden by using the information the function NetUserGetInfo
@@ -10,11 +11,11 @@ we do not override them if they exist in the default environment.
 
 Signed-off-by: Heiko Voigt <hvoigt@hvoigt.net>
 ---
- source/winsup/cygwin/uinfo.cc |   10 +++++++---
- 1 files changed, 7 insertions(+), 3 deletions(-)
+ msys/rt/src/winsup/cygwin/uinfo.cc | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/msys/rt/src/winsup/cygwin/uinfo.cc b/msys/rt/src/winsup/cygwin/uinfo.cc
-index 7f9b8a1..01f22e9 100644
+index 7f9b8a1..8071982 100644
 --- a/msys/rt/src/winsup/cygwin/uinfo.cc
 +++ b/msys/rt/src/winsup/cygwin/uinfo.cc
 @@ -80,7 +80,9 @@ internal_getlogin (cygheap_user &user)
@@ -42,5 +43,5 @@ index 7f9b8a1..01f22e9 100644
  	  sys_wcstombs (buf, ui->usri3_home_dir, MAX_PATH);
  	  if (!buf[0])
 -- 
-1.6.3.GIT
+1.9.4.msysgit.0
 

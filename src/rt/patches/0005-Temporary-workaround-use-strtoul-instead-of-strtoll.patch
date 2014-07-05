@@ -1,12 +1,12 @@
-From e0e110e8062b643b02ef16c8ee4a503161a9546d Mon Sep 17 00:00:00 2001
+From 3d4559ebacae9b76879d684c84bbe2b8aa0d0944 Mon Sep 17 00:00:00 2001
 From: Alexander Gavrilov <angavrilov@gmail.com>
 Date: Wed, 16 Jul 2008 20:48:53 +0400
-Subject: [PATCH] Temporary workaround: use strtoul instead of strtoll.
+Subject: [PATCH 05/18] Temporary workaround: use strtoul instead of strtoll.
 
 Also fixes a bug in negative pid handling (the 'av' part).
 ---
- source/winsup/utils/kill.cc |   20 +++++++++++++++++---
- 1 files changed, 17 insertions(+), 3 deletions(-)
+ msys/rt/src/winsup/utils/kill.cc | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
 diff --git a/msys/rt/src/winsup/utils/kill.cc b/msys/rt/src/winsup/utils/kill.cc
 index e21646f..3f4934c 100644
@@ -55,5 +55,5 @@ index e21646f..3f4934c 100644
            || (!force && (pid < LONG_MIN || pid > LONG_MAX))
            || (force && (pid <= 0 || pid > ULONG_MAX))) 
 -- 
-1.5.6.3.1089.g3c8b0
+1.9.4.msysgit.0
 

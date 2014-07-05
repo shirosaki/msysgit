@@ -1,15 +1,16 @@
-From 16490ed6f8eb761f5b80db6aebed6d805e48f57c Mon Sep 17 00:00:00 2001
+From ffcf202eccdfbf424ed2c9f4f46a88c476901b68 Mon Sep 17 00:00:00 2001
 From: Heiko Voigt <hvoigt@hvoigt.net>
 Date: Wed, 3 Feb 2010 19:46:42 +0100
-Subject: [PATCH] spawning of processes: combine for loops and resolve fixme
+Subject: [PATCH 09/18] spawning of processes: combine for loops and resolve
+ fixme
 
 This enables easier handling of quoting the arguments. Additionally we
 can get rid of the FIXME comment in the source.
 
 Signed-off-by: Heiko Voigt <hvoigt@hvoigt.net>
 ---
- msys/rt/src/winsup/cygwin/spawn.cc |    6 +-----
- 1 files changed, 1 insertions(+), 5 deletions(-)
+ msys/rt/src/winsup/cygwin/spawn.cc | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/msys/rt/src/winsup/cygwin/spawn.cc b/msys/rt/src/winsup/cygwin/spawn.cc
 index e7278e6..108b2f1 100644
@@ -29,5 +30,5 @@ index e7278e6..108b2f1 100644
  	  const char *a; // Pointer to newargv element.
  
 -- 
-1.6.5.1.msysgit.1.12.gf4ccd
+1.9.4.msysgit.0
 

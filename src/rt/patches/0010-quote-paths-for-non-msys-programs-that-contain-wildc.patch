@@ -1,7 +1,8 @@
-From ca92234f3b5d3d0d54e0ba141cebdcfeebae11d9 Mon Sep 17 00:00:00 2001
+From d7c68280f11fb98658e6fa763b673002cde1c7ae Mon Sep 17 00:00:00 2001
 From: Heiko Voigt <hvoigt@hvoigt.net>
 Date: Wed, 3 Feb 2010 22:16:56 +0100
-Subject: [PATCH] quote paths for non msys programs that contain wildcards
+Subject: [PATCH 10/18] quote paths for non msys programs that contain
+ wildcards
 
 Native windows programs expect to receive quotes in their arguments.
 Unlike in the Unix world where they are stripped by the shell.
@@ -25,8 +26,8 @@ arguments containing Windows wildcards.
 
 Signed-off-by: Heiko Voigt <hvoigt@hvoigt.net>
 ---
- msys/rt/src/winsup/cygwin/spawn.cc |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ msys/rt/src/winsup/cygwin/spawn.cc | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/msys/rt/src/winsup/cygwin/spawn.cc b/msys/rt/src/winsup/cygwin/spawn.cc
 index 108b2f1..342159f 100644
@@ -47,5 +48,5 @@ index 108b2f1..342159f 100644
  	  else
  	    {
 -- 
-1.6.5.1.msysgit.1.12.gf4ccd
+1.9.4.msysgit.0
 
