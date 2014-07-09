@@ -1,0 +1,80 @@
+From e59bf84e77258e456bc3729a3cef3627d2f6dad2 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 1 Jul 2014 00:41:15 +0900
+Subject: [PATCH 08/45] 4.7-java-jni
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.7-java-jni.patch
+---
+ libjava/classpath/configure            | 2 +-
+ libjava/classpath/configure.ac         | 2 +-
+ libjava/include/posix.h                | 6 ++++++
+ libjava/java/net/natVMURLConnection.cc | 4 ++++
+ 4 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/libjava/classpath/configure b/libjava/classpath/configure
+index 23341df..02d8323 100644
+--- a/libjava/classpath/configure
++++ b/libjava/classpath/configure
+@@ -3173,7 +3173,7 @@ case "$host_os" in
+ 	cp_module=""
+ 	;;
+ 	*)
+-	cp_module="-module"
++	cp_module="-module -avoid-version"
+ 	;;
+ esac
+ 
+diff --git a/libjava/classpath/configure.ac b/libjava/classpath/configure.ac
+index 910c8f0..14a6543 100644
+--- a/libjava/classpath/configure.ac
++++ b/libjava/classpath/configure.ac
+@@ -64,7 +64,7 @@ case "$host_os" in
+ 	cp_module=""
+ 	;;
+ 	*)
+-	cp_module="-module"
++	cp_module="-module -avoid-version"
+ 	;;
+ esac
+ 
+diff --git a/libjava/include/posix.h b/libjava/include/posix.h
+index 6bd560c..cbda784 100644
+--- a/libjava/include/posix.h
++++ b/libjava/include/posix.h
+@@ -42,11 +42,17 @@ details.  */
+ #include <java/util/Properties.h>
+ 
+ // Prefix and suffix for shared libraries.
++#ifdef __CYGWIN__
++#define _Jv_platform_solib_prefix "cyg"
++#else
+ #define _Jv_platform_solib_prefix "lib"
++#endif
+ #if defined(__APPLE__) && defined(__MACH__)
+ #define _Jv_platform_solib_suffix ".dylib"
+ #elif defined(HPUX) && defined(HP_PA)
+ #define _Jv_platform_solib_suffix ".sl"
++#elif defined(__CYGWIN__)
++#define _Jv_platform_solib_suffix ".dll"
+ #else
+ #define _Jv_platform_solib_suffix ".so"
+ #endif
+diff --git a/libjava/java/net/natVMURLConnection.cc b/libjava/java/net/natVMURLConnection.cc
+index 0a30a21..810e045 100644
+--- a/libjava/java/net/natVMURLConnection.cc
++++ b/libjava/java/net/natVMURLConnection.cc
+@@ -32,7 +32,11 @@ void
+ java::net::VMURLConnection::init ()
+ {
+ #if defined (HAVE_MAGIC_T) && defined (HAVE_MAGIC_H) && defined (USE_LTDL)
++#ifdef __CYGWIN__
++  lt_dlhandle handle = lt_dlopenext ("cygmagic-1.dll");
++#else
+   lt_dlhandle handle = lt_dlopenext ("libmagic.so");
++#endif
+   if (!handle)
+     return;
+ 
+-- 
+2.0.1
+

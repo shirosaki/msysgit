@@ -1,0 +1,41 @@
+From c2c81148a2f86694c06a70bdf2561421a1b8dce9 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Fri, 11 Jul 2014 15:15:08 +0900
+Subject: [PATCH 45/45] Drop wchar function usage in libquadmath
+
+---
+ libquadmath/printf/quadmath-printf.h | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/libquadmath/printf/quadmath-printf.h b/libquadmath/printf/quadmath-printf.h
+index 32ebcec..1a63ca3 100644
+--- a/libquadmath/printf/quadmath-printf.h
++++ b/libquadmath/printf/quadmath-printf.h
+@@ -138,15 +138,6 @@ __quadmath_do_put (struct __quadmath_printf_file *fp, int wide,
+   size_t len;
+   if (fp->file_p)
+     {
+-      if (wide)
+-	{
+-	  size_t cnt;
+-	  const wchar_t *ls = (const wchar_t *) s;
+-	  for (cnt = 0; cnt < n; cnt++)
+-	    if (putwc (ls[cnt], fp->fp) == WEOF)
+-	      break;
+-	  return cnt;
+-	}
+       return fwrite (s, 1, n, fp->fp);
+     }
+   len = MIN (fp->size, n);
+@@ -162,7 +153,7 @@ __quadmath_do_putc (struct __quadmath_printf_file *fp, int wide,
+ 		    wchar_t c)
+ {
+   if (fp->file_p)
+-    return wide ? (int) putwc (c, fp->fp) : putc (c, fp->fp);
++    return putc (c, fp->fp);
+   if (fp->size)
+     {
+       *(fp->str++) = c;
+-- 
+2.0.1
+

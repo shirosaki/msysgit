@@ -1,0 +1,40 @@
+From d1fe1c5e13e79246da63224b999c0031d2f1ea6e Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Sat, 5 Jul 2014 10:18:13 +0900
+Subject: [PATCH 31/45] Remove GC code to avoid compile errors with old gcc
+
+---
+ gcc/vec.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/gcc/vec.h b/gcc/vec.h
+index c99d2ef..b72bf09 100644
+--- a/gcc/vec.h
++++ b/gcc/vec.h
+@@ -1137,7 +1137,11 @@ gt_ggc_mx (vec<T, va_gc> *v)
+ {
+   extern void gt_ggc_mx (T &);
+   for (unsigned i = 0; i < v->length (); i++)
++#if __GNUC__ < 4
++    ;
++#else
+     gt_ggc_mx ((*v)[i]);
++#endif
+ }
+ 
+ template<typename T>
+@@ -1157,7 +1161,11 @@ gt_pch_nx (vec<T, A, vl_embed> *v)
+ {
+   extern void gt_pch_nx (T &);
+   for (unsigned i = 0; i < v->length (); i++)
++#if __GNUC__ < 4
++    ;
++#else
+     gt_pch_nx ((*v)[i]);
++#endif
+ }
+ 
+ template<typename T, typename A>
+-- 
+2.0.1
+

@@ -1,0 +1,28 @@
+From 3efe59ea037273390c0ef8f3bbbd0cfb2b36d0ef Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Mon, 7 Jul 2014 09:41:05 +0900
+Subject: [PATCH 33/45] Replace backslashes in the script path
+
+Script path may be Windows path. `basename` doesn't work with
+backspash path.
+---
+ gcc/exec-tool.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/exec-tool.in b/gcc/exec-tool.in
+index 6722ce5..4c33a7f 100644
+--- a/gcc/exec-tool.in
++++ b/gcc/exec-tool.in
+@@ -27,7 +27,8 @@ exeext=@host_exeext@
+ fast_install=@enable_fast_install@
+ objdir=@objdir@
+ 
+-invoked=`basename "$0"`
++script_path=`echo $0 | sed 's/\\\\/\//g'`
++invoked=`basename "$script_path"`
+ id=$invoked
+ case "$invoked" in
+   as)
+-- 
+2.0.1
+

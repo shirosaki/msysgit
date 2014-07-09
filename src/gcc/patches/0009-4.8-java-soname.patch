@@ -1,0 +1,37 @@
+From c6a6b7e52d011fb27ac15559512befe9127247ca Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 1 Jul 2014 00:41:21 +0900
+Subject: [PATCH 09/45] 4.8-java-soname
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-java-soname.patch
+---
+ gcc/config/i386/cygwin.h  | 2 +-
+ gcc/config/i386/mingw32.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/config/i386/cygwin.h b/gcc/config/i386/cygwin.h
+index fefbb19..cad5ba3 100644
+--- a/gcc/config/i386/cygwin.h
++++ b/gcc/config/i386/cygwin.h
+@@ -133,7 +133,7 @@ along with GCC; see the file COPYING3.  If not see
+ #define LIBGCC_SONAME "cyggcc_s" LIBGCC_EH_EXTN "-1.dll"
+ 
+ /* We should find a way to not have to update this manually.  */
+-#define LIBGCJ_SONAME "cyggcj" /*LIBGCC_EH_EXTN*/ "-13.dll"
++#define LIBGCJ_SONAME "cyggcj" /*LIBGCC_EH_EXTN*/ "-14.dll"
+ 
+ /* Make stack executable to avoid DEP problems with trampolines.  */
+ #define HAVE_ENABLE_EXECUTE_STACK
+diff --git a/gcc/config/i386/mingw32.h b/gcc/config/i386/mingw32.h
+index 1ac5544..92d3607 100644
+--- a/gcc/config/i386/mingw32.h
++++ b/gcc/config/i386/mingw32.h
+@@ -245,4 +245,4 @@ do {						         \
+ #define LIBGCC_SONAME "libgcc_s" LIBGCC_EH_EXTN "-1.dll"
+ 
+ /* We should find a way to not have to update this manually.  */
+-#define LIBGCJ_SONAME "libgcj" /*LIBGCC_EH_EXTN*/ "-13.dll"
++#define LIBGCJ_SONAME "libgcj" /*LIBGCC_EH_EXTN*/ "-14.dll"
+-- 
+2.0.1
+

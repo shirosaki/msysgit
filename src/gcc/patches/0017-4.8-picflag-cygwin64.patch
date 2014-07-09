@@ -1,0 +1,92 @@
+From d03e3af56ea223e5c277fd1751a40bba14d50421 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 1 Jul 2014 00:42:21 +0900
+Subject: [PATCH 17/45] 4.8-picflag-cygwin64
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-picflag-cygwin64.patch
+---
+ config/picflag.m4   | 4 +++-
+ gcc/configure       | 4 +++-
+ libada/configure    | 4 +++-
+ libgcc/configure    | 4 +++-
+ libiberty/configure | 4 +++-
+ 5 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/config/picflag.m4 b/config/picflag.m4
+index bd81812..2ee5cd0 100644
+--- a/config/picflag.m4
++++ b/config/picflag.m4
+@@ -17,7 +17,9 @@ case "${$2}" in
+     hppa*64*-*-hpux*)
+ 	# PIC is the default for 64-bit PA HP-UX.
+ 	;;
+-    i[[34567]]86-*-cygwin* | i[[34567]]86-*-mingw* | x86_64-*-mingw*)
++    i[[34567]]86-*-cygwin* | x86_64-*-cygwin*)
++	;;
++    i[[34567]]86-*-mingw* | x86_64-*-mingw*)
+ 	;;
+     i[[34567]]86-*-interix[[3-9]]*)
+ 	# Interix 3.x gcc -fpic/-fPIC options generate broken code.
+diff --git a/gcc/configure b/gcc/configure
+index 8279b0c..9f453af 100644
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -4893,7 +4893,9 @@ case "${target}" in
+     hppa*64*-*-hpux*)
+ 	# PIC is the default for 64-bit PA HP-UX.
+ 	;;
+-    i[34567]86-*-cygwin* | i[34567]86-*-mingw* | x86_64-*-mingw*)
++    i[34567]86-*-cygwin* | x86_64-*-cygwin*)
++	;;
++    i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	;;
+     i[34567]86-*-interix[3-9]*)
+ 	# Interix 3.x gcc -fpic/-fPIC options generate broken code.
+diff --git a/libada/configure b/libada/configure
+index da92d0e..19d3e5e 100644
+--- a/libada/configure
++++ b/libada/configure
+@@ -2834,7 +2834,9 @@ case "${host}" in
+     hppa*64*-*-hpux*)
+ 	# PIC is the default for 64-bit PA HP-UX.
+ 	;;
+-    i[34567]86-*-cygwin* | i[34567]86-*-mingw* | x86_64-*-mingw*)
++    i[34567]86-*-cygwin* | x86_64-*-cygwin*)
++	;;
++    i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	;;
+     i[34567]86-*-interix[3-9]*)
+ 	# Interix 3.x gcc -fpic/-fPIC options generate broken code.
+diff --git a/libgcc/configure b/libgcc/configure
+index f88e27b..bb36889 100644
+--- a/libgcc/configure
++++ b/libgcc/configure
+@@ -2228,7 +2228,9 @@ case "${host}" in
+     hppa*64*-*-hpux*)
+ 	# PIC is the default for 64-bit PA HP-UX.
+ 	;;
+-    i[34567]86-*-cygwin* | i[34567]86-*-mingw* | x86_64-*-mingw*)
++    i[34567]86-*-cygwin* | x86_64-*-cygwin*)
++	;;
++    i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	;;
+     i[34567]86-*-interix[3-9]*)
+ 	# Interix 3.x gcc -fpic/-fPIC options generate broken code.
+diff --git a/libiberty/configure b/libiberty/configure
+index 5367027..17bd3c5 100644
+--- a/libiberty/configure
++++ b/libiberty/configure
+@@ -4865,7 +4865,9 @@ case "${host}" in
+     hppa*64*-*-hpux*)
+ 	# PIC is the default for 64-bit PA HP-UX.
+ 	;;
+-    i[34567]86-*-cygwin* | i[34567]86-*-mingw* | x86_64-*-mingw*)
++    i[34567]86-*-cygwin* | x86_64-*-cygwin*)
++	;;
++    i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	;;
+     i[34567]86-*-interix[3-9]*)
+ 	# Interix 3.x gcc -fpic/-fPIC options generate broken code.
+-- 
+2.0.1
+

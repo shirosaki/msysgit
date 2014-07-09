@@ -1,0 +1,50 @@
+From 1d9a3cd87609aab025dd16d8d99afc8185827165 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Fri, 4 Jul 2014 22:26:25 +0900
+Subject: [PATCH 28/45] Fix error badly punctuated parameter list with old gcc
+
+---
+ gcc/gengtype-state.c | 6 +++---
+ gcc/gengtype.h       | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/gcc/gengtype-state.c b/gcc/gengtype-state.c
+index 6092dad..0db0d40 100644
+--- a/gcc/gengtype-state.c
++++ b/gcc/gengtype-state.c
+@@ -165,16 +165,16 @@ fatal_reading_state (struct state_token_st* tok, const char*msg)
+ /* Fatal printf-like message while reading state.  This can't be a
+    function, because there is no way to pass a va_arg to a variant of
+    fatal.  */
+-#define fatal_reading_state_printf(Tok,Fmt,...) do {	\
++#define fatal_reading_state_printf(Tok,Fmt,ARGS...) do {	\
+     struct state_token_st* badtok = Tok;		\
+     if (badtok)						\
+       fatal ("%s:%d:%d: Invalid state file; " Fmt,	\
+ 	      badtok->stok_file,			\
+ 	      badtok->stok_line,			\
+-	      badtok->stok_col, __VA_ARGS__);		\
++	      badtok->stok_col, ##ARGS);		\
+     else						\
+       fatal ("%s:%d: Invalid state file; " Fmt,		\
+-	     state_path, state_line, __VA_ARGS__);	\
++	     state_path, state_line, ##ARGS);	\
+   } while(0)
+ 
+ 
+diff --git a/gcc/gengtype.h b/gcc/gengtype.h
+index f71ad97..2d935bc 100644
+--- a/gcc/gengtype.h
++++ b/gcc/gengtype.h
+@@ -500,7 +500,7 @@ void dbgprint_count_type_at (const char *, int, const char *, type_p);
+ #define DBGPRINT_COUNT_TYPE(Msg,Ty) do {if (do_debug)			\
+       dbgprint_count_type_at (__FILE__, __LINE__, Msg, Ty);}while (0)
+ #else
+-#define DBGPRINTF(Fmt,...) do {/*nodbgrintf*/} while (0)
++#define DBGPRINTF(Fmt...) do {/*nodbgrintf*/} while (0)
+ #define DBGPRINT_COUNT_TYPE(Msg,Ty) do{/*nodbgprint_count_type*/}while (0)
+ #endif /*ENABLE_CHECKING */
+ 
+-- 
+2.0.1
+

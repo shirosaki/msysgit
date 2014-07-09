@@ -1,0 +1,27 @@
+From 9f78529f3ec82cd424fb9495537f049b8e6220bb Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 9 Jul 2014 10:52:51 +0900
+Subject: [PATCH 37/45] Add missing types in parallel/types.h
+
+---
+ libstdc++-v3/include/parallel/types.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/libstdc++-v3/include/parallel/types.h b/libstdc++-v3/include/parallel/types.h
+index 709f3eb..5116902 100644
+--- a/libstdc++-v3/include/parallel/types.h
++++ b/libstdc++-v3/include/parallel/types.h
+@@ -110,6 +110,10 @@ namespace __gnu_parallel
+       EQUAL_SPLIT 
+     };
+ 
++  typedef unsigned long long uint64_t;
++  typedef unsigned short uint16_t;
++  typedef long long int64_t;
++
+   /**
+    * @brief Unsigned integer to index __elements.
+    * The total number of elements for each algorithm must fit into this type.
+-- 
+2.0.1
+

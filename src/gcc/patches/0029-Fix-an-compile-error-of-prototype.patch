@@ -1,0 +1,35 @@
+From e08ddf66988fe11af91ee65492798272f26b4a78 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Fri, 4 Jul 2014 22:29:01 +0900
+Subject: [PATCH 29/45] Fix an compile error of prototype
+
+../../gcc/vec.h:1277: prototype for `template <class T, class A>
+template <class T1> void va_stack::alloc(vec<T1,va_stack,vl_ptr> &,
+unsigned int, vec<T1,va_sta ck,vl_embed> *)' does not match any in
+class `va_stack'
+../../gcc/vec.h:400: candidate is: template <class T> static void
+va_stack::alloc(vec<T,va_stack,vl_ptr> &, unsigned int,
+vec<T,va_stack,vl_embed> *)
+---
+ gcc/vec.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/vec.h b/gcc/vec.h
+index 3c1bb9a..c99d2ef 100644
+--- a/gcc/vec.h
++++ b/gcc/vec.h
+@@ -1272,9 +1272,9 @@ public:
+   void qsort (int (*) (const void *, const void *));
+   unsigned lower_bound (T, bool (*)(const T &, const T &)) const;
+ 
+-  template<typename T1>
++/*  template<typename T1>
+   friend void va_stack::alloc(vec<T1, va_stack, vl_ptr>&, unsigned,
+-			      vec<T1, va_stack, vl_embed> *);
++			      vec<T1, va_stack, vl_embed> *); */
+ 
+   /* FIXME - This field should be private, but we need to cater to
+ 	     compilers that have stricter notions of PODness for types.  */
+-- 
+2.0.1
+

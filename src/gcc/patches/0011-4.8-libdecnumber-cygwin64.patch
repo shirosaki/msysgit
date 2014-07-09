@@ -1,0 +1,68 @@
+From ff42245778e4817bd6a98cc25e47e1fdee04c517 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 1 Jul 2014 00:41:35 +0900
+Subject: [PATCH 11/45] 4.8-libdecnumber-cygwin64
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-libdecnumber-cygwin64.patch
+---
+ config/dfp.m4          | 2 +-
+ gcc/configure          | 2 +-
+ libdecnumber/configure | 2 +-
+ libgcc/configure       | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/config/dfp.m4 b/config/dfp.m4
+index e971db4..5f52bfa 100644
+--- a/config/dfp.m4
++++ b/config/dfp.m4
+@@ -23,7 +23,7 @@ Valid choices are 'yes', 'bid', 'dpd', and 'no'.]) ;;
+     powerpc*-*-linux* | i?86*-*-linux* | x86_64*-*-linux* | s390*-*-linux* | \
+     i?86*-*-gnu* | \
+     i?86*-*-mingw* | x86_64*-*-mingw* | \
+-    i?86*-*-cygwin*)
++    i?86*-*-cygwin* | x86_64*-*cygwin*)
+       enable_decimal_float=yes
+       ;;
+     *)
+diff --git a/gcc/configure b/gcc/configure
+index b9e8a8f..8279b0c 100644
+--- a/gcc/configure
++++ b/gcc/configure
+@@ -7079,7 +7079,7 @@ else
+     powerpc*-*-linux* | i?86*-*-linux* | x86_64*-*-linux* | s390*-*-linux* | \
+     i?86*-*-gnu* | \
+     i?86*-*-mingw* | x86_64*-*-mingw* | \
+-    i?86*-*-cygwin*)
++    i?86*-*-cygwin* | x86_64*-*-cygwin*)
+       enable_decimal_float=yes
+       ;;
+     *)
+diff --git a/libdecnumber/configure b/libdecnumber/configure
+index 0466371..91721de 100644
+--- a/libdecnumber/configure
++++ b/libdecnumber/configure
+@@ -4613,7 +4613,7 @@ else
+     powerpc*-*-linux* | i?86*-*-linux* | x86_64*-*-linux* | s390*-*-linux* | \
+     i?86*-*-gnu* | \
+     i?86*-*-mingw* | x86_64*-*-mingw* | \
+-    i?86*-*-cygwin*)
++    i?86*-*-cygwin* | x86_64*-*-cygwin*)
+       enable_decimal_float=yes
+       ;;
+     *)
+diff --git a/libgcc/configure b/libgcc/configure
+index 1425df6..f88e27b 100644
+--- a/libgcc/configure
++++ b/libgcc/configure
+@@ -4078,7 +4078,7 @@ else
+     powerpc*-*-linux* | i?86*-*-linux* | x86_64*-*-linux* | s390*-*-linux* | \
+     i?86*-*-gnu* | \
+     i?86*-*-mingw* | x86_64*-*-mingw* | \
+-    i?86*-*-cygwin*)
++    i?86*-*-cygwin* | x86_64*-*-cygwin*)
+       enable_decimal_float=yes
+       ;;
+     *)
+-- 
+2.0.1
+

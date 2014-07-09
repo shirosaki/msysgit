@@ -1,0 +1,52 @@
+From 8358551d3bad35e5ae049bb8ab80e41050edf4a9 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 9 Jul 2014 11:21:41 +0900
+Subject: [PATCH 38/45] Add missing types in bits/atomic_base.h
+
+---
+ libstdc++-v3/include/bits/atomic_base.h | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff --git a/libstdc++-v3/include/bits/atomic_base.h b/libstdc++-v3/include/bits/atomic_base.h
+index 609fe8b..ac14cd8 100644
+--- a/libstdc++-v3/include/bits/atomic_base.h
++++ b/libstdc++-v3/include/bits/atomic_base.h
+@@ -41,6 +41,35 @@ namespace std _GLIBCXX_VISIBILITY(default)
+ {
+ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+ 
++  typedef unsigned int  uintptr_t;
++  typedef int           intptr_t;
++
++  /* Define int_least types */
++  typedef char       int_least8_t;
++  typedef short      int_least16_t;
++  typedef int        int_least32_t;
++  typedef long long  int_least64_t;
++
++  typedef unsigned char        uint_least8_t;
++  typedef unsigned short       uint_least16_t;
++  typedef unsigned int         uint_least32_t;
++  typedef unsigned long long   uint_least64_t;
++
++  /* Define int_fast types.  short is often slow */
++  typedef char       int_fast8_t;
++  typedef int        int_fast16_t;
++  typedef int        int_fast32_t;
++  typedef long long  int_fast64_t;
++
++  typedef unsigned char        uint_fast8_t;
++  typedef unsigned int         uint_fast16_t;
++  typedef unsigned int         uint_fast32_t;
++  typedef unsigned long long   uint_fast64_t;
++
++  /* Define intmax. */
++  typedef int64_t    intmax_t;
++  typedef uint64_t   uintmax_t;
++
+   /**
+    * @defgroup atomics Atomics
+    *
+-- 
+2.0.1
+

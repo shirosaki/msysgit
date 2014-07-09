@@ -1,0 +1,40 @@
+From 9bc829da2b281fb85bf983be3b7fae96069a04c9 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 1 Jul 2014 00:41:48 +0900
+Subject: [PATCH 13/45] 4.8-libffi-cygwin64
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-libffi-cygwin64.patch
+---
+ libffi/src/x86/ffi.c   | 2 +-
+ libffi/src/x86/win64.S | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libffi/src/x86/ffi.c b/libffi/src/x86/ffi.c
+index 611e221..6338de2 100644
+--- a/libffi/src/x86/ffi.c
++++ b/libffi/src/x86/ffi.c
+@@ -28,7 +28,7 @@
+    DEALINGS IN THE SOFTWARE.
+    ----------------------------------------------------------------------- */
+ 
+-#if !defined(__x86_64__) || defined(_WIN64)
++#if !defined(__x86_64__) || defined(_WIN64) || defined(__CYGWIN__)
+ 
+ #ifdef _WIN64
+ #include <windows.h>
+diff --git a/libffi/src/x86/win64.S b/libffi/src/x86/win64.S
+index fcdb270..45fe150 100644
+--- a/libffi/src/x86/win64.S
++++ b/libffi/src/x86/win64.S
+@@ -295,7 +295,7 @@ SYMBOL_NAME(ffi_closure_win64):
+ 	mov	%rax, %rcx	# context is first parameter
+ 	mov	%rsp, %rdx	# stack is second parameter
+ 	add	$48, %rdx	# point to start of arguments
+-	mov	$SYMBOL_NAME(ffi_closure_win64_inner), %rax
++	lea	SYMBOL_NAME(ffi_closure_win64_inner)(%rip), %rax
+ 	callq	*%rax		# call the real closure function
+ 	add	$40, %rsp
+ 	movq	%rax, %xmm0	# If the closure returned a float,
+-- 
+2.0.1
+

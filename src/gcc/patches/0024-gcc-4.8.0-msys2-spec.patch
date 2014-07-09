@@ -1,0 +1,406 @@
+From c007c9699f27e59bd5677a890cc07134d3050644 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 1 Jul 2014 00:43:09 +0900
+Subject: [PATCH 24/45] gcc-4.8.0-msys2-spec
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8.0-msys2-spec.patch
+---
+ gcc/config.build           |   4 ++
+ gcc/config.gcc             |  31 +++++++++
+ gcc/config.host            |   7 ++
+ gcc/config/i386/msys-w64.h |  84 ++++++++++++++++++++++++
+ gcc/config/i386/msys.h     | 156 +++++++++++++++++++++++++++++++++++++++++++++
+ gcc/config/i386/t-msys-w64 |   3 +
+ libgcc/config.host         |   3 +
+ libgcc/config/i386/t-msys  |  19 ++++++
+ 8 files changed, 307 insertions(+)
+ create mode 100644 gcc/config/i386/msys-w64.h
+ create mode 100644 gcc/config/i386/msys.h
+ create mode 100644 gcc/config/i386/t-msys-w64
+ create mode 100644 libgcc/config/i386/t-msys
+
+diff --git a/gcc/config.build b/gcc/config.build
+index 12d5248..cde1643 100644
+--- a/gcc/config.build
++++ b/gcc/config.build
+@@ -64,6 +64,10 @@ case $build in
+     build_xm_file=i386/xm-cygwin.h
+     build_exeext=.exe
+     ;;
++  i[34567]86-*-msys* | x86_64-*-msys* )
++    build_xm_file=i386/xm-cygwin.h
++    build_exeext=.exe
++    ;;
+   i[34567]86-*-mingw32* | x86_64-*-mingw*)
+     build_xm_file=i386/xm-mingw32.h
+     build_exeext=.exe
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index ec617cf..1984849 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -1468,6 +1468,35 @@ x86_64-*-cygwin*)
+ 	fi
+ 	use_gcc_stdint=wrap
+ 	;;
++i[34567]86-*-msys*)
++	tm_file="${tm_file} i386/unix.h i386/bsd.h i386/gas.h dbxcoff.h i386/cygming.h i386/msys.h i386/cygwin-stdint.h"
++	xm_file=i386/xm-cygwin.h
++	tmake_file="${tmake_file} i386/t-cygming t-slibgcc"
++	target_gtfiles="\$(srcdir)/config/i386/winnt.c"
++	extra_options="${extra_options} i386/cygming.opt i386/cygwin.opt"
++	extra_objs="winnt.o winnt-stubs.o"
++	c_target_objs="${c_target_objs} msformat-c.o"
++	cxx_target_objs="${cxx_target_objs} winnt-cxx.o msformat-c.o"
++	if test x$enable_threads = xyes; then
++		thread_file='posix'
++	fi
++	use_gcc_stdint=wrap
++	;;
++x86_64-*-msys*)
++	need_64bit_isa=yes
++	tm_file="${tm_file} i386/unix.h i386/bsd.h i386/gas.h dbxcoff.h i386/cygming.h i386/msys.h i386/msys-w64.h i386/cygwin-stdint.h"
++	xm_file=i386/xm-cygwin.h
++	tmake_file="${tmake_file} i386/t-cygming t-slibgcc i386/t-msys-w64"
++	target_gtfiles="\$(srcdir)/config/i386/winnt.c"
++	extra_options="${extra_options} i386/cygming.opt i386/cygwin.opt"
++	extra_objs="winnt.o winnt-stubs.o"
++	c_target_objs="${c_target_objs} msformat-c.o"
++	cxx_target_objs="${cxx_target_objs} winnt-cxx.o msformat-c.o"
++	if test x$enable_threads = xyes; then
++		thread_file='posix'
++	fi
++	use_gcc_stdint=wrap
++	;;
+ i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 	tm_file="${tm_file} i386/unix.h i386/bsd.h i386/gas.h dbxcoff.h i386/cygming.h"
+ 	xm_file=i386/xm-mingw32.h
+@@ -3724,6 +3753,8 @@ case ${target} in
+ 		;;
+ 	i[34567]86-*-cygwin* | x86_64-*-cygwin*)
+ 		;;
++	i[34567]86-*-msys* | x86_64-*-msys*)
++		;;
+ 	i[34567]86-*-mingw* | x86_64-*-mingw*)
+ 		;;
+ 	i[34567]86-*-freebsd* | x86_64-*-freebsd*)
+diff --git a/gcc/config.host b/gcc/config.host
+index d871333..8935199 100644
+--- a/gcc/config.host
++++ b/gcc/config.host
+@@ -221,6 +221,13 @@ case ${host} in
+     host_exeext=.exe
+     host_lto_plugin_soname=cyglto_plugin.dll
+     ;;
++  i[34567]86-*-msys* | x86_64-*-msys*)
++    host_xm_file=i386/xm-cygwin.h
++    out_host_hook_obj=host-cygwin.o
++    host_xmake_file="${host_xmake_file} i386/x-cygwin"
++    host_exeext=.exe
++    host_lto_plugin_soname=msys-lto_plugin.dll
++    ;;
+   i[34567]86-*-mingw32*)
+     host_xm_file=i386/xm-mingw32.h
+     host_xmake_file="${host_xmake_file} i386/x-mingw32"
+diff --git a/gcc/config/i386/msys-w64.h b/gcc/config/i386/msys-w64.h
+new file mode 100644
+index 0000000..22f4cdc
+--- /dev/null
++++ b/gcc/config/i386/msys-w64.h
+@@ -0,0 +1,84 @@
++/* Operating system specific defines to be used when targeting GCC for
++   hosting on Windows 32/64 via MSYS runtime, using GNU tools and
++   the Windows API Library.
++   Copyright (C) 2013 Free Software Foundation, Inc.
++
++This file is part of GCC.
++
++GCC is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 3, or (at your option)
++any later version.
++
++GCC is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with GCC; see the file COPYING3.  If not see
++<http://www.gnu.org/licenses/>.  */
++
++/* Enable multilib.  */
++
++#undef ASM_SPEC
++#define ASM_SPEC "%{m32:--32} %{m64:--64}"
++
++/* To implement C++ function replacement we always wrap the cxx
++   malloc-like operators.  See N2800 #17.6.4.6 [replacement.functions] */
++#undef CXX_WRAP_SPEC_LIST
++#define CXX_WRAP_SPEC_LIST " \
++  --wrap _Znwm \
++  --wrap _Znam \
++  --wrap _ZdlPv \
++  --wrap _ZdaPv \
++  --wrap _ZnwmRKSt9nothrow_t \
++  --wrap _ZnamRKSt9nothrow_t \
++  --wrap _ZdlPvRKSt9nothrow_t \
++  --wrap _ZdaPvRKSt9nothrow_t \
++"
++
++#undef SPEC_32
++#undef SPEC_64
++#define SPEC_32 "m32"
++#define SPEC_64 "!m32"
++
++#undef SUB_LINK_ENTRY32
++#undef SUB_LINK_ENTRY64
++#define SUB_LINK_ENTRY32 "-e __msys_dll_entry@12"
++#define SUB_LINK_ENTRY64 "-e _msys_dll_entry"
++
++#undef SUB_LINK_SPEC
++#undef SUB_LINK_ENTRY
++#define SUB_LINK_SPEC "%{" SPEC_64 ":-m i386pep} %{" SPEC_32 ":-m i386pe}"
++#define SUB_LINK_ENTRY "%{" SPEC_64 ":" SUB_LINK_ENTRY64 "} %{" SPEC_32 ":" SUB_LINK_ENTRY32 "}"
++
++#undef MULTILIB_DEFAULTS
++#define MULTILIB_DEFAULTS { "m64" }
++
++#undef LINK_SPEC
++#define LINK_SPEC SUB_LINK_SPEC "\
++  %{mwindows:--subsystem windows} \
++  %{mconsole:--subsystem console} \
++  " CXX_WRAP_SPEC " \
++  %{shared: %{mdll: %eshared and mdll are not compatible}} \
++  %{shared: --shared} %{mdll:--dll} \
++  %{static:-Bstatic} %{!static:-Bdynamic} \
++  %{shared|mdll: " SUB_LINK_ENTRY " --enable-auto-image-base} \
++  %(shared_libgcc_undefs) \
++  --dll-search-prefix=msys- \
++  %{rdynamic: --export-all-symbols} \
++  %{!shared: %{!mdll: %{" SPEC_32 ":--large-address-aware} --tsaware}}"
++
++/* MSYS64 will have a 64-bit long type. */
++#undef LONG_TYPE_SIZE
++#define LONG_TYPE_SIZE (TARGET_64BIT ? 64 : 32)
++
++/* Override default "long long unsigned int" from cygming.h. */
++#undef SIZE_TYPE
++#define SIZE_TYPE (TARGET_64BIT ? "long unsigned int" : "unsigned int")
++#undef PTRDIFF_TYPE
++#define PTRDIFF_TYPE (TARGET_64BIT ? "long int" : "int")
++
++#undef LIBGCC_SONAME
++#define LIBGCC_SONAME "msys-gcc_s-seh-1.dll"
+diff --git a/gcc/config/i386/msys.h b/gcc/config/i386/msys.h
+new file mode 100644
+index 0000000..2195885
+--- /dev/null
++++ b/gcc/config/i386/msys.h
+@@ -0,0 +1,156 @@
++/* Operating system specific defines to be used when targeting GCC for
++   hosting on Windows32, using a Unix style C library and tools.
++   Copyright (C) 1995-2013 Free Software Foundation, Inc.
++
++This file is part of GCC.
++
++GCC is free software; you can redistribute it and/or modify
++it under the terms of the GNU General Public License as published by
++the Free Software Foundation; either version 3, or (at your option)
++any later version.
++
++GCC is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU General Public License for more details.
++
++You should have received a copy of the GNU General Public License
++along with GCC; see the file COPYING3.  If not see
++<http://www.gnu.org/licenses/>.  */
++
++#define EXTRA_OS_CPP_BUILTINS()					\
++  do								\
++    {								\
++      builtin_define ("__CYGWIN__");			\
++      builtin_define ("__MSYS__");				\
++      if (!TARGET_64BIT)					\
++	builtin_define ("__CYGWIN32__");			\
++      builtin_define ("__unix__");				\
++      builtin_define ("__unix");				\
++    }								\
++  while (0)
++
++#undef CPP_SPEC
++#define CPP_SPEC "%(cpp_cpu) %{posix:-D_POSIX_SOURCE} \
++  %{!ansi:-Dunix} %{pthread: } \
++  -D__MSYS__ \
++  %{mwin32:-DWIN32 -D_WIN32 -D__WIN32 -D__WIN32__ %{!ansi:-DWINNT}} \
++  %{!nostdinc:%{!mno-win32:-idirafter ../include/w32api%s -idirafter ../../include/w32api%s}}\
++"
++
++#undef STARTFILE_SPEC
++#define STARTFILE_SPEC "\
++  %{!shared: %{!mdll: crt0%O%s \
++  %{pg:gcrt0%O%s}}}\
++  crtbegin.o%s"
++
++#undef ENDFILE_SPEC
++#define ENDFILE_SPEC \
++  "%{Ofast|ffast-math|funsafe-math-optimizations:crtfastmath.o%s}\
++   crtend.o%s"
++
++/* Normally, -lgcc is not needed since everything in it is in the DLL, but we
++   want to allow things to be added to it when installing new versions of
++   GCC without making a new msys-2.0.dll, so we leave it.  Profiling is handled
++   by calling the init function from main.  */
++
++#ifdef ENABLE_SHARED_LIBGCC
++#define SHARED_LIBGCC_SPEC " \
++ %{static|static-libgcc:-lgcc -lgcc_eh} \
++ %{!static: \
++   %{!static-libgcc: \
++     -lgcc_s -lgcc \
++    } \
++  } "
++#else
++#define SHARED_LIBGCC_SPEC " -lgcc "
++#endif
++
++#undef REAL_LIBGCC_SPEC
++#define REAL_LIBGCC_SPEC SHARED_LIBGCC_SPEC
++
++/* We have to dynamic link to get to the system DLLs.  All of libc, libm and
++   the Unix stuff is in msys-2.0.dll.  The import library is called
++   'libmsys-2.0.a'.  For Windows applications, include more libraries, but
++   always include kernel32.  We'd like to specific subsystem windows to
++   ld, but that doesn't work just yet.  */
++
++#undef LIB_SPEC
++#define LIB_SPEC "\
++  %{pg:-lgmon} \
++  %{pthread: } \
++  -lmsys-2.0 \
++  %{mwindows:-lgdi32 -lcomdlg32} \
++  -ladvapi32 -lshell32 -luser32 -lkernel32"
++
++/* To implement C++ function replacement we always wrap the cxx
++   malloc-like operators.  See N2800 #17.6.4.6 [replacement.functions] */
++#undef CXX_WRAP_SPEC_LIST
++#define CXX_WRAP_SPEC_LIST " \
++  --wrap _Znwj \
++  --wrap _Znaj \
++  --wrap _ZdlPv \
++  --wrap _ZdaPv \
++  --wrap _ZnwjRKSt9nothrow_t \
++  --wrap _ZnajRKSt9nothrow_t \
++  --wrap _ZdlPvRKSt9nothrow_t \
++  --wrap _ZdaPvRKSt9nothrow_t \
++"
++
++#if defined (USE_CYGWIN_LIBSTDCXX_WRAPPERS)
++
++#if USE_CYGWIN_LIBSTDCXX_WRAPPERS
++/* Default on, only explict -mno disables.  */
++#define CXX_WRAP_SPEC_OPT "!mno-use-libstdc-wrappers"
++#else
++/* Default off, only explict -m enables.  */
++#define CXX_WRAP_SPEC_OPT "muse-libstdc-wrappers"
++#endif
++
++#define CXX_WRAP_SPEC "%{" CXX_WRAP_SPEC_OPT ":" CXX_WRAP_SPEC_LIST "}"
++
++#else /* !defined (USE_CYGWIN_LIBSTDCXX_WRAPPERS)  */
++
++#define CXX_WRAP_SPEC ""
++
++#endif /* ?defined (USE_CYGWIN_LIBSTDCXX_WRAPPERS) */
++
++#define LINK_SPEC "\
++  %{mwindows:--subsystem windows} \
++  %{mconsole:--subsystem console} \
++  " CXX_WRAP_SPEC " \
++  %{shared: %{mdll: %eshared and mdll are not compatible}} \
++  %{shared: --shared} %{mdll:--dll} \
++  %{static:-Bstatic} %{!static:-Bdynamic} \
++  %{shared|mdll: --enable-auto-image-base -e __msys_dll_entry@12} \
++  --dll-search-prefix=msys- \
++  %{rdynamic: --export-all-symbols} \
++  %{!shared: %{!mdll: --large-address-aware --tsaware}}"
++
++/* Binutils does not handle weak symbols from dlls correctly.  For now,
++   do not use them unnecessarily in gthr-posix.h.  */
++#define GTHREAD_USE_WEAK 0
++
++/* Every program on MSYS links against msys-2.0.dll which contains
++   the pthread routines.  There is no need to explicitly link them
++   and the -pthread flag is not recognized.  */
++#undef GOMP_SELF_SPECS
++#define GOMP_SELF_SPECS ""
++#undef GTM_SELF_SPECS
++#define GTM_SELF_SPECS ""
++
++/* This matches SHLIB_SONAME and SHLIB_SOVERSION in t-msys. */
++#if DWARF2_UNWIND_INFO
++#define LIBGCC_EH_EXTN ""
++#else
++#define LIBGCC_EH_EXTN "-sjlj"
++#endif
++#define LIBGCC_SONAME "msys-gcc_s" LIBGCC_EH_EXTN "-1.dll"
++
++/* We should find a way to not have to update this manually.  */
++#define LIBGCJ_SONAME "msys-gcj" /*LIBGCC_EH_EXTN*/ "-14.dll"
++
++/* Make stack executable to avoid DEP problems with trampolines.  */
++#define HAVE_ENABLE_EXECUTE_STACK
++#undef  CHECK_EXECUTE_STACK_ENABLED
++#define CHECK_EXECUTE_STACK_ENABLED flag_setstackexecutable
+diff --git a/gcc/config/i386/t-msys-w64 b/gcc/config/i386/t-msys-w64
+new file mode 100644
+index 0000000..01968fd
+--- /dev/null
++++ b/gcc/config/i386/t-msys-w64
+@@ -0,0 +1,3 @@
++MULTILIB_OPTIONS = m64/m32
++MULTILIB_DIRNAMES = 64
++MULTILIB_OSDIRNAMES = ../lib ../lib32
+diff --git a/libgcc/config.host b/libgcc/config.host
+index 76d007c..fd12006 100644
+--- a/libgcc/config.host
++++ b/libgcc/config.host
+@@ -277,6 +277,9 @@ i[34567]86-*-mingw* | x86_64-*-mingw*)
+ i[34567]86-*-cygwin* | x86_64-*-cygwin*)
+   enable_execute_stack=config/i386/enable-execute-stack-mingw32.c
+   ;;
++i[34567]86-*-msys* | x86_64-*-msys*)
++  enable_execute_stack=config/i386/enable-execute-stack-mingw32.c
++  ;;
+ *)
+   enable_execute_stack=enable-execute-stack-empty.c;
+   ;;
+diff --git a/libgcc/config/i386/t-msys b/libgcc/config/i386/t-msys
+new file mode 100644
+index 0000000..9142002
+--- /dev/null
++++ b/libgcc/config/i386/t-msys
+@@ -0,0 +1,19 @@
++# If we are building next to winsup, this will let us find the real
++# limits.h when building libgcc2.  Otherwise, winsup must be installed
++# first.
++LIBGCC2_INCLUDES += -I$(srcdir)/../winsup/include \
++	-I$(srcdir)/../winsup/cygwin/include
++
++# MSYS-specific parts of LIB_SPEC
++SHLIB_LC = -lmsys-2.0 -ladvapi32 -lshell32 -luser32 -lkernel32
++
++# We have already included one of the t-{dw2,sjlj}-eh fragments for EH_MODEL
++SHLIB_EH_EXTENSION = $(subst -dw2,,-$(EH_MODEL))
++
++# MSYS uses different conventions than MinGW; override generic SHLIB_ def'ns here.
++SHLIB_IMPLIB = @shlib_base_name@$(SHLIB_EXT).a
++SHLIB_SONAME = msys-gcc_s$(SHLIB_EH_EXTENSION)-$(SHLIB_SOVERSION)$(SHLIB_EXT)
++# This must match the definitions of SHLIB_SONAME/SHLIB_SOVERSION and LIBGCC_SONAME.
++# We'd like to use SHLIB_SONAME here too, and we can, since
++# we don't rely on shlib_base_name substitution for it.
++SHLIB_MKMAP_OPTS = -v pe_dll=$(SHLIB_SONAME)
+-- 
+2.0.1
+

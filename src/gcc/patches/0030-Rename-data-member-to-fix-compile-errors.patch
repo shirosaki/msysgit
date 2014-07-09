@@ -1,0 +1,367 @@
+From a371261cb02b0d965a1bcfaf1dd4baebceb56ac8 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Sat, 5 Jul 2014 07:59:54 +0900
+Subject: [PATCH 30/45] Rename data member to fix compile errors
+
+ANSI C++ forbids data member `x' with same name as enclosing class
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=7647
+---
+ gcc/gcse.c            | 34 ++++++++++++++--------------
+ gcc/genautomata.c     | 62 +++++++++++++++++++++++++--------------------------
+ gcc/postreload-gcse.c | 10 ++++-----
+ 3 files changed, 53 insertions(+), 53 deletions(-)
+
+diff --git a/gcc/gcse.c b/gcc/gcse.c
+index e0bd200..d64d5cb 100644
+--- a/gcc/gcse.c
++++ b/gcc/gcse.c
+@@ -259,7 +259,7 @@ static struct obstack gcse_obstack;
+ struct expr
+ {
+   /* The expression.  */
+-  rtx expr;
++  rtx expr1;
+   /* Index in the available expression bitmaps.  */
+   int bitmap_index;
+   /* Next entry with the same hash.  */
+@@ -681,7 +681,7 @@ compute_local_properties (sbitmap *transp, sbitmap *comp, sbitmap *antloc,
+ 	     We start by assuming all are transparent [none are killed], and
+ 	     then reset the bits for those that are.  */
+ 	  if (transp)
+-	    compute_transp (expr->expr, indx, transp);
++	    compute_transp (expr->expr1, indx, transp);
+ 
+ 	  /* The occurrences recorded in antic_occr are exactly those that
+ 	     we want to set to nonzero in ANTLOC.  */
+@@ -1113,7 +1113,7 @@ insert_expr_in_table (rtx x, enum machine_mode mode, rtx insn, int antic_p,
+   cur_expr = table->table[hash];
+   found = 0;
+ 
+-  while (cur_expr && 0 == (found = expr_equiv_p (cur_expr->expr, x)))
++  while (cur_expr && 0 == (found = expr_equiv_p (cur_expr->expr1, x)))
+     {
+       /* If the expression isn't found, save a pointer to the end of
+ 	 the list.  */
+@@ -1133,7 +1133,7 @@ insert_expr_in_table (rtx x, enum machine_mode mode, rtx insn, int antic_p,
+ 	last_expr->next_same_hash = cur_expr;
+ 
+       /* Set the fields of the expr element.  */
+-      cur_expr->expr = x;
++      cur_expr->expr1 = x;
+       cur_expr->bitmap_index = table->n_elems++;
+       cur_expr->next_same_hash = NULL;
+       cur_expr->antic_occr = NULL;
+@@ -1395,7 +1395,7 @@ dump_hash_table (FILE *file, const char *name, struct hash_table_d *table)
+ 	expr = flat_table[i];
+ 	fprintf (file, "Index %d (hash value %d; max distance %d)\n  ",
+ 		 expr->bitmap_index, hash_val[i], expr->max_distance);
+-	print_rtl (file, expr->expr);
++	print_rtl (file, expr->expr1);
+ 	fprintf (file, "\n");
+       }
+ 
+@@ -1835,13 +1835,13 @@ prune_expressions (bool pre_p)
+       for (expr = expr_hash_table.table[ui]; expr; expr = expr->next_same_hash)
+ 	{
+ 	  /* Note potentially trapping expressions.  */
+-	  if (may_trap_p (expr->expr))
++	  if (may_trap_p (expr->expr1))
+ 	    {
+ 	      bitmap_set_bit (prune_exprs, expr->bitmap_index);
+ 	      continue;
+ 	    }
+ 
+-	  if (!pre_p && MEM_P (expr->expr))
++	  if (!pre_p && MEM_P (expr->expr1))
+ 	    /* Note memory references that can be clobbered by a call.
+ 	       We do not split abnormal edges in hoisting, so would
+ 	       a memory reference get hoisted along an abnormal edge,
+@@ -1849,13 +1849,13 @@ prune_expressions (bool pre_p)
+ 	       constant memory references can be hoisted along abnormal
+ 	       edges.  */
+ 	    {
+-	      if (GET_CODE (XEXP (expr->expr, 0)) == SYMBOL_REF
+-		  && CONSTANT_POOL_ADDRESS_P (XEXP (expr->expr, 0)))
++	      if (GET_CODE (XEXP (expr->expr1, 0)) == SYMBOL_REF
++		  && CONSTANT_POOL_ADDRESS_P (XEXP (expr->expr1, 0)))
+ 		continue;
+ 
+-	      if (MEM_READONLY_P (expr->expr)
+-		  && !MEM_VOLATILE_P (expr->expr)
+-		  && MEM_NOTRAP_P (expr->expr))
++	      if (MEM_READONLY_P (expr->expr1)
++		  && !MEM_VOLATILE_P (expr->expr1)
++		  && MEM_NOTRAP_P (expr->expr1))
+ 		/* Constant memory reference, e.g., a PIC address.  */
+ 		continue;
+ 
+@@ -2088,7 +2088,7 @@ process_insert_insn (struct expr *expr)
+ {
+   rtx reg = expr->reaching_reg;
+   /* Copy the expression to make sure we don't have any sharing issues.  */
+-  rtx exp = copy_rtx (expr->expr);
++  rtx exp = copy_rtx (expr->expr1);
+   rtx pat;
+ 
+   start_sequence ();
+@@ -2359,7 +2359,7 @@ pre_insert_copy_insn (struct expr *expr, rtx insn)
+ 		 case the PARALLEL will have a single set.  */
+ 	      if (first_set == NULL_RTX)
+ 		first_set = x;
+-	      if (expr_equiv_p (SET_SRC (x), expr->expr))
++	      if (expr_equiv_p (SET_SRC (x), expr->expr1))
+ 	        {
+ 	          set = x;
+ 	          break;
+@@ -2995,7 +2995,7 @@ should_hoist_expr_to_dom (basic_block expr_bb, struct expr *expr,
+ 	     code.  This decision is made by the observation of CSiBE
+ 	     on ARM target, while it has no obvious effect on other
+ 	     targets like x86, x86_64, mips and powerpc.  */
+-	  else if (CONST_INT_P (expr->expr)
++	  else if (CONST_INT_P (expr->expr1)
+ 		   || (BB_DATA (bb)->max_reg_pressure[pressure_class]
+ 			 >= ira_class_hard_regs_num[pressure_class]
+ 		       && decreased_pressure < *nregs))
+@@ -3957,7 +3957,7 @@ trim_ld_motion_mems (void)
+ 	  for (expr = expr_hash_table.table[hash];
+ 	       expr != NULL;
+ 	       expr = expr->next_same_hash)
+-	    if (expr_equiv_p (expr->expr, ptr->pattern))
++	    if (expr_equiv_p (expr->expr1, ptr->pattern))
+ 	      break;
+ 	}
+       else
+@@ -3996,7 +3996,7 @@ update_ld_motion_stores (struct expr * expr)
+ {
+   struct ls_expr * mem_ptr;
+ 
+-  if ((mem_ptr = find_rtx_in_ldst (expr->expr)))
++  if ((mem_ptr = find_rtx_in_ldst (expr->expr1)))
+     {
+       /* We can try to find just the REACHED stores, but is shouldn't
+ 	 matter to set the reaching reg everywhere...  some might be
+diff --git a/gcc/genautomata.c b/gcc/genautomata.c
+index 3665d95..c05feb9 100644
+--- a/gcc/genautomata.c
++++ b/gcc/genautomata.c
+@@ -512,7 +512,7 @@ struct decl
+     struct unit_pattern_rel_decl absence;
+     struct reserv_decl reserv;
+     struct insn_reserv_decl insn_reserv;
+-  } decl;
++  } decl1;
+ };
+ 
+ /* The following structures represent parsed reservation strings.  */
+@@ -594,7 +594,7 @@ struct regexp
+     struct repeat_regexp repeat;
+     struct allof_regexp allof;
+     struct oneof_regexp oneof;
+-  } regexp;
++  } regexp1;
+ };
+ 
+ /* Represents description of pipeline hazard description based on
+@@ -888,56 +888,56 @@ struct state_ainsn_table
+      if (_decl->mode != dm_unit)					\
+        decl_mode_check_failed (_decl->mode, "dm_unit",			\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_decl)->decl.unit; }))
++     &(_decl)->decl1.unit; }))
+ 
+ #define DECL_BYPASS(d) __extension__					\
+ (({ __typeof (d) const _decl = (d);					\
+      if (_decl->mode != dm_bypass)					\
+        decl_mode_check_failed (_decl->mode, "dm_bypass",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_decl)->decl.bypass; }))
++     &(_decl)->decl1.bypass; }))
+ 
+ #define DECL_AUTOMATON(d) __extension__					\
+ (({ __typeof (d) const _decl = (d);					\
+      if (_decl->mode != dm_automaton)					\
+        decl_mode_check_failed (_decl->mode, "dm_automaton",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_decl)->decl.automaton; }))
++     &(_decl)->decl1.automaton; }))
+ 
+ #define DECL_EXCL(d) __extension__					\
+ (({ __typeof (d) const _decl = (d);					\
+      if (_decl->mode != dm_excl)					\
+        decl_mode_check_failed (_decl->mode, "dm_excl",			\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_decl)->decl.excl; }))
++     &(_decl)->decl1.excl; }))
+ 
+ #define DECL_PRESENCE(d) __extension__					\
+ (({ __typeof (d) const _decl = (d);					\
+      if (_decl->mode != dm_presence)					\
+        decl_mode_check_failed (_decl->mode, "dm_presence",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_decl)->decl.presence; }))
++     &(_decl)->decl1.presence; }))
+ 
+ #define DECL_ABSENCE(d) __extension__					\
+ (({ __typeof (d) const _decl = (d);					\
+      if (_decl->mode != dm_absence)					\
+        decl_mode_check_failed (_decl->mode, "dm_absence",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_decl)->decl.absence; }))
++     &(_decl)->decl1.absence; }))
+ 
+ #define DECL_RESERV(d) __extension__					\
+ (({ __typeof (d) const _decl = (d);					\
+      if (_decl->mode != dm_reserv)					\
+        decl_mode_check_failed (_decl->mode, "dm_reserv",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_decl)->decl.reserv; }))
++     &(_decl)->decl1.reserv; }))
+ 
+ #define DECL_INSN_RESERV(d) __extension__				\
+ (({ __typeof (d) const _decl = (d);					\
+      if (_decl->mode != dm_insn_reserv)					\
+        decl_mode_check_failed (_decl->mode, "dm_insn_reserv",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_decl)->decl.insn_reserv; }))
++     &(_decl)->decl1.insn_reserv; }))
+ 
+ static const char *decl_name (enum decl_mode);
+ static void decl_mode_check_failed (enum decl_mode, const char *,
+@@ -990,42 +990,42 @@ decl_mode_check_failed (enum decl_mode mode, const char *expected_mode_str,
+      if (_regexp->mode != rm_unit)					\
+        regexp_mode_check_failed (_regexp->mode, "rm_unit",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_regexp)->regexp.unit; }))
++     &(_regexp)->regexp1.unit; }))
+ 
+ #define REGEXP_RESERV(r) __extension__					\
+ (({ struct regexp *const _regexp = (r);					\
+      if (_regexp->mode != rm_reserv)					\
+        regexp_mode_check_failed (_regexp->mode, "rm_reserv",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_regexp)->regexp.reserv; }))
++     &(_regexp)->regexp1.reserv; }))
+ 
+ #define REGEXP_SEQUENCE(r) __extension__				\
+ (({ struct regexp *const _regexp = (r);					\
+      if (_regexp->mode != rm_sequence)					\
+        regexp_mode_check_failed (_regexp->mode, "rm_sequence",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_regexp)->regexp.sequence; }))
++     &(_regexp)->regexp1.sequence; }))
+ 
+ #define REGEXP_REPEAT(r) __extension__					\
+ (({ struct regexp *const _regexp = (r);					\
+      if (_regexp->mode != rm_repeat)					\
+        regexp_mode_check_failed (_regexp->mode, "rm_repeat",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_regexp)->regexp.repeat; }))
++     &(_regexp)->regexp1.repeat; }))
+ 
+ #define REGEXP_ALLOF(r) __extension__					\
+ (({ struct regexp *const _regexp = (r);					\
+      if (_regexp->mode != rm_allof)					\
+        regexp_mode_check_failed (_regexp->mode, "rm_allof",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_regexp)->regexp.allof; }))
++     &(_regexp)->regexp1.allof; }))
+ 
+ #define REGEXP_ONEOF(r) __extension__					\
+ (({ struct regexp *const _regexp = (r);					\
+      if (_regexp->mode != rm_oneof)					\
+        regexp_mode_check_failed (_regexp->mode, "rm_oneof",		\
+ 			       __FILE__, __LINE__, __FUNCTION__);	\
+-     &(_regexp)->regexp.oneof; }))
++     &(_regexp)->regexp1.oneof; }))
+ 
+ static const char *regexp_name (enum regexp_mode);
+ static void regexp_mode_check_failed (enum regexp_mode, const char *,
+@@ -1074,21 +1074,21 @@ regexp_mode_check_failed (enum regexp_mode mode,
+ 
+ #else /* #if defined ENABLE_RTL_CHECKING && (GCC_VERSION >= 2007) */
+ 
+-#define DECL_UNIT(d) (&(d)->decl.unit)
+-#define DECL_BYPASS(d) (&(d)->decl.bypass)
+-#define DECL_AUTOMATON(d) (&(d)->decl.automaton)
+-#define DECL_EXCL(d) (&(d)->decl.excl)
+-#define DECL_PRESENCE(d) (&(d)->decl.presence)
+-#define DECL_ABSENCE(d) (&(d)->decl.absence)
+-#define DECL_RESERV(d) (&(d)->decl.reserv)
+-#define DECL_INSN_RESERV(d) (&(d)->decl.insn_reserv)
+-
+-#define REGEXP_UNIT(r) (&(r)->regexp.unit)
+-#define REGEXP_RESERV(r) (&(r)->regexp.reserv)
+-#define REGEXP_SEQUENCE(r) (&(r)->regexp.sequence)
+-#define REGEXP_REPEAT(r) (&(r)->regexp.repeat)
+-#define REGEXP_ALLOF(r) (&(r)->regexp.allof)
+-#define REGEXP_ONEOF(r) (&(r)->regexp.oneof)
++#define DECL_UNIT(d) (&(d)->decl1.unit)
++#define DECL_BYPASS(d) (&(d)->decl1.bypass)
++#define DECL_AUTOMATON(d) (&(d)->decl1.automaton)
++#define DECL_EXCL(d) (&(d)->decl1.excl)
++#define DECL_PRESENCE(d) (&(d)->decl1.presence)
++#define DECL_ABSENCE(d) (&(d)->decl1.absence)
++#define DECL_RESERV(d) (&(d)->decl1.reserv)
++#define DECL_INSN_RESERV(d) (&(d)->decl1.insn_reserv)
++
++#define REGEXP_UNIT(r) (&(r)->regexp1.unit)
++#define REGEXP_RESERV(r) (&(r)->regexp1.reserv)
++#define REGEXP_SEQUENCE(r) (&(r)->regexp1.sequence)
++#define REGEXP_REPEAT(r) (&(r)->regexp1.repeat)
++#define REGEXP_ALLOF(r) (&(r)->regexp1.allof)
++#define REGEXP_ONEOF(r) (&(r)->regexp1.oneof)
+ 
+ #endif /* #if defined ENABLE_RTL_CHECKING && (GCC_VERSION >= 2007) */
+ 
+diff --git a/gcc/postreload-gcse.c b/gcc/postreload-gcse.c
+index eb6f0d8..5cc82b4 100644
+--- a/gcc/postreload-gcse.c
++++ b/gcc/postreload-gcse.c
+@@ -94,7 +94,7 @@ static htab_t expr_table;
+ struct expr
+ {
+   /* The expression (SET_SRC for expressions, PATTERN for assignments).  */
+-  rtx expr;
++  rtx expr1;
+ 
+   /* The same hash for this entry.  */
+   hashval_t hash;
+@@ -305,7 +305,7 @@ expr_equiv_p (const void *exp1p, const void *exp2p)
+ {
+   const struct expr *const exp1 = (const struct expr *) exp1p;
+   const struct expr *const exp2 = (const struct expr *) exp2p;
+-  int equiv_p = exp_equiv_p (exp1->expr, exp2->expr, 0, true);
++  int equiv_p = exp_equiv_p (exp1->expr1, exp2->expr1, 0, true);
+ 
+   gcc_assert (!equiv_p || exp1->hash == exp2->hash);
+   return equiv_p;
+@@ -339,7 +339,7 @@ insert_expr_in_table (rtx x, rtx insn)
+      we're going to see more expressions later on.  */
+   cur_expr = (struct expr *) obstack_alloc (&expr_obstack,
+ 					    sizeof (struct expr));
+-  cur_expr->expr = x;
++  cur_expr->expr1 = x;
+   cur_expr->hash = hash;
+   cur_expr->avail_occr = NULL;
+ 
+@@ -408,7 +408,7 @@ lookup_expr_in_table (rtx pat)
+ 
+   tmp_expr = (struct expr *) obstack_alloc (&expr_obstack,
+ 					    sizeof (struct expr));
+-  tmp_expr->expr = pat;
++  tmp_expr->expr1 = pat;
+   tmp_expr->hash = hash;
+   tmp_expr->avail_occr = NULL;
+ 
+@@ -435,7 +435,7 @@ dump_hash_table_entry (void **slot, void *filep)
+   struct occr *occr;
+ 
+   fprintf (file, "expr: ");
+-  print_rtl (file, expr->expr);
++  print_rtl (file, expr->expr1);
+   fprintf (file,"\nhashcode: %u\n", expr->hash);
+   fprintf (file,"list of occurrences:\n");
+   occr = expr->avail_occr;
+-- 
+2.0.1
+

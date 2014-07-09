@@ -1,0 +1,39 @@
+From b6c0bd26ef8580629888f8c27a0e9c15cfbeaf43 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Mon, 7 Jul 2014 10:35:19 +0900
+Subject: [PATCH 34/45] Change msys-2.0 to msys-1.0
+
+---
+ gcc/config/i386/msys.h    | 2 +-
+ libgcc/config/i386/t-msys | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/gcc/config/i386/msys.h b/gcc/config/i386/msys.h
+index 2195885..ef49359 100644
+--- a/gcc/config/i386/msys.h
++++ b/gcc/config/i386/msys.h
+@@ -79,7 +79,7 @@ along with GCC; see the file COPYING3.  If not see
+ #define LIB_SPEC "\
+   %{pg:-lgmon} \
+   %{pthread: } \
+-  -lmsys-2.0 \
++  -lmsys-1.0 \
+   %{mwindows:-lgdi32 -lcomdlg32} \
+   -ladvapi32 -lshell32 -luser32 -lkernel32"
+ 
+diff --git a/libgcc/config/i386/t-msys b/libgcc/config/i386/t-msys
+index 9142002..48cb2bf 100644
+--- a/libgcc/config/i386/t-msys
++++ b/libgcc/config/i386/t-msys
+@@ -5,7 +5,7 @@ LIBGCC2_INCLUDES += -I$(srcdir)/../winsup/include \
+ 	-I$(srcdir)/../winsup/cygwin/include
+ 
+ # MSYS-specific parts of LIB_SPEC
+-SHLIB_LC = -lmsys-2.0 -ladvapi32 -lshell32 -luser32 -lkernel32
++SHLIB_LC = -lmsys-1.0 -ladvapi32 -lshell32 -luser32 -lkernel32
+ 
+ # We have already included one of the t-{dw2,sjlj}-eh fragments for EH_MODEL
+ SHLIB_EH_EXTENSION = $(subst -dw2,,-$(EH_MODEL))
+-- 
+2.0.1
+

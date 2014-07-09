@@ -1,0 +1,37 @@
+From 689b5b40cd7e0b27079778b18dd223ef75676a07 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Wed, 9 Jul 2014 14:39:36 +0900
+Subject: [PATCH 39/45] Do not use wchar functions
+
+---
+ libstdc++-v3/configure | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/libstdc++-v3/configure b/libstdc++-v3/configure
+index 679ac2b..12a9451 100644
+--- a/libstdc++-v3/configure
++++ b/libstdc++-v3/configure
+@@ -16497,12 +16497,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+   fi
+ 
+-  if test x"$enable_wchar_t" = x"yes"; then
+-
+-$as_echo "#define _GLIBCXX_USE_WCHAR_T 1" >>confdefs.h
+-
+-  fi
+-
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for enabled wchar_t specializations" >&5
+ $as_echo_n "checking for enabled wchar_t specializations... " >&6; }
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_wchar_t" >&5
+@@ -70708,7 +70702,6 @@ $as_echo "$ac_ld_relro" >&6; }
+ 
+          # All of the dependencies for wide character support are here, so
+          # turn it on.
+-         $as_echo "#define _GLIBCXX_USE_WCHAR_T 1" >>confdefs.h
+ 
+         ;;
+     esac
+-- 
+2.0.1
+

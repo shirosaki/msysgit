@@ -1,0 +1,27 @@
+From 56f5b53e50c038c7556a437e8f7cb573bcff41d7 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Sat, 5 Jul 2014 10:32:25 +0900
+Subject: [PATCH 32/45] Add cast to fix compile errors
+
+ANSI C++ forbids implicit conversion from `void *' in argument
+passing.
+---
+ gcc/config/i386/host-cygwin.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gcc/config/i386/host-cygwin.c b/gcc/config/i386/host-cygwin.c
+index 7a8152a..f625787 100644
+--- a/gcc/config/i386/host-cygwin.c
++++ b/gcc/config/i386/host-cygwin.c
+@@ -67,7 +67,7 @@ cygwin_gt_pch_get_address (size_t sz, int fd)
+   if (base == MAP_FAILED)
+     base = NULL;
+   else
+-    munmap (base, sz);
++    munmap ((caddr_t)base, sz);
+ 
+   if (lseek (fd, p, SEEK_SET) == (off_t) -1 )
+     fatal_error ("can%'t set position in PCH file: %m");
+-- 
+2.0.1
+

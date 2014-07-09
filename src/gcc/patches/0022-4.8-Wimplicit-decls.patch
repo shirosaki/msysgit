@@ -1,0 +1,59 @@
+From 74c1000cd577405bca09069d81ca1d29309a5a87 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 1 Jul 2014 00:42:52 +0900
+Subject: [PATCH 22/45] 4.8-Wimplicit-decls
+
+https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-Wimplicit-decls.patch
+---
+ libiberty/aclocal.m4 | 6 +++++-
+ libiberty/configure  | 3 +++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/libiberty/aclocal.m4 b/libiberty/aclocal.m4
+index bf8a907..6b5e66c 100644
+--- a/libiberty/aclocal.m4
++++ b/libiberty/aclocal.m4
+@@ -15,6 +15,8 @@ AC_CACHE_CHECK([for working strncmp], ac_cv_func_strncmp_works,
+ /* Test by Jim Wilson and Kaveh Ghazi.
+    Check whether strncmp reads past the end of its string parameters. */
+ #include <sys/types.h>
++#include <string.h>
++#include <stdlib.h>
+ 
+ #ifdef HAVE_FCNTL_H
+ #include <fcntl.h>
+@@ -147,7 +149,9 @@ if test $ac_cv_os_cray = yes; then
+ fi
+ 
+ AC_CACHE_CHECK(stack direction for C alloca, ac_cv_c_stack_direction,
+-[AC_TRY_RUN([find_stack_direction ()
++[AC_TRY_RUN([
++#include <stdlib.h>
++find_stack_direction ()
+ {
+   static char *addr = 0;
+   auto char dummy;
+diff --git a/libiberty/configure b/libiberty/configure
+index 17bd3c5..fd01f27 100644
+--- a/libiberty/configure
++++ b/libiberty/configure
+@@ -6069,6 +6069,7 @@ else
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
++#include <stdlib.h>
+ find_stack_direction ()
+ {
+   static char *addr = 0;
+@@ -6838,6 +6839,8 @@ else
+ /* Test by Jim Wilson and Kaveh Ghazi.
+    Check whether strncmp reads past the end of its string parameters. */
+ #include <sys/types.h>
++#include <string.h>
++#include <stdlib.h>
+ 
+ #ifdef HAVE_FCNTL_H
+ #include <fcntl.h>
+-- 
+2.0.1
+

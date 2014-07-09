@@ -1,0 +1,22 @@
+From 9f6c7559e0e57ab59d9db39e965b88e8c81d3b24 Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 10 Jul 2014 16:57:26 +0900
+Subject: [PATCH 43/45] Fix compile error due to missing __GTHREAD_COND_INIT
+
+---
+ libstdc++-v3/config.h.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libstdc++-v3/config.h.in b/libstdc++-v3/config.h.in
+index 61ac3ab..1f0f737 100644
+--- a/libstdc++-v3/config.h.in
++++ b/libstdc++-v3/config.h.in
+@@ -1197,3 +1197,5 @@
+ # define HAVE_TANL 1
+ # define tanl _tanl
+ #endif
++
++#define _GTHREAD_USE_COND_INIT_FUNC 1
+-- 
+2.0.1
+
