@@ -11,6 +11,8 @@ details. */
 #ifndef _I386_BYTEORDER_H
 #define _I386_BYTEORDER_H
 
+#include <_ansi.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,12 +38,12 @@ extern unsigned short int	ntohs(unsigned short int);
 extern unsigned long int	htonl(unsigned long int);
 extern unsigned short int	htons(unsigned short int);
 
-extern __inline__ unsigned long int	__ntohl(unsigned long int);
-extern __inline__ unsigned short int	__ntohs(unsigned short int);
-extern __inline__ unsigned long int	__constant_ntohl(unsigned long int);
-extern __inline__ unsigned short int	__constant_ntohs(unsigned short int);
+_ELIDABLE_INLINE unsigned long int	__ntohl(unsigned long int);
+_ELIDABLE_INLINE unsigned short int	__ntohs(unsigned short int);
+_ELIDABLE_INLINE unsigned long int	__constant_ntohl(unsigned long int);
+_ELIDABLE_INLINE unsigned short int	__constant_ntohs(unsigned short int);
 
-extern __inline__ unsigned long int
+_ELIDABLE_INLINE unsigned long int
 __ntohl(unsigned long int x)
 {
 	__asm__("xchgb %b0,%h0\n\t"	/* swap lower bytes	*/
@@ -58,7 +60,7 @@ __ntohl(unsigned long int x)
 			     (((unsigned long int)(x) & 0x00ff0000U) >>  8) | \
 			     (((unsigned long int)(x) & 0xff000000U) >> 24)))
 
-extern __inline__ unsigned short int
+_ELIDABLE_INLINE unsigned short int
 __ntohs(unsigned short int x)
 {
 	__asm__("xchgb %b0,%h0"		/* swap bytes		*/
@@ -76,7 +78,7 @@ __ntohs(unsigned short int x)
 #define __constant_htonl(x) __constant_ntohl(x)
 #define __constant_htons(x) __constant_ntohs(x)
 
-#ifdef  __OPTIMIZE__
+#if defined (__OPTIMIZE__) && !defined (__GNUC_STDC_INLINE__)
 #  define ntohl(x) \
 (__builtin_constant_p((long)(x)) ? \
  __constant_ntohl((x)) : \
