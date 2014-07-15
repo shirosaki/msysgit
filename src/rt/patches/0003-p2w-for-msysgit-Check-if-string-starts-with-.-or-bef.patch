@@ -1,7 +1,7 @@
-From 5629b84d4a9437f4fe63af20479472fa3a290ff0 Mon Sep 17 00:00:00 2001
+From b07c8051157d8019fcf3be55b773dc100ead286f Mon Sep 17 00:00:00 2001
 From: Steffen Prohaska <prohaska@zib.de>
 Date: Sat, 10 May 2008 20:30:09 +0200
-Subject: [PATCH 03/18] p2w for msysgit: Check if string starts with "." or "/"
+Subject: [PATCH 03/19] p2w for msysgit: Check if string starts with "." or "/"
  before considering it a pathlist
 
 ---

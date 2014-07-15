@@ -1,7 +1,7 @@
-From 3d4559ebacae9b76879d684c84bbe2b8aa0d0944 Mon Sep 17 00:00:00 2001
+From 819a9094fdb33821d43836989e27430b253655f4 Mon Sep 17 00:00:00 2001
 From: Alexander Gavrilov <angavrilov@gmail.com>
 Date: Wed, 16 Jul 2008 20:48:53 +0400
-Subject: [PATCH 05/18] Temporary workaround: use strtoul instead of strtoll.
+Subject: [PATCH 05/19] Temporary workaround: use strtoul instead of strtoll.
 
 Also fixes a bug in negative pid handling (the 'av' part).
 ---

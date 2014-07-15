@@ -1,7 +1,7 @@
-From 35311f5b2a8dd5a5a8996e7830b858cc0c503ee0 Mon Sep 17 00:00:00 2001
+From d83248ef3dc86112302336326a298b3ecc1c5489 Mon Sep 17 00:00:00 2001
 From: Kirill Smelkov <kirr@landau.phys.spbu.ru>
 Date: Wed, 4 May 2011 16:05:14 +0400
-Subject: [PATCH 12/18] bash: Don't load user32.dll for every shell process
+Subject: [PATCH 12/19] bash: Don't load user32.dll for every shell process
 
 I've discovered that like msys.dll, bash too pulls user32.dll in on every
 startup, which slows things down considerably.

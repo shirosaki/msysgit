@@ -1,7 +1,7 @@
-From eac3479608f574dec82ae6fcd35f1a21dde3684c Mon Sep 17 00:00:00 2001
+From 609f9e5c8d9291a4cc52d656199a6c2465d5cf53 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Sat, 5 Jul 2014 12:16:38 +0900
-Subject: [PATCH 18/18] msys.dll: increase heap
+Subject: [PATCH 18/19] msys.dll: increase heap
 
 Avoid out of memory error while building gcc.
 ---

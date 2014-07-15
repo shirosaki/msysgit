@@ -1,7 +1,7 @@
-From f625a26e00df961a53e8f29dcc4b917ff0487886 Mon Sep 17 00:00:00 2001
+From 386360ca236c5dfd839add285b8dd24654e9c4e9 Mon Sep 17 00:00:00 2001
 From: Heiko Voigt <hvoigt@hvoigt.net>
 Date: Tue, 12 May 2009 16:23:51 +0200
-Subject: [PATCH 07/18] only override the variables HOMEPATH and HOMEDRIVE if
+Subject: [PATCH 07/19] only override the variables HOMEPATH and HOMEDRIVE if
  they are not set
 
 It seems that in old windows systems these variables were quite unreliable.

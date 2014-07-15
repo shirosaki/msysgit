@@ -1,7 +1,7 @@
-From 6dcc7ac81725e9bcb9be38f3698b0f64c10b7407 Mon Sep 17 00:00:00 2001
+From 5b9e510785fa4a46432e5143766a8c85c0dd1aa3 Mon Sep 17 00:00:00 2001
 From: Karsten Blees <blees@dcon.de>
 Date: Thu, 5 Jul 2012 10:27:11 +0200
-Subject: [PATCH 15/18] msys.dll: support ALT+NUMPAD console input
+Subject: [PATCH 15/19] msys.dll: support ALT+NUMPAD console input
 
 The msys console handler currently ignores all key up events.
 

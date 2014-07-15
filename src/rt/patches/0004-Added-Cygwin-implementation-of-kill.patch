@@ -1,7 +1,7 @@
-From 6e0b161c076216a8b2d6d54197c4a43860fdbb10 Mon Sep 17 00:00:00 2001
+From 1bfb68a7904792821b55a5bad08ecc5e6a9ca40b Mon Sep 17 00:00:00 2001
 From: Alexander Gavrilov <angavrilov@gmail.com>
 Date: Mon, 14 Jul 2008 22:44:47 +0400
-Subject: [PATCH 04/18] Added Cygwin implementation of kill.
+Subject: [PATCH 04/19] Added Cygwin implementation of kill.
 
 Cygwin uses a special implementation of kill, that supports
 terminating native Windows processes via the '-f' switch.
