@@ -1,4 +1,4 @@
-From 79ca403d73ebeb94af066ac85e0c87f92680d95f Mon Sep 17 00:00:00 2001
+From 85ab78d855d22b0c331a36862b7df303980e7927 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 22 Jul 2014 14:58:19 +0900
 Subject: [PATCH 19/20] msys.dll: add wchar functions from newlib 1.20 for gcc
@@ -43,10 +43,15 @@ Add wchar function required for gcc 4.8 build.
  msys/rt/src/newlib/libc/stdio/putwc.c              |   53 +
  msys/rt/src/newlib/libc/stdio/putwchar.c           |   92 +
  msys/rt/src/newlib/libc/stdio/sniprintf.c          |  120 ++
+ msys/rt/src/newlib/libc/stdio/snprintf.c           |   68 +-
+ msys/rt/src/newlib/libc/stdio/sprintf.c            |  720 +++++---
  msys/rt/src/newlib/libc/stdio/swprintf.c           |  626 +++++++
  msys/rt/src/newlib/libc/stdio/ungetwc.c            |  115 ++
- msys/rt/src/newlib/libc/stdio/vfprintf.c           | 1953 ++++++++++++++++----
+ msys/rt/src/newlib/libc/stdio/vfprintf.c           | 1954 ++++++++++++++++----
  msys/rt/src/newlib/libc/stdio/vfwprintf.c          | 1942 +++++++++++++++++++
+ msys/rt/src/newlib/libc/stdio/vscanf.c             |   24 +-
+ msys/rt/src/newlib/libc/stdio/vsnprintf.c          |   61 +-
+ msys/rt/src/newlib/libc/stdio/vsprintf.c           |   47 +-
  msys/rt/src/newlib/libc/stdlib/Makefile.in         |   11 +-
  msys/rt/src/newlib/libc/stdlib/btowc.c             |   32 +
  msys/rt/src/newlib/libc/string/Makefile.in         |    6 +-
@@ -59,7 +64,7 @@ Add wchar function required for gcc 4.8 build.
  msys/rt/src/newlib/libc/time/tzlock.c              |   56 +
  msys/rt/src/newlib/libc/time/wcsftime.c            |   68 +
  msys/rt/src/winsup/cygwin/cygwin.din               |   14 +
- 53 files changed, 9045 insertions(+), 661 deletions(-)
+ 58 files changed, 9650 insertions(+), 977 deletions(-)
  create mode 100644 msys/rt/src/newlib/libc/include/machine/_default_types.h
  create mode 100644 msys/rt/src/newlib/libc/include/machine/_types.h
  create mode 100644 msys/rt/src/newlib/libc/include/stdint.h
@@ -3323,6 +3328,986 @@ index 0000000..98a2c25
 +}
 +
 +#endif
+diff --git a/msys/rt/src/newlib/libc/stdio/snprintf.c b/msys/rt/src/newlib/libc/stdio/snprintf.c
+index c67f8e4..13414e3 100644
+--- a/msys/rt/src/newlib/libc/stdio/snprintf.c
++++ b/msys/rt/src/newlib/libc/stdio/snprintf.c
+@@ -1,9 +1,5 @@
+-/* doc in sprintf.c */
+-
+-/* This code created by modifying sprintf.c so copyright inherited. */
+-
+ /*
+- * Copyright (c) 1990 The Regents of the University of California.
++ * Copyright (c) 1990, 2007 The Regents of the University of California.
+  * All rights reserved.
+  *
+  * Redistribution and use in source and binary forms are permitted
+@@ -18,7 +14,11 @@
+  * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  */
++/* doc in sprintf.c */
++/* This code created by modifying sprintf.c so copyright inherited. */
+ 
++#include <_ansi.h>
++#include <reent.h>
+ #include <stdio.h>
+ #ifdef _HAVE_STDC
+ #include <stdarg.h>
+@@ -26,36 +26,47 @@
+ #include <varargs.h>
+ #endif
+ #include <limits.h>
+-#include <_ansi.h>
++#include <errno.h>
+ #include "local.h"
+ 
+ int
+ #ifdef _HAVE_STDC
+-_DEFUN (_snprintf_r, (ptr, str, size, fmt), struct _reent *ptr _AND char *str _AND size_t size _AND _CONST char *fmt _DOTS)
++_DEFUN(_snprintf_r, (ptr, str, size, fmt),
++       struct _reent *ptr _AND
++       char *str          _AND
++       size_t size        _AND
++       _CONST char *fmt _DOTS)
+ #else
+-_snprintf_r (ptr, str, size, fmt, va_alist)
+-     struct _reent *ptr;
+-     char *str;
+-     size_t size;
+-     _CONST char *fmt;
+-     va_dcl
++_snprintf_r(ptr, str, size, fmt, va_alist)
++            struct _reent *ptr;
++            char *str;
++            size_t size;
++            _CONST char *fmt;
++            va_dcl
+ #endif
+ {
+   int ret;
+   va_list ap;
+   FILE f;
+ 
++  if (size > INT_MAX)
++    {
++      ptr->_errno = EOVERFLOW;
++      return EOF;
++    }
+   f._flags = __SWR | __SSTR;
+   f._bf._base = f._p = (unsigned char *) str;
+   f._bf._size = f._w = (size > 0 ? size - 1 : 0);
+-  f._data = ptr;
++  f._file = -1;  /* No file. */
+ #ifdef _HAVE_STDC
+   va_start (ap, fmt);
+ #else
+   va_start (ap);
+ #endif
+-  ret = vfprintf (&f, fmt, ap);
++  ret = _svfprintf_r (ptr, &f, fmt, ap);
+   va_end (ap);
++  if (ret < EOF)
++    ptr->_errno = EOVERFLOW;
+   if (size > 0)
+     *f._p = 0;
+   return (ret);
+@@ -65,30 +76,41 @@ _snprintf_r (ptr, str, size, fmt, va_alist)
+ 
+ int
+ #ifdef _HAVE_STDC
+-_DEFUN (snprintf, (str, size, fmt), char *str _AND size_t size _AND _CONST char *fmt _DOTS)
++_DEFUN(snprintf, (str, size, fmt),
++       char *str   _AND
++       size_t size _AND
++       _CONST char *fmt _DOTS)
+ #else
+-snprintf (str, size, fmt, va_alist)
+-     char *str;
+-     size_t size;
+-     _CONST char *fmt;
+-     va_dcl
++snprintf(str, size, fmt, va_alist)
++         char *str;
++         size_t size;
++         _CONST char *fmt;
++         va_dcl
+ #endif
+ {
+   int ret;
+   va_list ap;
+   FILE f;
++  struct _reent *ptr = _REENT;
+ 
++  if (size > INT_MAX)
++    {
++      ptr->_errno = EOVERFLOW;
++      return EOF;
++    }
+   f._flags = __SWR | __SSTR;
+   f._bf._base = f._p = (unsigned char *) str;
+   f._bf._size = f._w = (size > 0 ? size - 1 : 0);
+-  f._data = _REENT;
++  f._file = -1;  /* No file. */
+ #ifdef _HAVE_STDC
+   va_start (ap, fmt);
+ #else
+   va_start (ap);
+ #endif
+-  ret = vfprintf (&f, fmt, ap);
++  ret = _svfprintf_r (ptr, &f, fmt, ap);
+   va_end (ap);
++  if (ret < EOF)
++    ptr->_errno = EOVERFLOW;
+   if (size > 0)
+     *f._p = 0;
+   return (ret);
+diff --git a/msys/rt/src/newlib/libc/stdio/sprintf.c b/msys/rt/src/newlib/libc/stdio/sprintf.c
+index b537632..072622e 100644
+--- a/msys/rt/src/newlib/libc/stdio/sprintf.c
++++ b/msys/rt/src/newlib/libc/stdio/sprintf.c
+@@ -16,276 +16,552 @@
+  */
+ 
+ /*
+-
+ FUNCTION
+-        <<printf>>, <<fprintf>>, <<sprintf>>, <<snprintf>>---format output
++<<sprintf>>, <<fprintf>>, <<printf>>, <<snprintf>>, <<asprintf>>, <<asnprintf>>---format output
++
+ INDEX
+ 	fprintf
+ INDEX
++	_fprintf_r
++INDEX
+ 	printf
+ INDEX
++	_printf_r
++INDEX
++	asprintf
++INDEX
++	_asprintf_r
++INDEX
+ 	sprintf
+ INDEX
++	_sprintf_r
++INDEX
+ 	snprintf
++INDEX
++	_snprintf_r
++INDEX
++	asnprintf
++INDEX
++	_asnprintf_r
+ 
+ ANSI_SYNOPSIS
+         #include <stdio.h>
+ 
+-        int printf(const char *<[format]> [, <[arg]>, ...]);
+-        int fprintf(FILE *<[fd]>, const char *<[format]> [, <[arg]>, ...]);
+-        int sprintf(char *<[str]>, const char *<[format]> [, <[arg]>, ...]);
+-        int snprintf(char *<[str]>, size_t <[size]>, const char *<[format]> [, <[arg]>, ...]);
+-
+-TRAD_SYNOPSIS
+-	#include <stdio.h>
+-
+-	int printf(<[format]> [, <[arg]>, ...])
+-	char *<[format]>;
+-
+-	int fprintf(<[fd]>, <[format]> [, <[arg]>, ...]);
+-	FILE *<[fd]>;
+-	char *<[format]>;
+-
+-	int sprintf(<[str]>, <[format]> [, <[arg]>, ...]);
+-	char *<[str]>;
+-	char *<[format]>;
+-
+-	int snprintf(<[str]>, size_t <[size]>, <[format]> [, <[arg]>, ...]);
+-	char *<[str]>;
+-        size_t <[size]>;
+-	char *<[format]>;
++        int printf(const char *<[format]>, ...);
++        int fprintf(FILE *<[fd]>, const char *<[format]>, ...);
++        int sprintf(char *<[str]>, const char *<[format]>, ...);
++        int snprintf(char *<[str]>, size_t <[size]>, const char *<[format]>,
++                     ...);
++        int asprintf(char **<[strp]>, const char *<[format]>, ...);
++        char *asnprintf(char *<[str]>, size_t *<[size]>, const char *<[format]>,
++                        ...);
++
++        int _printf_r(struct _reent *<[ptr]>, const char *<[format]>, ...);
++        int _fprintf_r(struct _reent *<[ptr]>, FILE *<[fd]>,
++                       const char *<[format]>, ...);
++        int _sprintf_r(struct _reent *<[ptr]>, char *<[str]>,
++                       const char *<[format]>, ...);
++        int _snprintf_r(struct _reent *<[ptr]>, char *<[str]>, size_t <[size]>,
++                        const char *<[format]>, ...);
++        int _asprintf_r(struct _reent *<[ptr]>, char **<[strp]>,
++                        const char *<[format]>, ...);
++        char *_asnprintf_r(struct _reent *<[ptr]>, char *<[str]>,
++                           size_t *<[size]>, const char *<[format]>, ...);
+ 
+ DESCRIPTION
+         <<printf>> accepts a series of arguments, applies to each a
+         format specifier from <<*<[format]>>>, and writes the
+-        formatted data to <<stdout>>, terminated with a null character.
+-        The behavior of <<printf>> is undefined if there are not enough
+-        arguments for the format.
+-        <<printf>> returns when it reaches the end of the format string.
+-        If there are more arguments than the format requires, excess
+-        arguments are ignored.
+-
+-        <<fprintf>>, <<sprintf>> and <<snprintf>> are identical to <<printf>>,
+-        other than the destination of the formatted output: <<fprintf>> sends
+-        the output to a specified file <[fd]>, while <<sprintf>> stores the
+-        output in the specified char array <[str]> and <<snprintf>> limits
+-        number of characters written to <[str]> to at most <[size]> (including
+-        terminating <<0>>).  For <<sprintf>> and <<snprintf>>, the behavior is
+-        also undefined if the output <<*<[str]>>> overlaps with one of the
+-        arguments. <[format]> is a pointer to a charater string containing
+-        two types of objects: ordinary characters (other than <<%>>), which
+-        are copied unchanged to the output, and conversion
+-        specifications, each of which is introduced by <<%>>.
+-        (To include <<%>> in the output, use <<%%>> in the format string.)
+-        A conversion specification has the following form:
+-
+-.       %[<[flags]>][<[width]>][.<[prec]>][<[size]>][<[type]>]
+-
+-        The fields of the conversion specification have the following meanings:
++        formatted data to <<stdout>>, without a terminating NUL
++        character.  The behavior of <<printf>> is undefined if there
++        are not enough arguments for the format.  <<printf>> returns
++        when it reaches the end of the format string.  If there are
++        more arguments than the format requires, excess arguments are
++        ignored.
++
++        <<fprintf>> is like <<printf>>, except that output is directed
++        to the stream <[fd]> rather than <<stdout>>.
++
++        <<sprintf>> is like <<printf>>, except that output is directed
++        to the buffer <[str]>, and a terminating NUL is output.
++        Behavior is undefined if more output is generated than the
++        buffer can hold.
++
++        <<snprintf>> is like <<sprintf>>, except that output is
++        limited to at most <[size]> bytes, including the terminating
++        <<NUL>>.  As a special case, if <[size]> is 0, <[str]> can be
++        NULL, and <<snprintf>> merely calculates how many bytes would
++        be printed.
++
++        <<asprintf>> is like <<sprintf>>, except that the output is
++        stored in a dynamically allocated buffer, <[pstr]>, which
++        should be freed later with <<free>>.
++
++        <<asnprintf>> is like <<sprintf>>, except that the return type
++        is either the original <[str]> if it was large enough, or a
++        dynamically allocated string if the output exceeds *<[size]>;
++        the length of the result is returned in *<[size]>.  When
++        dynamic allocation occurs, the contents of the original
++        <[str]> may have been modified.
++
++        For <<sprintf>>, <<snprintf>>, and <<asnprintf>>, the behavior
++	is undefined if the output <<*<[str]>>> overlaps with one of
++	the arguments.  Behavior is also undefined if the argument for
++	<<%n>> within <<*<[format]>>> overlaps another argument.
++
++        <[format]> is a pointer to a character string containing two
++	types of objects: ordinary characters (other than <<%>>),
++	which are copied unchanged to the output, and conversion
++	specifications, each of which is introduced by <<%>>. (To
++	include <<%>> in the output, use <<%%>> in the format string.)
++	A conversion specification has the following form:
++
++.       %[<[pos]>][<[flags]>][<[width]>][.<[prec]>][<[size]>]<[type]>
++
++        The fields of the conversion specification have the following
++        meanings:
+ 
+         O+
++	o <[pos]>
++
++        Conversions normally consume arguments in the order that they
++        are presented.  However, it is possible to consume arguments
++        out of order, and reuse an argument for more than one
++        conversion specification (although the behavior is undefined
++        if the same argument is requested with different types), by
++        specifying <[pos]>, which is a decimal integer followed by
++        '$'.  The integer must be between 1 and <NL_ARGMAX> from
++        limits.h, and if argument <<%n$>> is requested, all earlier
++        arguments must be requested somewhere within <[format]>.  If
++        positional parameters are used, then all conversion
++        specifications except for <<%%>> must specify a position.
++	This positional parameters method is a POSIX extension to the C
++	standard definition for the functions.
++
+ 	o <[flags]>
+ 
+-	an optional sequence of characters which control
+-	output justification, numeric signs, decimal points,
+-	trailing zeroes, and octal and hex prefixes.
+-	The flag characters are minus (<<->>), plus (<<+>>),
+-	space ( ), zero (<<0>>), and sharp (<<#>>).  They can
+-	appear in any combination.
+-
+-	o+
+-    	o -
+-		The result of the conversion is left justified, and the right is
+-		padded with blanks.  If you do not use this flag, the result is right
+-		justified, and padded on the left.
+-
+-        o +
+-		The result of a signed conversion (as determined by <[type]>)
+-		will always begin with a plus or minus sign.  (If you do not use
+-        this flag, positive values do not begin with a plus sign.)
+-
+-        o " " (space)
+-		If the first character of a signed conversion specification
+-        is not a sign, or if a signed conversion results in no
+-		characters, the result will begin with a space.  If the
+-        space ( ) flag and the plus (<<+>>) flag both appear,
+-		the space flag is ignored.
+-
+-        o 0
+-		If the <[type]> character is <<d>>, <<i>>, <<o>>, <<u>>,
+-		<<x>>, <<X>>, <<e>>, <<E>>, <<f>>, <<g>>, or <<G>>: leading zeroes,
+-		are used to pad the field width (following any indication of sign or
+-		base); no spaces are used for padding.  If the zero (<<0>>) and
+-		minus (<<->>) flags both appear, the zero (<<0>>) flag will
+-		be ignored.  For <<d>>, <<i>>, <<o>>, <<u>>, <<x>>, and <<X>>
+-		conversions, if a precision <[prec]> is specified, the zero (<<0>>)
+-        flag is ignored.
+-		
+-		Note that <<0>> is interpreted as a flag, not as the beginning
+-        of a field width.
+-
+-        o #
+-		The result is to be converted to an alternative form, according
+-		to the next character:
+-
+-	    o+
+-		    o 0
+-			increases precision to force the first digit
+-                        of the result to be a zero.
++	<[flags]> is an optional sequence of characters which control
++	output justification, numeric signs, decimal points, trailing
++	zeros, and octal and hex prefixes.  The flag characters are
++	minus (<<->>), plus (<<+>>), space ( ), zero (<<0>>), sharp
++	(<<#>>), and quote (<<'>>).  They can appear in any
++	combination, although not all flags can be used for all
++	conversion specification types.
++
++		o+
++		o '
++			A POSIX extension to the C standard.  However, this
++			implementation presently treats it as a no-op, which
++			is the default behavior for the C locale, anyway.  (If
++			it did what it is supposed to, when <[type]> were <<i>>,
++			<<d>>, <<u>>, <<f>>, <<F>>, <<g>>, or <<G>>, the
++			integer portion of the conversion would be formatted
++			with thousands' grouping wide characters.)
++
++		o -
++			The result of the conversion is left
++			justified, and the right is padded with
++			blanks.  If you do not use this flag, the
++			result is right justified, and padded on the
++			left.
++
++	        o +
++			The result of a signed conversion (as
++			determined by <[type]> of <<d>>, <<i>>, <<a>>,
++			<<A>>, <<e>>, <<E>>, <<f>>, <<F>>, <<g>>, or
++			<<G>>) will always begin with a plus or minus
++			sign.  (If you do not use this flag, positive
++			values do not begin with a plus sign.)
++
++		o " " (space)
++			If the first character of a signed conversion
++		        specification is not a sign, or if a signed
++		        conversion results in no characters, the
++		        result will begin with a space.  If the space
++		        ( ) flag and the plus (<<+>>) flag both
++		        appear, the space flag is ignored.
++
++	        o 0
++			If the <[type]> character is <<d>>, <<i>>,
++			<<o>>, <<u>>, <<x>>, <<X>>, <<a>>, <<A>>,
++			<<e>>, <<E>>, <<f>>, <<F>>, <<g>>, or <<G>>:  leading
++			zeros are used to pad the field width
++			(following any indication of sign or base); no
++			spaces are used for padding.  If the zero
++			(<<0>>) and minus (<<->>) flags both appear,
++			the zero (<<0>>) flag will be ignored.  For
++			<<d>>, <<i>>, <<o>>, <<u>>, <<x>>, and <<X>>
++			conversions, if a precision <[prec]> is
++			specified, the zero (<<0>>) flag is ignored.
++
++			Note that <<0>> is interpreted as a flag, not
++		        as the beginning of a field width.
++
++	        o #
++			The result is to be converted to an
++			alternative form, according to the <[type]>
++			character:
++
++			o+
++			o o
++				Increases precision to force the first
++				digit of the result to be a zero.
+ 
+ 			o x
+-			a non-zero result will have a <<0x>> prefix.
++				A non-zero result will have a <<0x>>
++				prefix.
+ 
+ 			o X
+-			a non-zero result will have a <<0X>> prefix.
++				A non-zero result will have a <<0X>>
++				prefix.
+ 
+-			o e, E or f
+-			The result will always contain a decimal point
+-		        even if no digits follow the point.
+-                        (Normally, a decimal point appears only if a
+-			digit follows it.)  Trailing zeroes are removed.
++			o a, A, e, E, f, or F
++				The result will always contain a
++			        decimal point even if no digits follow
++			        the point.  (Normally, a decimal point
++			        appears only if a digit follows it.)
++			        Trailing zeros are removed.
+ 
+ 			o g or G
+-			same as <<e>> or <<E>>, but trailing zeroes
+-                        are not removed.
++				The result will always contain a
++			        decimal point even if no digits follow
++			        the point.  Trailing zeros are not
++			        removed.
+ 
+ 			o all others
+-			undefined.
++				Undefined.
+ 
+ 			o-
+-      o-
+-
+-      o <[width]>
+-
+-	  <[width]> is an optional minimum field width.  You can either
+-	  specify it directly as a decimal integer, or indirectly by
+-          using instead an asterisk (<<*>>), in which case an <<int>>
+-          argument is used as the field width.  Negative field widths
+-          are not supported; if you attempt to specify a negative field
+-          width, it is interpreted as a minus (<<->>) flag followed by a
+-          positive field width.
+-
+-      o <[prec]>
+-
+-	  an optional field; if present, it is introduced with `<<.>>'
+-	  (a period). This field gives the maximum number of
+-	  characters to print in a conversion; the minimum number of
+-	  digits of an integer to print, for conversions with <[type]>
+-	  <<d>>, <<i>>, <<o>>, <<u>>, <<x>>, and <<X>>; the maximum number of
+-	  significant digits, for the <<g>> and <<G>> conversions;
+-	  or the number of digits to print after the decimal
+-	  point, for <<e>>, <<E>>, and <<f>> conversions.  You can specify
+-	  the precision either directly as a decimal integer or
+-	  indirectly by using an asterisk (<<*>>), in which case
+-	  an <<int>> argument is used as the precision.  Supplying a negative
+-      precision is equivalent to omitting the precision.
+-	  If only a period is specified the precision is zero.
+-	  If a precision appears with any other conversion <[type]>
+-	  than those listed here, the behavior is undefined.
+-
+-      o  <[size]>
+-
+-		<<h>>, <<l>>, and <<L>> are optional size characters which
+-		override the default way that <<printf>> interprets the
+-		data type of the corresponding argument.  <<h>> forces
+-		the following <<d>>, <<i>>, <<o>>, <<u>>, <<x>> or <<X>> conversion
+-		<[type]> to apply to a <<short>> or <<unsigned short>>. <<h>> also
+-		forces a following <<n>> <[type]> to apply to
+-		a pointer to a <<short>>. Similarily, an
+-		<<l>> forces the following <<d>>, <<i>>, <<o>>, <<u>>,
+-		<<x>> or <<X>> conversion <[type]> to apply to a <<long>> or
+-		<<unsigned long>>.  <<l>> also forces a following <<n>> <[type]> to
+-		apply to a pointer to a <<long>>. If an <<h>>
+-		or an <<l>> appears with another conversion
+-		specifier, the behavior is undefined.  <<L>> forces a
+-		following <<e>>, <<E>>, <<f>>, <<g>> or <<G>> conversion <[type]> to
+-		apply to a <<long double>> argument.  If <<L>> appears with
+-		any other conversion <[type]>, the behavior is undefined.
+-
+-     o   <[type]>
+-
+-		<[type]> specifies what kind of conversion <<printf>> performs.
+-		Here is a table of these:
+-
+-	o+
++		o-
++
++	o <[width]>
++
++		<[width]> is an optional minimum field width.  You can
++		either specify it directly as a decimal integer, or
++		indirectly by using instead an asterisk (<<*>>), in
++		which case an <<int>> argument is used as the field
++		width.  If positional arguments are used, then the
++		width must also be specified positionally as <<*m$>>,
++		with m as a decimal integer.  Negative field widths
++		are treated as specifying the minus (<<->>) flag for
++		left justfication, along with a positive field width.
++		The resulting format may be wider than the specified
++		width.
++
++	o <[prec]>
++
++		<[prec]> is an optional field; if present, it is
++		introduced with `<<.>>' (a period). You can specify
++		the precision either directly as a decimal integer or
++		indirectly by using an asterisk (<<*>>), in which case
++		an <<int>> argument is used as the precision.  If
++		positional arguments are used, then the precision must
++		also be specified positionally as <<*m$>>, with m as a
++		decimal integer.  Supplying a negative precision is
++		equivalent to omitting the precision.  If only a
++		period is specified the precision is zero. The effect
++		depends on the conversion <[type]>.
++
++		o+
++		o d, i, o, u, x, or X
++			Minimum number of digits to appear.  If no
++			precision is given, defaults to 1.
++
++		o a or A
++			Number of digits to appear after the decimal
++			point.  If no precision is given, the
++			precision defaults to the minimum needed for
++			an exact representation.
++
++		o e, E, f or F
++			Number of digits to appear after the decimal
++			point.  If no precision is given, the
++			precision defaults to 6.
++
++		o g or G
++			Maximum number of significant digits.  A
++			precision of 0 is treated the same as a
++			precision of 1.  If no precision is given, the
++			precision defaults to 6.
++
++		o s or S
++			Maximum number of characters to print from the
++			string.  If no precision is given, the entire
++			string is printed.
++
++		o all others
++			undefined.
++
++		o-
++
++	o <[size]>
++
++		<[size]> is an optional modifier that changes the data
++		type that the corresponding argument has.  Behavior is
++		unspecified if a size is given that does not match the
++		<[type]>.
++
++		o+
++		o hh
++			With <<d>>, <<i>>, <<o>>, <<u>>, <<x>>, or
++			<<X>>, specifies that the argument should be
++			converted to a <<signed char>> or <<unsigned
++			char>> before printing.
++
++			With <<n>>, specifies that the argument is a
++			pointer to a <<signed char>>.
++
++		o h
++			With <<d>>, <<i>>, <<o>>, <<u>>, <<x>>, or
++			<<X>>, specifies that the argument should be
++			converted to a <<short>> or <<unsigned short>>
++			before printing.
++
++			With <<n>>, specifies that the argument is a
++			pointer to a <<short>>.
++
++		o l
++			With <<d>>, <<i>>, <<o>>, <<u>>, <<x>>, or
++			<<X>>, specifies that the argument is a
++			<<long>> or <<unsigned long>>.
++
++			With <<c>>, specifies that the argument has
++			type <<wint_t>>.
++
++			With <<s>>, specifies that the argument is a
++			pointer to <<wchar_t>>.
++
++			With <<n>>, specifies that the argument is a
++			pointer to a <<long>>.
++
++			With <<a>>, <<A>>, <<e>>, <<E>>, <<f>>, <<F>>,
++			<<g>>, or <<G>>, has no effect (because of
++			vararg promotion rules, there is no need to
++			distinguish between <<float>> and <<double>>).
++
++		o ll
++			With <<d>>, <<i>>, <<o>>, <<u>>, <<x>>, or
++			<<X>>, specifies that the argument is a
++			<<long long>> or <<unsigned long long>>.
++
++			With <<n>>, specifies that the argument is a
++			pointer to a <<long long>>.
++
++		o j
++			With <<d>>, <<i>>, <<o>>, <<u>>, <<x>>, or
++			<<X>>, specifies that the argument is an
++			<<intmax_t>> or <<uintmax_t>>.
++
++			With <<n>>, specifies that the argument is a
++			pointer to an <<intmax_t>>.
++
++		o z
++			With <<d>>, <<i>>, <<o>>, <<u>>, <<x>>, or
++			<<X>>, specifies that the argument is a <<size_t>>.
++
++			With <<n>>, specifies that the argument is a
++			pointer to a <<size_t>>.
++
++		o t
++			With <<d>>, <<i>>, <<o>>, <<u>>, <<x>>, or
++			<<X>>, specifies that the argument is a
++			<<ptrdiff_t>>.
++
++			With <<n>>, specifies that the argument is a
++			pointer to a <<ptrdiff_t>>.
++
++		o L
++			With <<a>>, <<A>>, <<e>>, <<E>>, <<f>>, <<F>>,
++			<<g>>, or <<G>>, specifies that the argument
++			is a <<long double>>.
++
++		o-
++
++	o   <[type]>
++
++		<[type]> specifies what kind of conversion <<printf>>
++		performs.  Here is a table of these:
++
++		o+
+ 		o %
+-		prints the percent character (<<%>>)
++			Prints the percent character (<<%>>).
+ 
+ 		o c
+-		prints <[arg]> as single character
+-		
++			Prints <[arg]> as single character.  If the
++			<<l>> size specifier is in effect, a multibyte
++			character is printed.
++
++		o C
++			Short for <<%lc>>.  A POSIX extension to the C standard.
++
+ 		o s
+-		prints characters until precision is reached or a null terminator
+-		is encountered; takes a string pointer
++			Prints the elements of a pointer to <<char>>
++			until the precision or a null character is
++			reached.  If the <<l>> size specifier is in
++			effect, the pointer is to an array of
++			<<wchar_t>>, and the string is converted to
++			multibyte characters before printing.
++
++		o S
++			Short for <<%ls>>.  A POSIX extension to the C standard.
+ 
+-		o d
+-		prints a signed decimal integer; takes an <<int>> (same as <<i>>)
++		o d or i
++			Prints a signed decimal integer; takes an
++			<<int>>.  Leading zeros are inserted as
++			necessary to reach the precision.  A value of 0 with
++			a precision of 0 produces an empty string.
+ 
+-		o i
+-		prints a signed decimal integer; takes an <<int>> (same as <<d>>)
++		o D
++			Newlib extension, short for <<%ld>>.
+ 
+ 		o o
+-		prints a signed octal integer; takes an <<int>>
++			Prints an unsigned octal integer; takes an
++			<<unsigned>>.  Leading zeros are inserted as
++			necessary to reach the precision.  A value of 0 with
++			a precision of 0 produces an empty string.
++
++		o O
++			Newlib extension, short for <<%lo>>.
+ 
+ 		o u
+-		prints an unsigned decimal integer; takes an <<int>>
++			Prints an unsigned decimal integer; takes an
++			<<unsigned>>.  Leading zeros are inserted as
++			necessary to reach the precision.  A value of 0 with
++			a precision of 0 produces an empty string.
++
++		o U
++			Newlib extension, short for <<%lu>>.
+ 
+ 		o x
+-		prints an unsigned hexadecimal integer (using <<abcdef>> as
+-		digits beyond <<9>>); takes an <<int>>
++			Prints an unsigned hexadecimal integer (using
++			<<abcdef>> as digits beyond <<9>>); takes an
++			<<unsigned>>.  Leading zeros are inserted as
++			necessary to reach the precision.  A value of 0 with
++			a precision of 0 produces an empty string.
+ 
+ 		o X
+-		prints an unsigned hexadecimal integer (using <<ABCDEF>> as
+-		digits beyond <<9>>); takes an <<int>>
++			Like <<x>>, but uses <<ABCDEF>> as digits
++			beyond <<9>>.
+ 
+ 		o f
+-		prints a signed value of the form <<[-]9999.9999>>; takes
+-		a floating point number
+-	
++			Prints a signed value of the form
++			<<[-]9999.9999>>, with the precision
++			determining how many digits follow the decimal
++			point; takes a <<double>> (remember that
++			<<float>> promotes to <<double>> as a vararg).
++			The low order digit is rounded to even.  If
++			the precision results in at most DECIMAL_DIG
++			digits, the result is rounded correctly; if
++			more than DECIMAL_DIG digits are printed, the
++			result is only guaranteed to round back to the
++			original value.
++
++			If the value is infinite, the result is
++			<<inf>>, and no zero padding is performed.  If
++			the value is not a number, the result is
++			<<nan>>, and no zero padding is performed.
++
++		o F
++			Like <<f>>, but uses <<INF>> and <<NAN>> for
++			non-finite numbers.
++
+ 		o e
+-		prints a signed	value of the form <<[-]9.9999e[+|-]999>>; takes a
+-		floating point number
++			Prints a signed value of the form
++			<<[-]9.9999e[+|-]999>>; takes a <<double>>.
++			The digit before the decimal point is non-zero
++			if the value is non-zero.  The precision
++			determines how many digits appear between
++			<<.>> and <<e>>, and the exponent always
++			contains at least two digits.  The value zero
++			has an exponent of zero.  If the value is not
++			finite, it is printed like <<f>>.
+ 
+ 		o E
+-		prints the same way as <<e>>, but using <<E>> to introduce the
+-		exponent; takes a floating point number
++			Like <<e>>, but using <<E>> to introduce the
++			exponent, and like <<F>> for non-finite
++			values.
+ 
+ 		o g
+-		prints a signed value in either <<f>> or <<e>> form, based on given
+-		value and precision---trailing zeros and the decimal point are
+-		printed only if necessary; takes a floating point number
+-	
++			Prints a signed value in either <<f>> or <<e>>
++			form, based on the given value and
++			precision---an exponent less than -4 or
++			greater than the precision selects the <<e>>
++			form.  Trailing zeros and the decimal point
++			are printed only if necessary; takes a
++			<<double>>.
++
+ 		o G
+-		prints the same way as <<g>>, but using <<E>> for the exponent if an
+-		exponent is needed; takes a floating point number
++			Like <<g>>, except use <<F>> or <<E>> form.
++
++		o a
++			Prints a signed value of the form
++			<<[-]0x1.ffffp[+|-]9>>; takes a <<double>>.
++			The letters <<abcdef>> are used for digits
++			beyond <<9>>.  The precision determines how
++			many digits appear after the decimal point.
++			The exponent contains at least one digit, and
++			is a decimal value representing the power of
++			2; a value of 0 has an exponent of 0.
++			Non-finite values are printed like <<f>>.
++
++		o A
++			Like <<a>>, except uses <<X>>, <<P>>, and
++			<<ABCDEF>> instead of lower case.
+ 
+ 		o n
+-		stores (in the same object) a count of the characters written;
+-		takes a pointer to <<int>>
++			Takes a pointer to <<int>>, and stores a count
++			of the number of bytes written so far.  No
++			output is created.
+ 
+ 		o p
+-		prints a pointer in an implementation-defined format.
+-		This implementation treats the pointer as an
+-		<<unsigned long>> (same as <<Lu>>).
+-	o-
+-O-
++			Takes a pointer to <<void>>, and prints it in
++			an implementation-defined format.  This
++			implementation is similar to <<%#tx>>), except
++			that <<0x>> appears even for the NULL pointer.
++
++		o-
++	O-
+ 
++        <<_printf_r>>, <<_fprintf_r>>, <<_asprintf_r>>,
++        <<_sprintf_r>>, <<_snprintf_r>>, <<_asnprintf_r>> are simply
++        reentrant versions of the functions above.
+ 
+ RETURNS
+-<<sprintf>> returns the number of bytes in the output string,
+-save that the concluding <<NULL>> is not counted.
+-<<printf>> and <<fprintf>> return the number of characters transmitted.
+-If an error occurs, <<printf>> and <<fprintf>> return <<EOF>>. No
+-error returns occur for <<sprintf>>.
++On success, <<sprintf>> and <<asprintf>> return the number of bytes in
++the output string, except the concluding <<NUL>> is not counted.
++<<snprintf>> returns the number of bytes that would be in the output
++string, except the concluding <<NUL>> is not counted.  <<printf>> and
++<<fprintf>> return the number of characters transmitted.
++<<asnprintf>> returns the original <[str]> if there was enough room,
++otherwise it returns an allocated string.
++
++If an error occurs, the result of <<printf>>, <<fprintf>>,
++<<snprintf>>, and <<asprintf>> is a negative value, and the result of
++<<asnprintf>> is NULL.  No error returns occur for <<sprintf>>.  For
++<<printf>> and <<fprintf>>, <<errno>> may be set according to
++<<fputc>>.  For <<asprintf>> and <<asnprintf>>, <<errno>> may be set
++to ENOMEM if allocation fails, and for <<snprintf>>, <<errno>> may be
++set to EOVERFLOW if <[size]> or the output length exceeds INT_MAX.
++
++BUGS
++The ``''' (quote) flag does not work when locale's thousands_sep is not empty.
+ 
+ PORTABILITY
+-        The  ANSI C standard specifies that implementations must
+-        support at least formatted output of up to 509 characters.
++ANSI C requires <<printf>>, <<fprintf>>, <<sprintf>>, and
++<<snprintf>>.  <<asprintf>> and <<asnprintf>> are newlib extensions.
++
++The ANSI C standard specifies that implementations must support at
++least formatted output of up to 509 characters.  This implementation
++has no inherent limit.
++
++Depending on how newlib was configured, not all format specifiers are
++supported.
+ 
+ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
+ <<lseek>>, <<read>>, <<sbrk>>, <<write>>.
+ */
+ 
++#include <_ansi.h>
++#include <reent.h>
+ #include <stdio.h>
+ #ifdef _HAVE_STDC
+ #include <stdarg.h>
+@@ -293,18 +569,20 @@ Supporting OS subroutines required: <<close>>, <<fstat>>, <<isatty>>,
+ #include <varargs.h>
+ #endif
+ #include <limits.h>
+-#include <_ansi.h>
+ #include "local.h"
+ 
+ int
+ #ifdef _HAVE_STDC
+-_DEFUN (_sprintf_r, (ptr, str, fmt), struct _reent *ptr _AND char *str _AND _CONST char *fmt _DOTS)
++_DEFUN(_sprintf_r, (ptr, str, fmt),
++       struct _reent *ptr _AND
++       char *str          _AND
++       _CONST char *fmt _DOTS)
+ #else
+-_sprintf_r (ptr, str, fmt, va_alist)
+-     struct _reent *ptr;
+-     char *str;
+-     _CONST char *fmt;
+-     va_dcl
++_sprintf_r(ptr, str, fmt, va_alist)
++           struct _reent *ptr;
++           char *str;
++           _CONST char *fmt;
++           va_dcl
+ #endif
+ {
+   int ret;
+@@ -314,15 +592,15 @@ _sprintf_r (ptr, str, fmt, va_alist)
+   f._flags = __SWR | __SSTR;
+   f._bf._base = f._p = (unsigned char *) str;
+   f._bf._size = f._w = INT_MAX;
+-  f._data = ptr;
++  f._file = -1;  /* No file. */
+ #ifdef _HAVE_STDC
+   va_start (ap, fmt);
+ #else
+   va_start (ap);
+ #endif
+-  ret = vfprintf (&f, fmt, ap);
++  ret = _svfprintf_r (ptr, &f, fmt, ap);
+   va_end (ap);
+-  *f._p = 0;
++  *f._p = '\0';	/* terminate the string */
+   return (ret);
+ }
+ 
+@@ -330,12 +608,14 @@ _sprintf_r (ptr, str, fmt, va_alist)
+ 
+ int
+ #ifdef _HAVE_STDC
+-_DEFUN (sprintf, (str, fmt), char *str _AND _CONST char *fmt _DOTS)
++_DEFUN(sprintf, (str, fmt),
++       char *str _AND
++       _CONST char *fmt _DOTS)
+ #else
+-sprintf (str, fmt, va_alist)
+-     char *str;
+-     _CONST char *fmt;
+-     va_dcl
++sprintf(str, fmt, va_alist)
++        char *str;
++        _CONST char *fmt;
++        va_dcl
+ #endif
+ {
+   int ret;
+@@ -345,15 +625,15 @@ sprintf (str, fmt, va_alist)
+   f._flags = __SWR | __SSTR;
+   f._bf._base = f._p = (unsigned char *) str;
+   f._bf._size = f._w = INT_MAX;
+-  f._data = _REENT;
++  f._file = -1;  /* No file. */
+ #ifdef _HAVE_STDC
+   va_start (ap, fmt);
+ #else
+   va_start (ap);
+ #endif
+-  ret = vfprintf (&f, fmt, ap);
++  ret = _svfprintf_r (_REENT, &f, fmt, ap);
+   va_end (ap);
+-  *f._p = 0;
++  *f._p = '\0';	/* terminate the string */
+   return (ret);
+ }
+ 
 diff --git a/msys/rt/src/newlib/libc/stdio/swprintf.c b/msys/rt/src/newlib/libc/stdio/swprintf.c
 new file mode 100644
 index 0000000..6348017
@@ -4077,7 +5062,7 @@ index 0000000..7f3e3fe
 +  return _ungetwc_r (_REENT, wc, fp);
 +}
 diff --git a/msys/rt/src/newlib/libc/stdio/vfprintf.c b/msys/rt/src/newlib/libc/stdio/vfprintf.c
-index df3e47d..15e1a62 100644
+index df3e47d..1b6e341 100644
 --- a/msys/rt/src/newlib/libc/stdio/vfprintf.c
 +++ b/msys/rt/src/newlib/libc/stdio/vfprintf.c
 @@ -1,103 +1,4 @@
@@ -4508,7 +5493,7 @@ index df3e47d..15e1a62 100644
  
  /*
   * Helper function for `fprintf to unbuffered unix file': creates a
-@@ -209,66 +335,164 @@ __sprint(fp, uio)
+@@ -209,66 +335,165 @@ __sprint(fp, uio)
   * worries about ungetc buffers and so forth.
   */
  static int
@@ -4529,6 +5514,7 @@ index df3e47d..15e1a62 100644
  	/* copy the important variables */
 -	fake._data = fp->_data;
  	fake._flags = fp->_flags & ~__SNBF;
++	fake._data = fp->_data;
 +	fake._flags2 = fp->_flags2;
  	fake._file = fp->_file;
  	fake._cookie = fp->_cookie;
@@ -4696,7 +5682,7 @@ index df3e47d..15e1a62 100644
  #define	to_char(n)	((n) + '0')
  
  /*
-@@ -280,32 +504,45 @@ static int exponent _PARAMS((char *, int, int));
+@@ -280,32 +505,45 @@ static int exponent _PARAMS((char *, int, int));
  #define	LONGDBL		0x008		/* long double */
  #define	LONGINT		0x010		/* long integer */
  #ifndef _NO_LONGLONG
@@ -4758,7 +5744,7 @@ index df3e47d..15e1a62 100644
  {
  	register char *fmt;	/* format string */
  	register int ch;	/* character from fmt */
-@@ -313,38 +550,46 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
+@@ -313,38 +551,46 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
  	register char *cp;	/* handy char pointer (short term usage) */
  	register struct __siov *iovp;/* for PRINT macro */
  	register int flags;	/* flags as above */
@@ -4826,7 +5812,7 @@ index df3e47d..15e1a62 100644
  	enum { OCT, DEC, HEX } base;/* base for [diouxX] conversion */
  	int dprec;		/* a copy of prec if [diouxX], 0 otherwise */
  	int realsz;		/* field size expanded by dprec */
-@@ -353,9 +598,13 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
+@@ -353,9 +599,13 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
  #define NIOV 8
  	struct __suio uio;	/* output information: summary */
  	struct __siov iov[NIOV];/* ... and individual io vectors */
@@ -4842,7 +5828,7 @@ index df3e47d..15e1a62 100644
  
  	/*
  	 * Choose PADSIZE to trade efficiency vs. size.  If larger printf
-@@ -368,6 +617,9 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
+@@ -368,6 +618,9 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
  	static _CONST char zeroes[PADSIZE] =
  	 {'0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'};
  
@@ -4852,7 +5838,7 @@ index df3e47d..15e1a62 100644
  	/*
  	 * BEWARE, these `goto error' on error, and PAD uses `n'.
  	 */
-@@ -377,7 +629,7 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
+@@ -377,7 +630,7 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
  	uio.uio_resid += (len); \
  	iovp++; \
  	if (++uio.uio_iovcnt >= NIOV) { \
@@ -4861,7 +5847,7 @@ index df3e47d..15e1a62 100644
  			goto error; \
  		iovp = iov; \
  	} \
-@@ -385,78 +637,153 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
+@@ -385,78 +638,153 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
  #define	PAD(howmany, with) { \
  	if ((n = (howmany)) > 0) { \
  		while (n > PADSIZE) { \
@@ -4952,7 +5938,7 @@ index df3e47d..15e1a62 100644
  
 +#ifndef STRING_ONLY
 +	/* Initialize std streams if not dealing with sprintf family.  */
-+	CHECK_INIT (fp);
++	CHECK_INIT(fp);
 +	_flockfile (fp);
 +
 +	ORIENT(fp, -1);
@@ -5043,7 +6029,7 @@ index df3e47d..15e1a62 100644
  		fmt++;		/* skip over '%' */
  
  		flags = 0;
-@@ -464,9 +791,28 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
+@@ -464,9 +792,28 @@ _DEFUN (_VFPRINTF_R, (data, fp, fmt0, ap),
  		width = 0;
  		prec = -1;
  		sign = '\0';
@@ -5072,7 +6058,7 @@ index df3e47d..15e1a62 100644
  		case ' ':
  			/*
  			 * ``If the space and + flags both appear, the space
-@@ -480,13 +826,47 @@ reswitch:	switch (ch) {
+@@ -480,13 +827,47 @@ reswitch:	switch (ch) {
  			flags |= ALT;
  			goto rflag;
  		case '*':
@@ -5121,7 +6107,7 @@ index df3e47d..15e1a62 100644
  				goto rflag;
  			width = -width;
  			/* FALLTHROUGH */
-@@ -498,13 +878,46 @@ reswitch:	switch (ch) {
+@@ -498,13 +879,46 @@ reswitch:	switch (ch) {
  			goto rflag;
  		case '.':
  			if ((ch = *fmt++) == '*') {
@@ -5172,7 +6158,7 @@ index df3e47d..15e1a62 100644
  				ch = *fmt++;
  			}
  			prec = n < 0 ? -1 : n;
-@@ -521,9 +934,20 @@ reswitch:	switch (ch) {
+@@ -521,9 +935,20 @@ reswitch:	switch (ch) {
  		case '5': case '6': case '7': case '8': case '9':
  			n = 0;
  			do {
@@ -5195,7 +6181,7 @@ index df3e47d..15e1a62 100644
  			width = n;
  			goto reswitch;
  #ifdef FLOATING_POINT
-@@ -532,30 +956,94 @@ reswitch:	switch (ch) {
+@@ -532,30 +957,94 @@ reswitch:	switch (ch) {
  			goto rflag;
  #endif
  		case 'h':
@@ -5298,7 +6284,7 @@ index df3e47d..15e1a62 100644
  #ifndef _NO_LONGLONG
  			if ((quad_t)_uquad < 0)
  #else
-@@ -569,93 +1057,169 @@ reswitch:	switch (ch) {
+@@ -569,93 +1058,169 @@ reswitch:	switch (ch) {
  			base = DEC;
  			goto number;
  #ifdef FLOATING_POINT
@@ -5511,7 +6497,7 @@ index df3e47d..15e1a62 100644
  
  			if (softsign)
  				sign = '-';
-@@ -664,22 +1228,29 @@ reswitch:	switch (ch) {
+@@ -664,22 +1229,29 @@ reswitch:	switch (ch) {
  		case 'n':
  #ifndef _NO_LONGLONG
  			if (flags & QUADINT)
@@ -5548,7 +6534,7 @@ index df3e47d..15e1a62 100644
  			goto nosign;
  		case 'p':
  			/*
-@@ -690,22 +1261,100 @@ reswitch:	switch (ch) {
+@@ -690,22 +1262,100 @@ reswitch:	switch (ch) {
  			 *	-- ANSI X3J11
  			 */
  			/* NOSTRICT */
@@ -5654,7 +6640,7 @@ index df3e47d..15e1a62 100644
  
  				if (p != NULL) {
  					size = p - cp;
-@@ -714,14 +1363,14 @@ reswitch:	switch (ch) {
+@@ -714,14 +1364,14 @@ reswitch:	switch (ch) {
  				} else
  					size = prec;
  			} else
@@ -5673,7 +6659,7 @@ index df3e47d..15e1a62 100644
  			base = DEC;
  			goto nosign;
  		case 'X':
-@@ -729,12 +1378,18 @@ reswitch:	switch (ch) {
+@@ -729,12 +1379,18 @@ reswitch:	switch (ch) {
  			goto hex;
  		case 'x':
  			xdigs = "0123456789abcdef";
@@ -5694,7 +6680,7 @@ index df3e47d..15e1a62 100644
  			/* unsigned conversions */
  nosign:			sign = '\0';
  			/*
-@@ -760,7 +1415,7 @@ number:			if ((dprec = prec) >= 0)
+@@ -760,7 +1416,7 @@ number:			if ((dprec = prec) >= 0)
  				switch (base) {
  				case OCT:
  					do {
@@ -5703,7 +6689,7 @@ index df3e47d..15e1a62 100644
  						_uquad >>= 3;
  					} while (_uquad);
  					/* handle octal leading 0 */
-@@ -770,11 +1425,37 @@ number:			if ((dprec = prec) >= 0)
+@@ -770,11 +1426,37 @@ number:			if ((dprec = prec) >= 0)
  
  				case DEC:
  					/* many numbers are 1 digit */
@@ -5745,7 +6731,7 @@ index df3e47d..15e1a62 100644
  					break;
  
  				case HEX:
-@@ -786,7 +1467,7 @@ number:			if ((dprec = prec) >= 0)
+@@ -786,7 +1468,7 @@ number:			if ((dprec = prec) >= 0)
  
  				default:
  					cp = "bug in vfprintf: bad base";
@@ -5754,7 +6740,7 @@ index df3e47d..15e1a62 100644
  					goto skipsize;
  				}
  			}
-@@ -826,6 +1507,7 @@ number:			if ((dprec = prec) >= 0)
+@@ -826,6 +1508,7 @@ number:			if ((dprec = prec) >= 0)
  		 * required by a decimal [diouxX] precision, then print the
  		 * string proper, then emit zeroes required by any leftover
  		 * floating precision; finally, if LADJUST, pad with blanks.
@@ -5762,7 +6748,7 @@ index df3e47d..15e1a62 100644
  		 *
  		 * Compute actual size, so we know how much to pad.
  		 * size excludes decimal prec; realsz includes it.
-@@ -833,130 +1515,195 @@ number:			if ((dprec = prec) >= 0)
+@@ -833,130 +1516,195 @@ number:			if ((dprec = prec) >= 0)
  		realsz = dprec > size ? dprec : size;
  		if (sign)
  			realsz++;
@@ -6030,7 +7016,7 @@ index df3e47d..15e1a62 100644
  		 * figures.
  		 */
  		if (ch == 'e' || ch == 'E') {
-@@ -965,30 +1712,11 @@ cvt(data, value, ndigits, flags, sign, decpt, ch, length)
+@@ -965,30 +1713,11 @@ cvt(data, value, ndigits, flags, sign, decpt, ch, length)
  		mode = 2;		/* ndigits significant digits */
  	}
  
@@ -6063,7 +7049,7 @@ index df3e47d..15e1a62 100644
  			if (*digits == '0' && value)
  				*decpt = -ndigits + 1;
  			bp += *decpt;
-@@ -1003,33 +1731,460 @@ cvt(data, value, ndigits, flags, sign, decpt, ch, length)
+@@ -1003,33 +1732,460 @@ cvt(data, value, ndigits, flags, sign, decpt, ch, length)
  }
  
  static int
@@ -8483,6 +9469,239 @@ index 0000000..9fc3529
 +  return &args[n];
 +}
 +#endif /* !_NO_POS_ARGS */
+diff --git a/msys/rt/src/newlib/libc/stdio/vscanf.c b/msys/rt/src/newlib/libc/stdio/vscanf.c
+index 59c6373..e559b77 100644
+--- a/msys/rt/src/newlib/libc/stdio/vscanf.c
++++ b/msys/rt/src/newlib/libc/stdio/vscanf.c
+@@ -18,37 +18,35 @@
+  */
+ 
+ #include <_ansi.h>
++#include <reent.h>
+ #include <stdio.h>
+-#include "local.h"
+-
+ #ifdef _HAVE_STDC
+ #include <stdarg.h>
+ #else
+ #include <varargs.h>
+ #endif
+-
+-/*
+- * vscanf
+- */
++#include "local.h"
+ 
+ #ifndef _REENT_ONLY
+ 
+ int
+-_DEFUN (vscanf, (fmt, ap), 
+-    _CONST char *fmt _AND 
+-    va_list ap)
++_DEFUN(vscanf, (fmt, ap), 
++       _CONST char *fmt _AND 
++       va_list ap)
+ {
++  _REENT_SMALL_CHECK_INIT (_REENT);
+   return __svfscanf_r (_REENT, _stdin_r (_REENT), fmt, ap);
+ }
+ 
+ #endif /* !_REENT_ONLY */
+ 
+ int
+-_DEFUN (_vscanf_r, (ptr, fmt, ap),
+-    struct _reent *ptr _AND 
+-    _CONST char *fmt _AND 
+-    va_list ap)
++_DEFUN(_vscanf_r, (ptr, fmt, ap),
++       struct _reent *ptr _AND 
++       _CONST char *fmt   _AND 
++       va_list ap)
+ {
++  _REENT_SMALL_CHECK_INIT (ptr);
+   return __svfscanf_r (ptr, _stdin_r (ptr), fmt, ap);
+ }
+ 
+diff --git a/msys/rt/src/newlib/libc/stdio/vsnprintf.c b/msys/rt/src/newlib/libc/stdio/vsnprintf.c
+index 4e9c283..58106b6 100644
+--- a/msys/rt/src/newlib/libc/stdio/vsnprintf.c
++++ b/msys/rt/src/newlib/libc/stdio/vsnprintf.c
+@@ -1,7 +1,3 @@
+-/* doc in vfprintf.c */
+-
+-/* This code created by modifying vsprintf.c so copyright inherited. */
+-
+ /*
+  * Copyright (c) 1990 The Regents of the University of California.
+  * All rights reserved.
+@@ -18,6 +14,7 @@
+  * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  */
++/* doc in vfprintf.c */
+ 
+ #if defined(LIBC_SCCS) && !defined(lint)
+ static char sccsid[] = "%W% (Berkeley) %G%";
+@@ -27,48 +24,48 @@ static char sccsid[] = "%W% (Berkeley) %G%";
+ #include <reent.h>
+ #include <stdio.h>
+ #include <limits.h>
+-#ifdef _HAVE_STDC
+ #include <stdarg.h>
+-#else
+-#include <varargs.h>
+-#endif
++#include <errno.h>
++
++#include "local.h"
++
++#ifndef _REENT_ONLY
+ 
+ int
+-_DEFUN (vsnprintf, (str, size, fmt, ap),
+-     char *str _AND
+-     size_t size _AND
+-     _CONST char *fmt _AND
+-     va_list ap)
++_DEFUN(vsnprintf, (str, size, fmt, ap),
++       char *str        _AND
++       size_t size      _AND
++       const char *fmt _AND
++       va_list ap)
+ {
+-  int ret;
+-  FILE f;
+-
+-  f._flags = __SWR | __SSTR;
+-  f._bf._base = f._p = (unsigned char *) str;
+-  f._bf._size = f._w = (size > 0 ? size - 1 : 0);
+-  f._data = _REENT;
+-  ret = vfprintf (&f, fmt, ap);
+-  if (size > 0)
+-    *f._p = 0;
+-  return ret;
++  return _vsnprintf_r (_REENT, str, size, fmt, ap);
+ }
+ 
++#endif /* !_REENT_ONLY */
++
+ int
+-_DEFUN (_vsnprintf_r, (ptr, str, size, fmt, ap),
+-     struct _reent *ptr _AND
+-     char *str _AND
+-     size_t size _AND
+-     _CONST char *fmt _AND
+-     va_list ap)
++_DEFUN(_vsnprintf_r, (ptr, str, size, fmt, ap),
++       struct _reent *ptr _AND
++       char *str          _AND
++       size_t size        _AND
++       const char *fmt   _AND
++       va_list ap)
+ {
+   int ret;
+   FILE f;
+ 
++  if (size > INT_MAX)
++    {
++      ptr->_errno = EOVERFLOW;
++      return EOF;
++    }
+   f._flags = __SWR | __SSTR;
+   f._bf._base = f._p = (unsigned char *) str;
+   f._bf._size = f._w = (size > 0 ? size - 1 : 0);
+-  f._data = ptr;
+-  ret = _vfprintf_r (ptr, &f, fmt, ap);
++  f._file = -1;  /* No file. */
++  ret = _svfprintf_r (ptr, &f, fmt, ap);
++  if (ret < EOF)
++    ptr->_errno = EOVERFLOW;
+   if (size > 0)
+     *f._p = 0;
+   return ret;
+diff --git a/msys/rt/src/newlib/libc/stdio/vsprintf.c b/msys/rt/src/newlib/libc/stdio/vsprintf.c
+index b440ac5..9ab0c73 100644
+--- a/msys/rt/src/newlib/libc/stdio/vsprintf.c
++++ b/msys/rt/src/newlib/libc/stdio/vsprintf.c
+@@ -1,5 +1,3 @@
+-/* doc in vfprintf.c */
+-
+ /*
+  * Copyright (c) 1990 The Regents of the University of California.
+  * All rights reserved.
+@@ -16,6 +14,7 @@
+  * IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  */
++/* doc in vfprintf.c */
+ 
+ #if defined(LIBC_SCCS) && !defined(lint)
+ static char sccsid[] = "%W% (Berkeley) %G%";
+@@ -25,36 +24,29 @@ static char sccsid[] = "%W% (Berkeley) %G%";
+ #include <reent.h>
+ #include <stdio.h>
+ #include <limits.h>
+-#ifdef _HAVE_STDC
+ #include <stdarg.h>
+-#else
+-#include <varargs.h>
+-#endif
++
++#include "local.h"
++
++#ifndef _REENT_ONLY
+ 
+ int
+-_DEFUN (vsprintf, (str, fmt, ap),
+-     char *str _AND
+-     _CONST char *fmt _AND
+-     va_list ap)
++_DEFUN(vsprintf, (str, fmt, ap),
++       char *str        _AND
++       const char *fmt _AND
++       va_list ap)
+ {
+-  int ret;
+-  FILE f;
+-
+-  f._flags = __SWR | __SSTR;
+-  f._bf._base = f._p = (unsigned char *) str;
+-  f._bf._size = f._w = INT_MAX;
+-  f._data = _REENT;
+-  ret = vfprintf (&f, fmt, ap);
+-  *f._p = 0;
+-  return ret;
++  return _vsprintf_r (_REENT, str, fmt, ap);
+ }
+ 
++#endif /* !_REENT_ONLY */
++
+ int
+-_DEFUN (_vsprintf_r, (ptr, str, fmt, ap),
+-     struct _reent *ptr _AND
+-     char *str _AND
+-     _CONST char *fmt _AND
+-     va_list ap)
++_DEFUN(_vsprintf_r, (ptr, str, fmt, ap),
++       struct _reent *ptr _AND
++       char *str          _AND
++       const char *fmt   _AND
++       va_list ap)
+ {
+   int ret;
+   FILE f;
+@@ -62,9 +54,8 @@ _DEFUN (_vsprintf_r, (ptr, str, fmt, ap),
+   f._flags = __SWR | __SSTR;
+   f._bf._base = f._p = (unsigned char *) str;
+   f._bf._size = f._w = INT_MAX;
+-  f._data = ptr;
+-  ret = _vfprintf_r (ptr, &f, fmt, ap);
++  f._file = -1;  /* No file. */
++  ret = _svfprintf_r (ptr, &f, fmt, ap);
+   *f._p = 0;
+   return ret;
+ }
+-
 diff --git a/msys/rt/src/newlib/libc/stdlib/Makefile.in b/msys/rt/src/newlib/libc/stdlib/Makefile.in
 index c04f990..a30cc49 100644
 --- a/msys/rt/src/newlib/libc/stdlib/Makefile.in
