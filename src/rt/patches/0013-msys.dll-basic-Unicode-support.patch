@@ -1,7 +1,7 @@
 From b15b5077997a3baf258afd1a27a2ce5f4e352f9c Mon Sep 17 00:00:00 2001
 From: Karsten Blees <blees@dcon.de>
 Date: Wed, 20 Jul 2011 20:53:33 +0200
-Subject: [PATCH 13/19] msys.dll: basic Unicode support
+Subject: [PATCH 13/20] msys.dll: basic Unicode support
 
 The msys.dll currently uses Windows' *A APIs, i.e. all strings are in the
 default Windows ANSI encoding, which unfortunately depends on the installed
@@ -700,5 +700,5 @@ index 0000000..c5a5234
 +
 +#endif /* __UNICODE_H */
 -- 
-1.9.4.msysgit.0
+2.0.0.msysgit.0
 

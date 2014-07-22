@@ -1,7 +1,7 @@
 From c7a08bc50522edf8ddd2a41cf9c8a080c8f9f318 Mon Sep 17 00:00:00 2001
 From: Karsten Blees <blees@dcon.de>
 Date: Thu, 5 Jul 2012 10:18:33 +0200
-Subject: [PATCH 14/19] msys.dll: support Unicode console input
+Subject: [PATCH 14/20] msys.dll: support Unicode console input
 
 The msys.dll console handler still uses Windows system encoding for console
 input, while everything else in msys.dll has been switched to UTF-8.
@@ -90,5 +90,5 @@ index 233bf09..724db03 100644
  
    while (buflen)
 -- 
-1.9.4.msysgit.0
+2.0.0.msysgit.0
 

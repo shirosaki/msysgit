@@ -1,7 +1,7 @@
 From c0b26d182e807df7d7bb6b8cfc278bcb90eaa961 Mon Sep 17 00:00:00 2001
 From: Steffen Prohaska <prohaska@zib.de>
 Date: Sat, 10 May 2008 20:29:10 +0200
-Subject: [PATCH 02/19] Tweak p2w for msysgit: Do not touch strings containing
+Subject: [PATCH 02/20] Tweak p2w for msysgit: Do not touch strings containing
  \n, \r, or \t
 
 ---
@@ -27,5 +27,5 @@ index 1886914..7439c5f 100644
      {
        debug_printf("returning AbsWin32 path: %s", path);
 -- 
-1.9.4.msysgit.0
+2.0.0.msysgit.0
 

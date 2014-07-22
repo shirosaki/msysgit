@@ -1,7 +1,7 @@
 From b07c8051157d8019fcf3be55b773dc100ead286f Mon Sep 17 00:00:00 2001
 From: Steffen Prohaska <prohaska@zib.de>
 Date: Sat, 10 May 2008 20:30:09 +0200
-Subject: [PATCH 03/19] p2w for msysgit: Check if string starts with "." or "/"
+Subject: [PATCH 03/20] p2w for msysgit: Check if string starts with "." or "/"
  before considering it a pathlist
 
 ---
@@ -22,5 +22,5 @@ index 7439c5f..1b84bf1 100644
  	   // Prevent ``foo:echo /bar/baz'' from being considered a path list.
  	   // 
 -- 
-1.9.4.msysgit.0
+2.0.0.msysgit.0
 

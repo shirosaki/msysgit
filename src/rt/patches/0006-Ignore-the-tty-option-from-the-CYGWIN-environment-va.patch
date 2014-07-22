@@ -1,7 +1,7 @@
 From 3c4114055cf4b3254376c1e22fa5a8ed0622b3a8 Mon Sep 17 00:00:00 2001
 From: Johannes Schindelin <johannes.schindelin@gmx.de>
 Date: Tue, 12 May 2009 00:14:17 +0200
-Subject: [PATCH 06/19] Ignore the "tty" option from the CYGWIN environment
+Subject: [PATCH 06/20] Ignore the "tty" option from the CYGWIN environment
  variable
 
 There is no working pty emulation in MSys, so it makes no sense to
@@ -32,5 +32,5 @@ index 64fcea4..9cf3e80 100644
    {NULL, {0}, justset, 0, {{0}, {0}}}
  };
 -- 
-1.9.4.msysgit.0
+2.0.0.msysgit.0
 

@@ -1,7 +1,7 @@
 From 819a9094fdb33821d43836989e27430b253655f4 Mon Sep 17 00:00:00 2001
 From: Alexander Gavrilov <angavrilov@gmail.com>
 Date: Wed, 16 Jul 2008 20:48:53 +0400
-Subject: [PATCH 05/19] Temporary workaround: use strtoul instead of strtoll.
+Subject: [PATCH 05/20] Temporary workaround: use strtoul instead of strtoll.
 
 Also fixes a bug in negative pid handling (the 'av' part).
 ---
@@ -55,5 +55,5 @@ index e21646f..3f4934c 100644
            || (!force && (pid < LONG_MIN || pid > LONG_MAX))
            || (force && (pid <= 0 || pid > ULONG_MAX))) 
 -- 
-1.9.4.msysgit.0
+2.0.0.msysgit.0
 

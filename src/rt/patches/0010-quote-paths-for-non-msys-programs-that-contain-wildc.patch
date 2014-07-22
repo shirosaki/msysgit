@@ -1,7 +1,7 @@
 From 0e3976c5974ae551bd8b52ad44771c8ed3f0f142 Mon Sep 17 00:00:00 2001
 From: Heiko Voigt <hvoigt@hvoigt.net>
 Date: Wed, 3 Feb 2010 22:16:56 +0100
-Subject: [PATCH 10/19] quote paths for non msys programs that contain
+Subject: [PATCH 10/20] quote paths for non msys programs that contain
  wildcards
 
 Native windows programs expect to receive quotes in their arguments.
@@ -48,5 +48,5 @@ index 108b2f1..342159f 100644
  	  else
  	    {
 -- 
-1.9.4.msysgit.0
+2.0.0.msysgit.0
 

@@ -1,7 +1,7 @@
 From 6459a45085f28103b08b5924da759494c39cd619 Mon Sep 17 00:00:00 2001
 From: Kirill Smelkov <kirr@landau.phys.spbu.ru>
 Date: Sun, 13 Feb 2011 01:12:14 +0300
-Subject: [PATCH 11/19] msys.dll: Don't pull user32.dll & friends just to
+Subject: [PATCH 11/20] msys.dll: Don't pull user32.dll & friends just to
  detect whether right alt should be used as meta
 
 I've discovered that every msys program pulls lots of dlls on startup.
@@ -95,5 +95,5 @@ index ada15e4..64ae840 100644
  }
  
 -- 
-1.9.4.msysgit.0
+2.0.0.msysgit.0
 

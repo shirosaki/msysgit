@@ -1,7 +1,7 @@
 From 976a0aa69e6adf1889a6b48098c59d01f442a1f9 Mon Sep 17 00:00:00 2001
 From: Karsten Blees <blees@dcon.de>
 Date: Thu, 5 Jul 2012 10:57:36 +0200
-Subject: [PATCH 17/19] bash: fix compile errors
+Subject: [PATCH 17/20] bash: fix compile errors
 
 According to POSIX, MB_CUR_MAX is the maximum multibyte length of the
 _current_ locale, thus it cannot be used to size an array. Use MB_LEN_MAX
@@ -35,5 +35,5 @@ index d4f18e7..1b538aa 100644
    char sep[2];
  #endif
 -- 
-1.9.4.msysgit.0
+2.0.0.msysgit.0
 
