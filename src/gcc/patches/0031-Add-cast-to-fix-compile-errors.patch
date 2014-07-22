@@ -1,7 +1,7 @@
-From 56f5b53e50c038c7556a437e8f7cb573bcff41d7 Mon Sep 17 00:00:00 2001
+From 8b07e8237f18f88a926c61d9af6e5ea1a04ed607 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Sat, 5 Jul 2014 10:32:25 +0900
-Subject: [PATCH 32/45] Add cast to fix compile errors
+Subject: [PATCH 31/43] Add cast to fix compile errors
 
 ANSI C++ forbids implicit conversion from `void *' in argument
 passing.
@@ -23,5 +23,5 @@ index 7a8152a..f625787 100644
    if (lseek (fd, p, SEEK_SET) == (off_t) -1 )
      fatal_error ("can%'t set position in PCH file: %m");
 -- 
-2.0.1
+2.0.0.msysgit.0
 

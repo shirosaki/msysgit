@@ -1,7 +1,7 @@
-From 8629095854b06601c849fb0befe588c42358f54e Mon Sep 17 00:00:00 2001
+From 428d5d92f4123cea35574bd129d722a4244224bd Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:40:25 +0900
-Subject: [PATCH 01/45] gcc-4.8-filename-output
+Subject: [PATCH 01/43] gcc-4.8-filename-output
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8-filename-output.patch
 ---
@@ -9,10 +9,10 @@ https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8-filename-outpu
  1 file changed, 4 insertions(+)
 
 diff --git a/gcc/c-family/c-opts.c b/gcc/c-family/c-opts.c
-index 4b6990a..9a2c832 100644
+index 5ee7024..1adb92b 100644
 --- a/gcc/c-family/c-opts.c
 +++ b/gcc/c-family/c-opts.c
-@@ -1340,6 +1340,10 @@ c_finish_options (void)
+@@ -1347,6 +1347,10 @@ c_finish_options (void)
  static void
  push_command_line_include (void)
  {
@@ -24,5 +24,5 @@ index 4b6990a..9a2c832 100644
      {
        done_preinclude = true;
 -- 
-2.0.1
+2.0.0.msysgit.0
 

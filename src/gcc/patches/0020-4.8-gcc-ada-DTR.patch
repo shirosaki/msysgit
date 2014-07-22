@@ -1,7 +1,7 @@
-From 3691a5372f6360b57f08d76b1ecc069639abbaab Mon Sep 17 00:00:00 2001
+From 21bfa8d461216e015c12bfddc53e8ad2fce92145 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:42:47 +0900
-Subject: [PATCH 21/45] 4.8-gcc-ada-DTR
+Subject: [PATCH 20/43] 4.8-gcc-ada-DTR
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-gcc-ada-DTR.patch
 ---
@@ -27,5 +27,5 @@ index 0964886..e08a079 100644
  CNU(RTS_CONTROL_ENABLE, "Enable RTS flow ctrl")
  #endif
 -- 
-2.0.1
+2.0.0.msysgit.0
 

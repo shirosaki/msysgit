@@ -1,17 +1,17 @@
-From 8d6682d4798060ce357e23ebaa9e0d186e1bdcbe Mon Sep 17 00:00:00 2001
+From f9dd71a69fe55b3778d8c530140cc21f05dff30c Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Wed, 9 Jul 2014 15:25:31 +0900
-Subject: [PATCH 40/45] Compile insn-recog.o with -O1 to fix compile error
+Subject: [PATCH 39/43] Compile insn-recog.o with -O1 to fix compile error
 
 ---
  gcc/Makefile.in | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/gcc/Makefile.in b/gcc/Makefile.in
-index 671eb36..302c0e9 100644
+index 9241cf7..a8c98bc 100644
 --- a/gcc/Makefile.in
 +++ b/gcc/Makefile.in
-@@ -1054,6 +1054,9 @@ INCLUDES = -I. -I$(@D) -I$(srcdir) -I$(srcdir)/$(@D) \
+@@ -1055,6 +1055,9 @@ INCLUDES = -I. -I$(@D) -I$(srcdir) -I$(srcdir)/$(@D) \
  	   $(CPPINC) $(GMPINC) $(DECNUMINC) $(BACKTRACEINC) \
  	   $(CLOOGINC) $(ISLINC)
  
@@ -22,5 +22,5 @@ index 671eb36..302c0e9 100644
  	$(COMPILER) -c $(ALL_COMPILERFLAGS) $(ALL_CPPFLAGS) $< $(OUTPUT_OPTION)
  
 -- 
-2.0.1
+2.0.0.msysgit.0
 

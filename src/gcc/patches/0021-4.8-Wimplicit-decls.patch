@@ -1,7 +1,7 @@
-From 74c1000cd577405bca09069d81ca1d29309a5a87 Mon Sep 17 00:00:00 2001
+From 4c726cde69d1b32a7c18ef1098f8ef716e275d8d Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:42:52 +0900
-Subject: [PATCH 22/45] 4.8-Wimplicit-decls
+Subject: [PATCH 21/43] 4.8-Wimplicit-decls
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-Wimplicit-decls.patch
 ---
@@ -55,5 +55,5 @@ index 17bd3c5..fd01f27 100644
  #ifdef HAVE_FCNTL_H
  #include <fcntl.h>
 -- 
-2.0.1
+2.0.0.msysgit.0
 

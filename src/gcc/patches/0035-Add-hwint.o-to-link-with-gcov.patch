@@ -1,17 +1,17 @@
-From 838ff9fa96996526f9a457c8622a8365eb97d859 Mon Sep 17 00:00:00 2001
+From 997cb17dce8f3eb0d3e2c5667c790a736818c8fe Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Mon, 7 Jul 2014 14:18:52 +0900
-Subject: [PATCH 36/45] Add hwint.o to link with gcov
+Subject: [PATCH 35/43] Add hwint.o to link with gcov
 
 ---
  gcc/Makefile.in | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/gcc/Makefile.in b/gcc/Makefile.in
-index aad927c..671eb36 100644
+index 2a4475b..9241cf7 100644
 --- a/gcc/Makefile.in
 +++ b/gcc/Makefile.in
-@@ -4048,10 +4048,10 @@ gcov.o: gcov.c gcov-io.c $(GCOV_IO_H) intl.h $(SYSTEM_H) coretypes.h $(TM_H) \
+@@ -4049,10 +4049,10 @@ gcov.o: gcov.c gcov-io.c $(GCOV_IO_H) intl.h $(SYSTEM_H) coretypes.h $(TM_H) \
  gcov-dump.o: gcov-dump.c gcov-io.c $(GCOV_IO_H) $(SYSTEM_H) coretypes.h \
     $(TM_H) $(CONFIG_H) version.h intl.h $(DIAGNOSTIC_H)
  
@@ -25,5 +25,5 @@ index aad927c..671eb36 100644
  	+$(LINKER) $(ALL_LINKERFLAGS) $(LDFLAGS) $(GCOV_DUMP_OBJS) \
  		$(LIBS) -o $@
 -- 
-2.0.1
+2.0.0.msysgit.0
 

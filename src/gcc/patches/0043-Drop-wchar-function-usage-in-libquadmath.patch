@@ -1,7 +1,7 @@
-From c2c81148a2f86694c06a70bdf2561421a1b8dce9 Mon Sep 17 00:00:00 2001
+From 7a90d2e5ccd0e02983149b701e13c0c22dfef89c Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Fri, 11 Jul 2014 15:15:08 +0900
-Subject: [PATCH 45/45] Drop wchar function usage in libquadmath
+Subject: [PATCH 43/43] Drop wchar function usage in libquadmath
 
 ---
  libquadmath/printf/quadmath-printf.h | 11 +----------
@@ -37,5 +37,5 @@ index 32ebcec..1a63ca3 100644
      {
        *(fp->str++) = c;
 -- 
-2.0.1
+2.0.0.msysgit.0
 

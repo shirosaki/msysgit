@@ -1,17 +1,17 @@
-From b917019665c774b991e5198c93f6eb71f45d9191 Mon Sep 17 00:00:00 2001
+From d7f43620133a19ce3d93a924e10d2299fb6ce646 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Wed, 9 Jul 2014 17:10:26 +0900
-Subject: [PATCH 42/45] Fix include isl/stdint.h error
+Subject: [PATCH 40/43] Fix include isl/stdint.h error
 
 ---
  gcc/config.in | 3 +++
  1 file changed, 3 insertions(+)
 
 diff --git a/gcc/config.in b/gcc/config.in
-index 3df6af9..de7e403 100644
+index 27497d4..d44fb98 100644
 --- a/gcc/config.in
 +++ b/gcc/config.in
-@@ -2041,3 +2041,6 @@
+@@ -2053,3 +2053,6 @@
  #undef vfork
  #endif
  
@@ -19,5 +19,5 @@ index 3df6af9..de7e403 100644
 +#define _ISL_INCLUDE_ISL_STDINT_H
 +#endif
 -- 
-2.0.1
+2.0.0.msysgit.0
 

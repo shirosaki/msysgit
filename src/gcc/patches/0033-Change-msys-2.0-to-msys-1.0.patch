@@ -1,7 +1,7 @@
-From b6c0bd26ef8580629888f8c27a0e9c15cfbeaf43 Mon Sep 17 00:00:00 2001
+From b3bb2379d6f61c6fb820bbd88f64ab36dc579cd9 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Mon, 7 Jul 2014 10:35:19 +0900
-Subject: [PATCH 34/45] Change msys-2.0 to msys-1.0
+Subject: [PATCH 33/43] Change msys-2.0 to msys-1.0
 
 ---
  gcc/config/i386/msys.h    | 2 +-
@@ -35,5 +35,5 @@ index 9142002..48cb2bf 100644
  # We have already included one of the t-{dw2,sjlj}-eh fragments for EH_MODEL
  SHLIB_EH_EXTENSION = $(subst -dw2,,-$(EH_MODEL))
 -- 
-2.0.1
+2.0.0.msysgit.0
 

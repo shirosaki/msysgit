@@ -1,7 +1,7 @@
-From c1f497fb6f8050ca3a1055d6294637a2c59f943e Mon Sep 17 00:00:00 2001
+From a4e6fe39c281c5cff0cb47a6915a34f4acfac630 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:43:19 +0900
-Subject: [PATCH 25/45] gcc-4.8.0-testsuite-msys2
+Subject: [PATCH 24/43] gcc-4.8.0-testsuite-msys2
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8.0-testsuite-msys2.patch
 ---
@@ -1073,7 +1073,7 @@ index d6ad013..805f256 100644
      } elseif { [istarget hppa*-*-hpux*] } {
  	set shlib_ext "sl"
 diff --git a/gcc/testsuite/lib/target-supports.exp b/gcc/testsuite/lib/target-supports.exp
-index a146f17..d52376b 100644
+index f32cd04..f3aba5b 100644
 --- a/gcc/testsuite/lib/target-supports.exp
 +++ b/gcc/testsuite/lib/target-supports.exp
 @@ -232,9 +232,9 @@ proc check_weak_available { } {
@@ -1106,7 +1106,7 @@ index a146f17..d52376b 100644
  	return [check_no_compiler_messages pe_aligned_commons object {
  	    int foo;
  	} "-mpe-aligned-commons"]
-@@ -1571,8 +1571,8 @@ proc check_fork_available {} {
+@@ -1597,8 +1597,8 @@ proc check_fork_available {} {
  # Returns true iff "mkfifo" is available on the target system.
  
  proc check_mkfifo_available {} {
@@ -1117,7 +1117,7 @@ index a146f17..d52376b 100644
         return 0
       }
  
-@@ -4768,7 +4768,7 @@ proc check_effective_target_4byte_wchar_t { } {
+@@ -4888,7 +4888,7 @@ proc check_effective_target_4byte_wchar_t { } {
  proc check_effective_target_automatic_stack_alignment  { } {
      # Ordinarily x86 supports automatic stack alignment ...
      if { [istarget i?86*-*-*] || [istarget x86_64-*-*] } then {
@@ -1743,12 +1743,12 @@ index 0b16764..79a02f5 100644
  // { dg-require-gthreads "" }
  
 diff --git a/libstdc++-v3/testsuite/30_threads/call_once/call_once1.cc b/libstdc++-v3/testsuite/30_threads/call_once/call_once1.cc
-index de12936..7304d4b 100644
+index de12936..ab71312 100644
 --- a/libstdc++-v3/testsuite/30_threads/call_once/call_once1.cc
 +++ b/libstdc++-v3/testsuite/30_threads/call_once/call_once1.cc
 @@ -1,7 +1,7 @@
 -// { dg-do run { target *-*-freebsd* *-*-netbsd* *-*-linux* *-*-solaris* *-*-cygwin *-*-darwin* powerpc-ibm-aix* } }
-+// { dg-do run { target *-*-freebsd* *-*-netbsd* *-*-linux* *-*-solaris* *-*-cygwin *-*-msys *-*-darwin* powerpc-ibm-aix* } }
++// { dg-do run { target *-*-freebsd* *-*-netbsd* *-*-linux* *-*-solaris* *-*-cygwin *-*-msys *-*-darwin1[1-9]* powerpc-ibm-aix* } }
  // { dg-options " -std=gnu++0x -pthread" { target *-*-freebsd* *-*-netbsd* *-*-linux* powerpc-ibm-aix* } }
  // { dg-options " -std=gnu++0x -pthreads" { target *-*-solaris* } }
 -// { dg-options " -std=gnu++0x " { target *-*-cygwin *-*-darwin* } }
@@ -1757,13 +1757,13 @@ index de12936..7304d4b 100644
  // { dg-require-gthreads "" }
  
 diff --git a/libstdc++-v3/testsuite/30_threads/condition_variable/54185.cc b/libstdc++-v3/testsuite/30_threads/condition_variable/54185.cc
-index 118d9be..5821075 100644
+index 9242718..0d50451 100644
 --- a/libstdc++-v3/testsuite/30_threads/condition_variable/54185.cc
 +++ b/libstdc++-v3/testsuite/30_threads/condition_variable/54185.cc
 @@ -1,7 +1,7 @@
--// { dg-do run { target *-*-freebsd* *-*-netbsd* *-*-linux* *-*-solaris* *-*-cygwin *-*-darwin* powerpc-ibm-aix* } }
-+// { dg-do run { target *-*-freebsd* *-*-netbsd* *-*-linux* *-*-solaris* *-*-cygwin *-*-msys *-*-darwin* powerpc-ibm-aix* } }
- // { dg-options " -std=gnu++0x -pthread" { target *-*-freebsd* *-*-netbsd* *-*-linux* powerpc-ibm-aix* } }
+-// { dg-do run { target *-*-freebsd* *-*-netbsd* *-*-linux* *-*-gnu* *-*-solaris* *-*-cygwin *-*-darwin1[1-9]* powerpc-ibm-aix* } }
++// { dg-do run { target *-*-freebsd* *-*-netbsd* *-*-linux* *-*-gnu* *-*-solaris* *-*-cygwin *-*-msys *-*-darwin1[1-9]* powerpc-ibm-aix* } }
+ // { dg-options " -std=gnu++0x -pthread" { target *-*-freebsd* *-*-netbsd* *-*-linux* *-*-gnu* powerpc-ibm-aix* } }
  // { dg-options " -std=gnu++0x -pthreads" { target *-*-solaris* } }
 -// { dg-options " -std=gnu++0x " { target *-*-cygwin *-*-darwin* } }
 +// { dg-options " -std=gnu++0x " { target *-*-cygwin *-*-msys *-*-darwin* } }
@@ -3858,5 +3858,5 @@ index 0d8ce04..3f6683b 100644
  // { dg-options "-pthreads" { target *-*-solaris* } }
  
 -- 
-2.0.1
+2.0.0.msysgit.0
 

@@ -1,7 +1,7 @@
-From d03e3af56ea223e5c277fd1751a40bba14d50421 Mon Sep 17 00:00:00 2001
+From a86d893e6ef89e4e4f01e2b08337371950e6f589 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:42:21 +0900
-Subject: [PATCH 17/45] 4.8-picflag-cygwin64
+Subject: [PATCH 17/43] 4.8-picflag-cygwin64
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-picflag-cygwin64.patch
 ---
@@ -28,7 +28,7 @@ index bd81812..2ee5cd0 100644
      i[[34567]]86-*-interix[[3-9]]*)
  	# Interix 3.x gcc -fpic/-fPIC options generate broken code.
 diff --git a/gcc/configure b/gcc/configure
-index 8279b0c..9f453af 100644
+index 7753119..193aeaa 100644
 --- a/gcc/configure
 +++ b/gcc/configure
 @@ -4893,7 +4893,9 @@ case "${target}" in
@@ -88,5 +88,5 @@ index 5367027..17bd3c5 100644
      i[34567]86-*-interix[3-9]*)
  	# Interix 3.x gcc -fpic/-fPIC options generate broken code.
 -- 
-2.0.1
+2.0.0.msysgit.0
 

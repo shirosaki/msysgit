@@ -1,7 +1,7 @@
-From 97ea4331fe236def3b36b67f3ac3e11e58c7778c Mon Sep 17 00:00:00 2001
+From 7b1f6593acfede43aed126ded8bb2fae9f8c053c Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Thu, 3 Jul 2014 17:29:05 +0900
-Subject: [PATCH 26/45] Import inttypes.h from gnulib
+Subject: [PATCH 25/43] Import inttypes.h from gnulib
 
 git clone git://git.savannah.gnu.org/gnulib.git
 cd lto-plugin
@@ -4916,5 +4916,5 @@ index 0000000..1c4d7bd
 +# endif
 +#endif
 -- 
-2.0.1
+2.0.0.msysgit.0
 

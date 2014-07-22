@@ -1,7 +1,7 @@
-From 3efe59ea037273390c0ef8f3bbbd0cfb2b36d0ef Mon Sep 17 00:00:00 2001
+From 6b77fe72572e0d7334ffa6a794faa417828601cc Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Mon, 7 Jul 2014 09:41:05 +0900
-Subject: [PATCH 33/45] Replace backslashes in the script path
+Subject: [PATCH 32/43] Replace backslashes in the script path
 
 Script path may be Windows path. `basename` doesn't work with
 backspash path.
@@ -24,5 +24,5 @@ index 6722ce5..4c33a7f 100644
  case "$invoked" in
    as)
 -- 
-2.0.1
+2.0.0.msysgit.0
 

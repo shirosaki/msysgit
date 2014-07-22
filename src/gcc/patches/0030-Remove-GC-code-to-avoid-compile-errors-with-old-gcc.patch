@@ -1,7 +1,7 @@
-From d1fe1c5e13e79246da63224b999c0031d2f1ea6e Mon Sep 17 00:00:00 2001
+From acc412485ab3a5d67b346e6de6feee075cfa9b2c Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Sat, 5 Jul 2014 10:18:13 +0900
-Subject: [PATCH 31/45] Remove GC code to avoid compile errors with old gcc
+Subject: [PATCH 30/43] Remove GC code to avoid compile errors with old gcc
 
 ---
  gcc/vec.h | 8 ++++++++
@@ -36,5 +36,5 @@ index c99d2ef..b72bf09 100644
  
  template<typename T, typename A>
 -- 
-2.0.1
+2.0.0.msysgit.0
 

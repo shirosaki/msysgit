@@ -1,7 +1,7 @@
-From c9fb5320ee5919b15de45c9abee9db1ea98d7be8 Mon Sep 17 00:00:00 2001
+From 483b1c9c1f5c8f743fc8ab2217355ecafaaf8f32 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:41:01 +0900
-Subject: [PATCH 06/45] 4.7-java-awt
+Subject: [PATCH 06/43] 4.7-java-awt
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.7-java-awt.patch
 ---
@@ -96,5 +96,5 @@ index 4fc0b10..1370469 100644
  # List of aliases.
  Dialog/a=FreeSans
 -- 
-2.0.1
+2.0.0.msysgit.0
 

@@ -1,7 +1,7 @@
-From a371261cb02b0d965a1bcfaf1dd4baebceb56ac8 Mon Sep 17 00:00:00 2001
+From c1fab86d679d264ca29431643396c0cd13b28184 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Sat, 5 Jul 2014 07:59:54 +0900
-Subject: [PATCH 30/45] Rename data member to fix compile errors
+Subject: [PATCH 29/43] Rename data member to fix compile errors
 
 ANSI C++ forbids data member `x' with same name as enclosing class
 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=7647
@@ -363,5 +363,5 @@ index eb6f0d8..5cc82b4 100644
    fprintf (file,"list of occurrences:\n");
    occr = expr->avail_occr;
 -- 
-2.0.1
+2.0.0.msysgit.0
 

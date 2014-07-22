@@ -1,7 +1,7 @@
-From fdc78923ec2ba90cad36f6d190a9f30cde7d5fba Mon Sep 17 00:00:00 2001
+From 4bf01a3e51b8fd90bd708f413b46aa52527547bf Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Wed, 9 Jul 2014 14:20:50 +0900
-Subject: [PATCH 44/45] Add stdint types
+Subject: [PATCH 42/43] Add stdint types
 
 ---
  gcc/ginclude/stdint-wrap.h | 89 +++++++++++++++++++++++++++++++++++++++++++++-
@@ -108,5 +108,5 @@ index 83b6f70..3fb7d6f 100644
  # include "stdint-gcc.h"
  #endif
 -- 
-2.0.1
+2.0.0.msysgit.0
 

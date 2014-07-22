@@ -1,7 +1,7 @@
-From e08ddf66988fe11af91ee65492798272f26b4a78 Mon Sep 17 00:00:00 2001
+From ef22601a289838f557d71d9cddc1ce4571d4529c Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Fri, 4 Jul 2014 22:29:01 +0900
-Subject: [PATCH 29/45] Fix an compile error of prototype
+Subject: [PATCH 28/43] Fix an compile error of prototype
 
 ../../gcc/vec.h:1277: prototype for `template <class T, class A>
 template <class T1> void va_stack::alloc(vec<T1,va_stack,vl_ptr> &,
@@ -31,5 +31,5 @@ index 3c1bb9a..c99d2ef 100644
    /* FIXME - This field should be private, but we need to cater to
  	     compilers that have stricter notions of PODness for types.  */
 -- 
-2.0.1
+2.0.0.msysgit.0
 

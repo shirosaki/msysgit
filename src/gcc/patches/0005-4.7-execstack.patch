@@ -1,7 +1,7 @@
-From 3648c829ba4edf320775ac914205d87e1d38171d Mon Sep 17 00:00:00 2001
+From daad9123ef283ca0b24776820ecd022a125c61ae Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:40:55 +0900
-Subject: [PATCH 05/45] 4.7-execstack
+Subject: [PATCH 05/43] 4.7-execstack
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.7-execstack.patch
 ---
@@ -52,7 +52,7 @@ index 0341904..85ed5be 100644
 -
  ; Need to retain blank line above.
 diff --git a/libgcc/config.host b/libgcc/config.host
-index 259c9a7..74472ed 100644
+index 4a76998..f503642 100644
 --- a/libgcc/config.host
 +++ b/libgcc/config.host
 @@ -274,6 +274,9 @@ case ${host} in
@@ -66,5 +66,5 @@ index 259c9a7..74472ed 100644
    enable_execute_stack=enable-execute-stack-empty.c;
    ;;
 -- 
-2.0.1
+2.0.0.msysgit.0
 

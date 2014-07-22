@@ -1,7 +1,7 @@
-From 7bc997f6ab195aaf3c3d2877759bf6457e63f167 Mon Sep 17 00:00:00 2001
+From f1cb803ed66240d098ccd186c583e9d27764ec62 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:42:14 +0900
-Subject: [PATCH 16/45] 4.8-lto-plugin-soname
+Subject: [PATCH 16/43] 4.8-lto-plugin-soname
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-lto-plugin-soname.patch
 ---
@@ -67,5 +67,5 @@ index 0c8d89f..c591d5d 100644
  
  liblto_plugin_la_DEPENDENCIES = $(if $(wildcard \
 -- 
-2.0.1
+2.0.0.msysgit.0
 

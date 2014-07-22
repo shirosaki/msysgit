@@ -1,7 +1,7 @@
-From 474cafb21b2a856543a6a3e194127bb78797f351 Mon Sep 17 00:00:00 2001
+From b212923046bcb92cbc44c10a0fb5b06d147f08f8 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:41:08 +0900
-Subject: [PATCH 07/45] 4.5-java-FIONREAD
+Subject: [PATCH 07/43] 4.5-java-FIONREAD
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.5-java-FIONREAD.patch
 ---
@@ -22,5 +22,5 @@ index e05904c..0a2569c 100644
        // If the ioctl doesn't work, we don't care.
        r = 0;
 -- 
-2.0.1
+2.0.0.msysgit.0
 

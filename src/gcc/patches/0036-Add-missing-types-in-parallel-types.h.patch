@@ -1,7 +1,7 @@
-From 9f78529f3ec82cd424fb9495537f049b8e6220bb Mon Sep 17 00:00:00 2001
+From c5fe3d8ef94db65ee10d784cf777a11eea8523b1 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Wed, 9 Jul 2014 10:52:51 +0900
-Subject: [PATCH 37/45] Add missing types in parallel/types.h
+Subject: [PATCH 36/43] Add missing types in parallel/types.h
 
 ---
  libstdc++-v3/include/parallel/types.h | 4 ++++
@@ -23,5 +23,5 @@ index 709f3eb..5116902 100644
     * @brief Unsigned integer to index __elements.
     * The total number of elements for each algorithm must fit into this type.
 -- 
-2.0.1
+2.0.0.msysgit.0
 

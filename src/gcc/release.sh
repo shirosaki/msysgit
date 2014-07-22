@@ -8,7 +8,7 @@ cd "$(dirname "$0")" && . ../common/update-lib.sh
 check_pristine
 
 package=gcc
-version=4.8.2
+version=4.8.3
 url=ftp://gcc.gnu.org/pub/gcc/releases/$package-$version
 d=$package-$version
 tar=$d.tar.bz2
@@ -19,7 +19,7 @@ CFLAGS=${CFLAGS/-pipe/}
 CXXFLAGS=${CXXFLAGS/-pipe/}
 
 export CPPFLAGS="${CPPFLAGS} -D__CYGWIN__"
-export LDFLAGS="${LDFLAGS} -s -Wl,--enable-auto-import -Wl,--disable-runtime-pseudo-reloc"
+export LDFLAGS="${LDFLAGS} -s -Wl,--enable-auto-import"
 # search gmp library
 export PATH=/usr/lib:$PATH
 # search msys-gcc_s-*.dll
@@ -88,3 +88,5 @@ pre_install
 (cd "$d" && make install) || die "Could not install"
 
 post_install
+
+sed -e '/_G_config.h/d' fileList.txt > tmp && mv -f tmp fileList.txt

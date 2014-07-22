@@ -1,7 +1,7 @@
-From 12387b8a3f23aa9de97ade903543a725cd99e52f Mon Sep 17 00:00:00 2001
+From 16589f18a56d5c62018b7809df153e328e3f1faa Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:42:40 +0900
-Subject: [PATCH 20/45] 4.5-skiptest
+Subject: [PATCH 19/43] 4.5-skiptest
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.5-skiptest.patch
 ---
@@ -20,5 +20,5 @@ index b079e25..c30eaf5 100644
  
  #ifndef __ASSEMBLER__
 -- 
-2.0.1
+2.0.0.msysgit.0
 

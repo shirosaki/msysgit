@@ -1,7 +1,7 @@
-From b8e0889d8ef73591cb3dfe08c25a2936e603fe54 Mon Sep 17 00:00:00 2001
+From 7454620e8685c0c73d945240dd2f6af029099890 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:40:33 +0900
-Subject: [PATCH 02/45] gcc-4.8-lambda-ICE
+Subject: [PATCH 02/43] gcc-4.8-lambda-ICE
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8-lambda-ICE.patch
 ---
@@ -11,10 +11,10 @@ https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8-lambda-ICE.pat
  create mode 100644 gcc/testsuite/g++.dg/cpp0x/lambda/lambda-names1.C
 
 diff --git a/gcc/cp/semantics.c b/gcc/cp/semantics.c
-index 580c609..c11c9e2 100644
+index 9518685..5314ea9 100644
 --- a/gcc/cp/semantics.c
 +++ b/gcc/cp/semantics.c
-@@ -2734,8 +2734,10 @@ finish_member_declaration (tree decl)
+@@ -2735,8 +2735,10 @@ finish_member_declaration (tree decl)
  					      /*friend_p=*/0);
  	}
      }
@@ -43,5 +43,5 @@ index 0000000..df2b037
 +    return [&t]() -> int {int __t; __t = t; return __t; }();
 +}
 -- 
-2.0.1
+2.0.0.msysgit.0
 

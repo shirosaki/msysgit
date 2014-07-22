@@ -1,7 +1,7 @@
-From 206e2116892fe1d4555b26b0102796437dd08748 Mon Sep 17 00:00:00 2001
+From 8358f7fc189fb6152b30f847e9e972578d4845dc Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:40:48 +0900
-Subject: [PATCH 04/45] 4.7-boehm-gc-cygwin
+Subject: [PATCH 04/43] 4.7-boehm-gc-cygwin
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.7-boehm-gc-cygwin.patch
 ---
@@ -68,5 +68,5 @@ index ffb34e0..5a1f479 100644
  {
      GC_thread me = (GC_thread)arg;
 -- 
-2.0.1
+2.0.0.msysgit.0
 

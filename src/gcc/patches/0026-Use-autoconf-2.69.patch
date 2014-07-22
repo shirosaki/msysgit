@@ -1,7 +1,7 @@
-From b9efa56ba3c6e14f4864356b43692895a3b0b1ab Mon Sep 17 00:00:00 2001
+From b0220e4f469dd02de0efd5f8ee5d3d5cfa04a7ad Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Thu, 3 Jul 2014 17:32:54 +0900
-Subject: [PATCH 27/45] Use autoconf 2.69
+Subject: [PATCH 26/43] Use autoconf 2.69
 
 ---
  config/override.m4 | 2 +-
@@ -21,5 +21,5 @@ index 52bd1c3..8b954d3 100644
  dnl Test for the exact version when AC_INIT is expanded.
  dnl This allows to update the tree in steps (for testing)
 -- 
-2.0.1
+2.0.0.msysgit.0
 

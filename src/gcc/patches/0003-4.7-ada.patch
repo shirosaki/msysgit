@@ -1,7 +1,7 @@
-From bcba1709863adbe441499391bf96d0ebd53a3fb2 Mon Sep 17 00:00:00 2001
+From 0626202df17b4f012937c12dd540b58a2f1bbae0 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:40:41 +0900
-Subject: [PATCH 03/45] 4.7-ada
+Subject: [PATCH 03/43] 4.7-ada
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.7-ada.patch
 ---
@@ -202,7 +202,7 @@ index 0000000..d441e7b
 +
 +end Ada.Interrupts.Names;
 diff --git a/gcc/ada/gcc-interface/Makefile.in b/gcc/ada/gcc-interface/Makefile.in
-index 0ddde72..06f36ac 100644
+index ee610f7..7f7bd88 100644
 --- a/gcc/ada/gcc-interface/Makefile.in
 +++ b/gcc/ada/gcc-interface/Makefile.in
 @@ -191,6 +191,13 @@ TARGET_ADA_SRCS =
@@ -291,7 +291,7 @@ index 0ddde72..06f36ac 100644
    EXTRA_GNATTOOLS = ../../gnatdll$(exeext)
    EXTRA_GNATMAKE_OBJS = mdll.o mdll-utl.o mdll-fil.o
    soext = .dll
-@@ -2535,7 +2556,7 @@ gnatlink-re: ../stamp-tools link.o targext.o gnatmake-re
+@@ -2533,7 +2554,7 @@ gnatlink-re: ../stamp-tools link.o targext.o gnatmake-re
  	  true; \
  	fi
  
@@ -300,7 +300,7 @@ index 0ddde72..06f36ac 100644
  #	Create the directory before deleting it, in case the directory is
  #	a list of directories (as it may be on VMS). This ensures we are
  #	deleting the right one.
-@@ -2582,6 +2603,46 @@ install-gnatlib: ../stamp-gnatlib-$(RTSDIR)
+@@ -2580,6 +2601,46 @@ install-gnatlib: ../stamp-gnatlib-$(RTSDIR)
  	cd $(DESTDIR)$(ADA_INCLUDE_DIR); $(CHMOD) a-wx *.adb
  	cd $(DESTDIR)$(ADA_INCLUDE_DIR); $(CHMOD) a-wx *.ads
  
@@ -347,7 +347,7 @@ index 0ddde72..06f36ac 100644
  ../stamp-gnatlib2-$(RTSDIR):
  	$(RM) $(RTSDIR)/s-*.ali
  	$(RM) $(RTSDIR)/s-*$(objext)
-@@ -2774,20 +2835,20 @@ gnatlib-shared-win32:
+@@ -2772,20 +2833,20 @@ gnatlib-shared-win32:
  	     MULTISUBDIR="$(MULTISUBDIR)" \
  	     THREAD_KIND="$(THREAD_KIND)" \
               gnatlib
@@ -3323,5 +3323,5 @@ index 0000000..6d813f5
 +
 +end System;
 -- 
-2.0.1
+2.0.0.msysgit.0
 

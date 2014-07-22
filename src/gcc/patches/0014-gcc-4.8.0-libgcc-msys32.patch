@@ -1,7 +1,7 @@
-From 394be66a6ec87c44c2463d40ed45621b4ee69847 Mon Sep 17 00:00:00 2001
+From eae5f2c41a595c0f4e711f079ad36bb78f6f6226 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:41:54 +0900
-Subject: [PATCH 14/45] gcc-4.8.0-libgcc-msys32
+Subject: [PATCH 14/43] gcc-4.8.0-libgcc-msys32
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8.0-libgcc-msys32.patch
 ---
@@ -9,7 +9,7 @@ https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8.0-libgcc-msys3
  1 file changed, 17 insertions(+)
 
 diff --git a/libgcc/config.host b/libgcc/config.host
-index 74472ed..76d007c 100644
+index f503642..4d3cba1 100644
 --- a/libgcc/config.host
 +++ b/libgcc/config.host
 @@ -574,6 +574,22 @@ i[34567]86-*-cygwin*)
@@ -35,7 +35,7 @@ index 74472ed..76d007c 100644
  i[34567]86-*-mingw*)
  	extra_parts="crtbegin.o crtend.o crtfastmath.o"
  	case ${target_thread_file} in
-@@ -1147,6 +1163,7 @@ i[34567]86-*-darwin* | x86_64-*-darwin* | \
+@@ -1151,6 +1167,7 @@ i[34567]86-*-darwin* | x86_64-*-darwin* | \
    i[34567]86-*-gnu* | \
    i[34567]86-*-solaris2* | x86_64-*-solaris2.1[0-9]* | \
    i[34567]86-*-cygwin* | i[34567]86-*-mingw* | x86_64-*-mingw* | \
@@ -44,5 +44,5 @@ index 74472ed..76d007c 100644
    i[34567]86-*-openbsd* | x86_64-*-openbsd*)
    	tmake_file="${tmake_file} t-softfp-tf"
 -- 
-2.0.1
+2.0.0.msysgit.0
 
