@@ -1,10 +1,12 @@
-From 806f45b1f58aee0cc803fb9abf4466c4e9458cc7 Mon Sep 17 00:00:00 2001
+From 614dd9399e2f6f5230d2f209fe61bd0094f87123 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 22 Jul 2014 14:59:15 +0900
 Subject: [PATCH 20/20] msys.dll: fix compile errors with gcc 4.8
 
 ---
  msys/rt/src/newlib/libc/ctype/ctype_.c    |  7 ++++++-
+ msys/rt/src/winsup/Makefile.common        |  2 +-
+ msys/rt/src/winsup/cygwin/Makefile.in     |  2 +-
  msys/rt/src/winsup/cygwin/autoload.cc     |  8 ++++----
  msys/rt/src/winsup/cygwin/cygheap.cc      | 26 ++++++++++++--------------
  msys/rt/src/winsup/cygwin/dcrt0.cc        |  6 +++---
@@ -21,7 +23,7 @@ Subject: [PATCH 20/20] msys.dll: fix compile errors with gcc 4.8
  msys/rt/src/winsup/cygwin/spawn.cc        |  2 +-
  msys/rt/src/winsup/cygwin/syscalls.cc     |  4 ++--
  msys/rt/src/winsup/cygwin/winsup.h        |  2 +-
- 17 files changed, 64 insertions(+), 90 deletions(-)
+ 19 files changed, 66 insertions(+), 92 deletions(-)
  delete mode 100644 msys/rt/src/winsup/cygwin/include/wchar.h
 
 diff --git a/msys/rt/src/newlib/libc/ctype/ctype_.c b/msys/rt/src/newlib/libc/ctype/ctype_.c
@@ -42,6 +44,32 @@ index 54f92d9..d4dcb72 100644
  _CONST char __declspec(dllexport) *__ctype_ptr = _ctype_b + 128;
  #else
  extern _CONST char _ctype_[1 + 256] __attribute__ ((alias ("_ctype_b+127")));
+diff --git a/msys/rt/src/winsup/Makefile.common b/msys/rt/src/winsup/Makefile.common
+index 78595d2..9e3e9d6 100644
+--- a/msys/rt/src/winsup/Makefile.common
++++ b/msys/rt/src/winsup/Makefile.common
+@@ -65,7 +65,7 @@ mingw_source:=$(updir)/mingw
+ utils_build:=$(bupdir)/utils
+ utils_source:=$(updir)/utils
+ 
+-INCLUDES:=-I. -I$(cygwin_source)/include -I$(cygwin_source) -I$(newlib_source)/libc/sys/cygwin -I$(newlib_source)/libc/include -I$(w32api_include)
++INCLUDES:=-I. -I$(cygwin_source)/include -I$(cygwin_source) -I$(newlib_source)/libc/sys/cygwin -I$(newlib_source)/libc/include -I$(w32api_include) -isystem /usr/include
+ ifdef CONFIG_DIR
+ INCLUDES+=-I$(CONFIG_DIR)
+ endif
+diff --git a/msys/rt/src/winsup/cygwin/Makefile.in b/msys/rt/src/winsup/cygwin/Makefile.in
+index c312fb4..f3ff060 100644
+--- a/msys/rt/src/winsup/cygwin/Makefile.in
++++ b/msys/rt/src/winsup/cygwin/Makefile.in
+@@ -218,7 +218,7 @@ winver_stamp: mkvers.sh include/cygwin/version.h winver.rc $(DLL_OFILES)
+ 	$(COMPILE_CXX) -o version.o version.cc
+ 
+ cygrun.exe : cygrun.o
+-	$(CC) -nodefaultlibs -o $@ $^ -lgcc $(LIB_NAME) -luser32 -lshell32 -lkernel32
++	$(CC) -o $@ $^ $(LIB_NAME) -luser32 -lshell32 -lkernel32
+ 
+ #
+ 
 diff --git a/msys/rt/src/winsup/cygwin/autoload.cc b/msys/rt/src/winsup/cygwin/autoload.cc
 index 67d0bc0..7b513aa 100644
 --- a/msys/rt/src/winsup/cygwin/autoload.cc
