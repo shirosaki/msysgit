@@ -1,7 +1,7 @@
 From 85ab78d855d22b0c331a36862b7df303980e7927 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 22 Jul 2014 14:58:19 +0900
-Subject: [PATCH 19/20] msys.dll: add wchar functions from newlib 1.20 for gcc
+Subject: [PATCH 19/21] msys.dll: add wchar functions from newlib 1.20 for gcc
  4.8
 
 Add wchar function required for gcc 4.8 build.

@@ -1,7 +1,7 @@
 From 2002106912f98672d57377b23fa84d59c82084cf Mon Sep 17 00:00:00 2001
 From: Johannes Sixt <j6t@kdbg.org>
 Date: Tue, 29 Dec 2009 21:31:16 +0100
-Subject: [PATCH 08/20] Do not start the fstab observer thread.
+Subject: [PATCH 08/21] Do not start the fstab observer thread.
 
 To update mount points while an MSYS program is active, a thread is started
 on program startup that observes fstab changes. On program shutdown, this

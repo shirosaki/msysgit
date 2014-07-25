@@ -1,7 +1,7 @@
 From e749280e01d308bf23a31266f0797e09326da980 Mon Sep 17 00:00:00 2001
 From: Heiko Voigt <hvoigt@hvoigt.net>
 Date: Wed, 3 Feb 2010 19:46:42 +0100
-Subject: [PATCH 09/20] spawning of processes: combine for loops and resolve
+Subject: [PATCH 09/21] spawning of processes: combine for loops and resolve
  fixme
 
 This enables easier handling of quoting the arguments. Additionally we

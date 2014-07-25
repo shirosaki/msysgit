@@ -1,7 +1,7 @@
 From 614dd9399e2f6f5230d2f209fe61bd0094f87123 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 22 Jul 2014 14:59:15 +0900
-Subject: [PATCH 20/20] msys.dll: fix compile errors with gcc 4.8
+Subject: [PATCH 20/21] msys.dll: fix compile errors with gcc 4.8
 
 ---
  msys/rt/src/newlib/libc/ctype/ctype_.c    |  7 ++++++-
