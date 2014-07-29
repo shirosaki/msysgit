@@ -1,0 +1,26 @@
+From 77c37e67a23acf20003a2253483a002c17292d1e Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Tue, 29 Jul 2014 15:17:16 +0900
+Subject: [PATCH 7/7] Set DEFAULT_PSEUDO_RELOC_VERSION 1
+
+V2 doesn't work with msys.
+---
+ ld/emultempl/pe.em | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ld/emultempl/pe.em b/ld/emultempl/pe.em
+index 80a2b10..6297564 100644
+--- a/ld/emultempl/pe.em
++++ b/ld/emultempl/pe.em
+@@ -99,7 +99,7 @@ fragment <<EOF
+ #endif
+ 
+ #if defined(TARGET_IS_i386pe)
+-#define DEFAULT_PSEUDO_RELOC_VERSION 2
++#define DEFAULT_PSEUDO_RELOC_VERSION 1
+ #else
+ #define DEFAULT_PSEUDO_RELOC_VERSION 1
+ #endif
+-- 
+2.0.0.msysgit.0
+

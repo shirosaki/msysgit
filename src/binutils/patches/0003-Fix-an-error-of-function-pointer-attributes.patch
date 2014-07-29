@@ -1,7 +1,7 @@
 From 2e4bcaf442e185f7dc476a2c118db4e7dcda0f95 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Thu, 3 Jul 2014 03:14:40 +0900
-Subject: [PATCH 3/6] Fix an error of function pointer attributes
+Subject: [PATCH 3/7] Fix an error of function pointer attributes
 
 ---
  gas/as.h | 8 ++++++++

@@ -1,7 +1,7 @@
 From 6eebe2068da9822b0a12bc5f4b7892f4976de2ba Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Wed, 2 Jul 2014 09:28:59 +0900
-Subject: [PATCH 2/6] Declare variables on the beginning of the block
+Subject: [PATCH 2/7] Declare variables on the beginning of the block
 
 ---
  bfd/peXXigen.c | 3 ++-

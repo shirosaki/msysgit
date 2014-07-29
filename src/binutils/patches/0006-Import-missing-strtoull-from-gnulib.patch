@@ -1,7 +1,7 @@
 From af785a17d4ed276b9e2ce3821a9f8a92b85fbd10 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Thu, 3 Jul 2014 11:22:01 +0900
-Subject: [PATCH 6/6] Import missing strtoull from gnulib
+Subject: [PATCH 6/7] Import missing strtoull from gnulib
 
 git clone git://git.savannah.gnu.org/gnulib.git
 cd ld

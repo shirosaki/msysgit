@@ -1,7 +1,7 @@
 From 75dcfdedfbca76b6e05d1726a7b4d989b09906c4 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Thu, 3 Jul 2014 03:31:29 +0900
-Subject: [PATCH 5/6] Add missing stdint.h
+Subject: [PATCH 5/7] Add missing stdint.h
 
 ---
  config/override.m4   | 2 +-

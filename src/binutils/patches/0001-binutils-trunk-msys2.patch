@@ -1,7 +1,7 @@
 From 4dafd08b1c6cda2d07dbed66ed6b5f77c52c8fba Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 14:47:04 +0900
-Subject: [PATCH 1/6] binutils-trunk-msys2
+Subject: [PATCH 1/7] binutils-trunk-msys2
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/binutils/binutils-trunk-msys2.patch
 ---
