@@ -47,12 +47,12 @@ Individual utilities
                                                   format files.
 * size: (binutils)size.                         List section sizes and total 
                                                   size.
-* strings: (binutils)strings.                   List printable strings from 
-                                                  files.
-* strip: (binutils)strip.                       Discard symbols.
 * libtool-invocation: (libtool)Invoking libtool.
                                                 Running the `libtool' script.
 * libtoolize: (libtool)Invoking libtoolize.     Adding libtool support.
+* strings: (binutils)strings.                   List printable strings from 
+                                                  files.
+* strip: (binutils)strip.                       Discard symbols.
 * windmc: (binutils)windmc.                     Generator for Windows message 
                                                   resources.
 * windres: (binutils)windres.                   Manipulate Windows resources.
