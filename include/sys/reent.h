@@ -148,6 +148,9 @@ struct __sFILE {
   int	_offset;	/* current lseek offset */
 
   struct _reent *_data;
+
+  _mbstate_t _mbstate;  /* for wide char stdio functions. */
+  int   _flags2;        /* for future use */
 };
 
 typedef struct __sFILE   __FILE;

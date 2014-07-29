@@ -103,13 +103,21 @@ typedef unsigned long vm_size_t;
 
 #define __BIT_TYPES_DEFINED__
 
-typedef char int8_t;
+#ifndef  __int8_t_defined
+ typedef char int8_t;
+#endif
 typedef unsigned char u_int8_t;
-typedef short int16_t;
+#ifndef  __int16_t_defined
+ typedef short int16_t;
+#endif
 typedef unsigned short u_int16_t;
-typedef int int32_t;
+#ifndef  __int32_t_defined
+ typedef int int32_t;
+#endif
 typedef unsigned int u_int32_t;
-typedef long long int64_t;
+#ifndef __int64_t_defined
+ typedef long long int64_t;
+#endif
 typedef unsigned long long u_int64_t;
 typedef int32_t register_t;
 #endif /* __MS_types__ */
