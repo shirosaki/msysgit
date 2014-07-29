@@ -141,7 +141,7 @@ file_magic_glob=""
 want_nocaseglob="no"
 
 # Command to associate shared and link libraries.
-sharedlib_from_linklib_cmd="func_cygming_dll_for_implib_fallback"
+sharedlib_from_linklib_cmd="func_cygming_dll_for_implib"
 
 # The archiver.
 AR="ar"
@@ -150,7 +150,7 @@ AR="ar"
 AR_FLAGS="cru"
 
 # How to feed a file listing to the archiver.
-archiver_list_spec=""
+archiver_list_spec="@"
 
 # A symbol stripping program.
 STRIP="strip"
@@ -182,7 +182,7 @@ global_symbol_to_c_name_address="sed -n -e 's/^: \\([^ ]*\\)[ ]*\$/  {\\\"\\1\\\
 global_symbol_to_c_name_address_lib_prefix="sed -n -e 's/^: \\([^ ]*\\)[ ]*\$/  {\\\"\\1\\\", (void *) 0},/p' -e 's/^[ABCDGIRSTW]* \\([^ ]*\\) \\(lib[^ ]*\\)\$/  {\"\\2\", (void *) \\&\\2},/p' -e 's/^[ABCDGIRSTW]* \\([^ ]*\\) \\([^ ]*\\)\$/  {\"lib\\2\", (void *) \\&\\2},/p'"
 
 # Specify filename containing input files for $NM.
-nm_file_list_spec=""
+nm_file_list_spec="@"
 
 # The root where to search for dependent libraries,and in which our libraries should be installed.
 lt_sysroot=
@@ -285,7 +285,7 @@ finish_eval=""
 hardcode_into_libs=no
 
 # Compile-time system search path for libraries.
-sys_lib_search_path_spec="/lib/gcc-lib/i686-pc-msys/2.95.3-1 /lib/gcc-lib /usr/lib/gcc-lib/i686-pc-msys/2.95.3-1 /i686-pc-msys/lib /usr/i686-pc-msys/lib  /usr/lib/w32api"
+sys_lib_search_path_spec="/usr/lib/gcc/i686-pc-msys/4.8.3 /usr/i686-pc-msys/lib /usr/lib /lib  /usr/lib/w32api"
 
 # Run-time system search path for libraries.
 sys_lib_dlsearch_path_spec="/lib /usr/lib"
@@ -294,10 +294,10 @@ sys_lib_dlsearch_path_spec="/lib /usr/lib"
 dlopen_support=yes
 
 # Whether dlopen of programs is supported.
-dlopen_self=no
+dlopen_self=yes
 
 # Whether dlopen of statically linked programs is supported.
-dlopen_self_static=unknown
+dlopen_self_static=yes
 
 # Commands to strip libraries.
 old_striplib="strip --strip-debug"
@@ -305,7 +305,7 @@ striplib="strip --strip-unneeded"
 
 
 # The linker used to build libraries.
-LD="/i686-pc-msys/bin/ld.exe"
+LD="/usr/i686-pc-msys/bin/ld.exe"
 
 # How to create reloadable object files.
 reload_flag=" -r"
@@ -321,7 +321,7 @@ CC="gcc"
 with_gcc=yes
 
 # Compiler flag to turn off builtin functions.
-no_builtin_flag=" -fno-builtin -fno-rtti -fno-exceptions"
+no_builtin_flag=" -fno-builtin"
 
 # Additional compiler flags for building library objects.
 pic_flag=" -DDLL_EXPORT -DPIC"
@@ -10110,7 +10110,7 @@ build_old_libs=`case $build_libtool_libs in yes) echo no;; *) echo yes;; esac`
 # ### BEGIN LIBTOOL TAG CONFIG: CXX
 
 # The linker used to build libraries.
-LD="/i686-pc-msys/bin/ld.exe"
+LD="/usr/i686-pc-msys/bin/ld.exe"
 
 # How to create reloadable object files.
 reload_flag=" -r"
@@ -10247,25 +10247,25 @@ file_list_spec=""
 hardcode_action=immediate
 
 # The directories searched by this compiler when creating a shared library.
-compiler_lib_search_dirs="/usr/lib /usr/lib /bin/../lib/gcc-lib/i686-pc-msys/2.95.3-1 /bin/../lib/gcc-lib /usr/lib/gcc-lib/i686-pc-msys/2.95.3-1 /bin/../lib/gcc-lib/i686-pc-msys/2.95.3-1/../../../../i686-pc-msys/lib /usr/lib/gcc-lib/i686-pc-msys/2.95.3-1/../../../../i686-pc-msys/lib"
+compiler_lib_search_dirs="/usr/lib/gcc/i686-pc-msys/4.8.3 /usr/lib/gcc/i686-pc-msys/4.8.3/../../../../i686-pc-msys/lib /usr/lib/gcc/i686-pc-msys/4.8.3/../../.."
 
 # Dependencies to place before and after the objects being linked to
 # create a shared library.
-predep_objects=""
-postdep_objects=""
+predep_objects="/usr/lib/gcc/i686-pc-msys/4.8.3/crtbegin.o"
+postdep_objects="/usr/lib/gcc/i686-pc-msys/4.8.3/crtend.o"
 predeps=""
-postdeps="-lstdc++ -lgcc -lmsys-1.0 -luser32 -lkernel32 -ladvapi32 -lshell32 -lgcc"
+postdeps="-lstdc++ -lgcc_s -lgcc -lmsys-1.0 -ladvapi32 -lshell32 -luser32 -lkernel32 -lgcc_s -lgcc"
 
 # The library search path used internally by the compiler when linking
 # a shared library.
-compiler_lib_search_path="-L/usr/lib -L/usr/lib -L/bin/../lib/gcc-lib/i686-pc-msys/2.95.3-1 -L/bin/../lib/gcc-lib -L/usr/lib/gcc-lib/i686-pc-msys/2.95.3-1 -L/bin/../lib/gcc-lib/i686-pc-msys/2.95.3-1/../../../../i686-pc-msys/lib -L/usr/lib/gcc-lib/i686-pc-msys/2.95.3-1/../../../../i686-pc-msys/lib"
+compiler_lib_search_path="-L/usr/lib/gcc/i686-pc-msys/4.8.3 -L/usr/lib/gcc/i686-pc-msys/4.8.3/../../../../i686-pc-msys/lib -L/usr/lib/gcc/i686-pc-msys/4.8.3/../../.."
 
 # ### END LIBTOOL TAG CONFIG: CXX
 
 # ### BEGIN LIBTOOL TAG CONFIG: F77
 
 # The linker used to build libraries.
-LD="/i686-pc-msys/bin/ld.exe"
+LD="/usr/i686-pc-msys/bin/ld.exe"
 
 # How to create reloadable object files.
 reload_flag=" -r"
@@ -10420,7 +10420,7 @@ compiler_lib_search_path=""
 # ### BEGIN LIBTOOL TAG CONFIG: FC
 
 # The linker used to build libraries.
-LD="/i686-pc-msys/bin/ld.exe"
+LD="/usr/i686-pc-msys/bin/ld.exe"
 
 # How to create reloadable object files.
 reload_flag=" -r"
@@ -10575,7 +10575,7 @@ compiler_lib_search_path="-L/usr/lib -L/usr/lib -L/bin/../lib/gcc-lib/i686-pc-ms
 # ### BEGIN LIBTOOL TAG CONFIG: GO
 
 # The linker used to build libraries.
-LD="/i686-pc-msys/bin/ld.exe"
+LD="/usr/i686-pc-msys/bin/ld.exe"
 
 # How to create reloadable object files.
 reload_flag=" -r"
@@ -10724,7 +10724,7 @@ compiler_lib_search_path=""
 # ### BEGIN LIBTOOL TAG CONFIG: GCJ
 
 # The linker used to build libraries.
-LD="/i686-pc-msys/bin/ld.exe"
+LD="/usr/i686-pc-msys/bin/ld.exe"
 
 # How to create reloadable object files.
 reload_flag=" -r"
