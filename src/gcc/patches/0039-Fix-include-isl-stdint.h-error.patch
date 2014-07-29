@@ -1,7 +1,7 @@
-From d7f43620133a19ce3d93a924e10d2299fb6ce646 Mon Sep 17 00:00:00 2001
+From a67b0992b081a5696eb7a77b027563ac12674098 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Wed, 9 Jul 2014 17:10:26 +0900
-Subject: [PATCH 40/43] Fix include isl/stdint.h error
+Subject: [PATCH 39/41] Fix include isl/stdint.h error
 
 ---
  gcc/config.in | 3 +++

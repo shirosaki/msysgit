@@ -1,7 +1,7 @@
 From eae5f2c41a595c0f4e711f079ad36bb78f6f6226 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:41:54 +0900
-Subject: [PATCH 14/43] gcc-4.8.0-libgcc-msys32
+Subject: [PATCH 14/41] gcc-4.8.0-libgcc-msys32
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8.0-libgcc-msys32.patch
 ---

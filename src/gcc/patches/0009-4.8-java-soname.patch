@@ -1,7 +1,7 @@
 From 11b3e187c79bf2334a593160bde6f895bd956f42 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:41:21 +0900
-Subject: [PATCH 09/43] 4.8-java-soname
+Subject: [PATCH 09/41] 4.8-java-soname
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-java-soname.patch
 ---

@@ -1,7 +1,7 @@
 From daad9123ef283ca0b24776820ecd022a125c61ae Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:40:55 +0900
-Subject: [PATCH 05/43] 4.7-execstack
+Subject: [PATCH 05/41] 4.7-execstack
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.7-execstack.patch
 ---

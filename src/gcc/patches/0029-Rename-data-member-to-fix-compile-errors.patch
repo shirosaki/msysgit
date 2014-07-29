@@ -1,7 +1,7 @@
 From c1fab86d679d264ca29431643396c0cd13b28184 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Sat, 5 Jul 2014 07:59:54 +0900
-Subject: [PATCH 29/43] Rename data member to fix compile errors
+Subject: [PATCH 29/41] Rename data member to fix compile errors
 
 ANSI C++ forbids data member `x' with same name as enclosing class
 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=7647

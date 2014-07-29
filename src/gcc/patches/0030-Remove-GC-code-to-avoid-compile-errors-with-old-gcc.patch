@@ -1,7 +1,7 @@
 From acc412485ab3a5d67b346e6de6feee075cfa9b2c Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Sat, 5 Jul 2014 10:18:13 +0900
-Subject: [PATCH 30/43] Remove GC code to avoid compile errors with old gcc
+Subject: [PATCH 30/41] Remove GC code to avoid compile errors with old gcc
 
 ---
  gcc/vec.h | 8 ++++++++

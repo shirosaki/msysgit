@@ -1,7 +1,7 @@
 From 549a1c0dff03011b06f032577ddc17617fcf4e0f Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:42:28 +0900
-Subject: [PATCH 18/43] 4.8-specs-cygwin
+Subject: [PATCH 18/41] 4.8-specs-cygwin
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-specs-cygwin.patch
 ---

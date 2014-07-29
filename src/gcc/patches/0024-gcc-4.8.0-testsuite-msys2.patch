@@ -1,7 +1,7 @@
 From a4e6fe39c281c5cff0cb47a6915a34f4acfac630 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:43:19 +0900
-Subject: [PATCH 24/43] gcc-4.8.0-testsuite-msys2
+Subject: [PATCH 24/41] gcc-4.8.0-testsuite-msys2
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8.0-testsuite-msys2.patch
 ---

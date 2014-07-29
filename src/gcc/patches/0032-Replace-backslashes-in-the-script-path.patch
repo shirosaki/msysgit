@@ -1,7 +1,7 @@
 From 6b77fe72572e0d7334ffa6a794faa417828601cc Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Mon, 7 Jul 2014 09:41:05 +0900
-Subject: [PATCH 32/43] Replace backslashes in the script path
+Subject: [PATCH 32/41] Replace backslashes in the script path
 
 Script path may be Windows path. `basename` doesn't work with
 backspash path.

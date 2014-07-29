@@ -1,7 +1,7 @@
-From 4bf01a3e51b8fd90bd708f413b46aa52527547bf Mon Sep 17 00:00:00 2001
+From 3daecaa3cfd0ad69ca12c41328c9defed183fd0b Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Wed, 9 Jul 2014 14:20:50 +0900
-Subject: [PATCH 42/43] Add stdint types
+Subject: [PATCH 41/41] Add stdint types
 
 ---
  gcc/ginclude/stdint-wrap.h | 89 +++++++++++++++++++++++++++++++++++++++++++++-

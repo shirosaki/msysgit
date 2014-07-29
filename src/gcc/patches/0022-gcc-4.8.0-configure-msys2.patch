@@ -1,7 +1,7 @@
 From 245bf820924770b4c075ab8fb48d1c751c459791 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:43:01 +0900
-Subject: [PATCH 22/43] gcc-4.8.0-configure-msys2
+Subject: [PATCH 22/41] gcc-4.8.0-configure-msys2
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8.0-configure-msys2.patch
 ---

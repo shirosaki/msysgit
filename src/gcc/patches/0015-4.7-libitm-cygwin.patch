@@ -1,7 +1,7 @@
 From 71b3135b3743bd05a5380fb5405470154be8baef Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:42:01 +0900
-Subject: [PATCH 15/43] 4.7-libitm-cygwin
+Subject: [PATCH 15/41] 4.7-libitm-cygwin
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.7-libitm-cygwin.patch
 ---

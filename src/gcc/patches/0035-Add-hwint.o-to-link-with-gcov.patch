@@ -1,7 +1,7 @@
 From 997cb17dce8f3eb0d3e2c5667c790a736818c8fe Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Mon, 7 Jul 2014 14:18:52 +0900
-Subject: [PATCH 35/43] Add hwint.o to link with gcov
+Subject: [PATCH 35/41] Add hwint.o to link with gcov
 
 ---
  gcc/Makefile.in | 4 ++--

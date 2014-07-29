@@ -1,7 +1,7 @@
 From 428d5d92f4123cea35574bd129d722a4244224bd Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:40:25 +0900
-Subject: [PATCH 01/43] gcc-4.8-filename-output
+Subject: [PATCH 01/41] gcc-4.8-filename-output
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8-filename-output.patch
 ---

@@ -1,7 +1,7 @@
 From 6a635504069c99ef5954632048af66c8be4208da Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:41:48 +0900
-Subject: [PATCH 13/43] 4.8-libffi-cygwin64
+Subject: [PATCH 13/41] 4.8-libffi-cygwin64
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-libffi-cygwin64.patch
 ---

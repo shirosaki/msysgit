@@ -1,7 +1,7 @@
 From 4c726cde69d1b32a7c18ef1098f8ef716e275d8d Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:42:52 +0900
-Subject: [PATCH 21/43] 4.8-Wimplicit-decls
+Subject: [PATCH 21/41] 4.8-Wimplicit-decls
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-Wimplicit-decls.patch
 ---

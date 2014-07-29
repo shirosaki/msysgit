@@ -1,7 +1,7 @@
 From a86d893e6ef89e4e4f01e2b08337371950e6f589 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:42:21 +0900
-Subject: [PATCH 17/43] 4.8-picflag-cygwin64
+Subject: [PATCH 17/41] 4.8-picflag-cygwin64
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.8-picflag-cygwin64.patch
 ---

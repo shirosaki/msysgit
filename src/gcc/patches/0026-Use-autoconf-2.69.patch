@@ -1,7 +1,7 @@
 From b0220e4f469dd02de0efd5f8ee5d3d5cfa04a7ad Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Thu, 3 Jul 2014 17:32:54 +0900
-Subject: [PATCH 26/43] Use autoconf 2.69
+Subject: [PATCH 26/41] Use autoconf 2.69
 
 ---
  config/override.m4 | 2 +-

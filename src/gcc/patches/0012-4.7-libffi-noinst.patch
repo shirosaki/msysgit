@@ -1,7 +1,7 @@
 From 260b5303f649832b78716a96c756b7bb5c02b43c Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:41:42 +0900
-Subject: [PATCH 12/43] 4.7-libffi-noinst
+Subject: [PATCH 12/41] 4.7-libffi-noinst
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/4.7-libffi-noinst.patch
 ---

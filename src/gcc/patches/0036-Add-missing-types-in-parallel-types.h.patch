@@ -1,7 +1,7 @@
 From c5fe3d8ef94db65ee10d784cf777a11eea8523b1 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Wed, 9 Jul 2014 10:52:51 +0900
-Subject: [PATCH 36/43] Add missing types in parallel/types.h
+Subject: [PATCH 36/41] Add missing types in parallel/types.h
 
 ---
  libstdc++-v3/include/parallel/types.h | 4 ++++

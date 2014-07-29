@@ -1,7 +1,7 @@
-From f9dd71a69fe55b3778d8c530140cc21f05dff30c Mon Sep 17 00:00:00 2001
+From b6d327c74b29a26669d847f8fa46ba60350a441c Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Wed, 9 Jul 2014 15:25:31 +0900
-Subject: [PATCH 39/43] Compile insn-recog.o with -O1 to fix compile error
+Subject: [PATCH 38/41] Compile insn-recog.o with -O1 to fix compile error
 
 ---
  gcc/Makefile.in | 3 +++

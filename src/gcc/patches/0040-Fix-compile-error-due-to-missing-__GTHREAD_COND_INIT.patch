@@ -1,7 +1,7 @@
-From 1dfa19456a26ece1177373759de531b142d1b617 Mon Sep 17 00:00:00 2001
+From 18eaa58c7300b53e7f443cfcf17723c48dfa6a27 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Thu, 10 Jul 2014 16:57:26 +0900
-Subject: [PATCH 41/43] Fix compile error due to missing __GTHREAD_COND_INIT
+Subject: [PATCH 40/41] Fix compile error due to missing __GTHREAD_COND_INIT
 
 ---
  libstdc++-v3/config.h.in | 2 ++

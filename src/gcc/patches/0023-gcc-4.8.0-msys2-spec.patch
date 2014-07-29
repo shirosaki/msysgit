@@ -1,7 +1,7 @@
 From d8ec43361f6ec976545f774618f99db01ae3a157 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Tue, 1 Jul 2014 00:43:09 +0900
-Subject: [PATCH 23/43] gcc-4.8.0-msys2-spec
+Subject: [PATCH 23/41] gcc-4.8.0-msys2-spec
 
 https://github.com/Alexpux/MSYS2-packages/blob/master/gcc/gcc-4.8.0-msys2-spec.patch
 ---

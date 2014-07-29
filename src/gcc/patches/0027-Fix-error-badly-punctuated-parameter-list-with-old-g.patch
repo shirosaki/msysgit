@@ -1,7 +1,7 @@
 From c968ec8548c61163d6e42c30b48fae8fe26e4721 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Fri, 4 Jul 2014 22:26:25 +0900
-Subject: [PATCH 27/43] Fix error badly punctuated parameter list with old gcc
+Subject: [PATCH 27/41] Fix error badly punctuated parameter list with old gcc
 
 ---
  gcc/gengtype-state.c | 6 +++---

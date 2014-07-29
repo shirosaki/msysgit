@@ -1,7 +1,7 @@
 From b3bb2379d6f61c6fb820bbd88f64ab36dc579cd9 Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Mon, 7 Jul 2014 10:35:19 +0900
-Subject: [PATCH 33/43] Change msys-2.0 to msys-1.0
+Subject: [PATCH 33/41] Change msys-2.0 to msys-1.0
 
 ---
  gcc/config/i386/msys.h    | 2 +-
