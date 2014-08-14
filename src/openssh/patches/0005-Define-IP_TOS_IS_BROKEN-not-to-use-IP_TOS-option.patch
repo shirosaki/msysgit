@@ -1,7 +1,7 @@
 From 5080680a1dba851ef8a4b6eba9aa91f4a111c9ba Mon Sep 17 00:00:00 2001
 From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
 Date: Fri, 27 Jun 2014 21:15:54 +0900
-Subject: [PATCH 5/5] Define IP_TOS_IS_BROKEN not to use IP_TOS option
+Subject: [PATCH 5/6] Define IP_TOS_IS_BROKEN not to use IP_TOS option
 
 Winsock IP_TOS option is silently ignored on Windows 7.
 http://blogs.msdn.com/b/wndp/archive/2006/07/05/657196.aspx

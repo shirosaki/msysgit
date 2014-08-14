@@ -1,0 +1,41 @@
+From ddfaa9f390747f19d7b5d07c201c8dbba874adff Mon Sep 17 00:00:00 2001
+From: Hiroshi Shirosaki <h.shirosaki@gmail.com>
+Date: Thu, 14 Aug 2014 12:59:23 +0900
+Subject: [PATCH 6/6] Drop static if header files have declaration
+
+gcc 4.8 fails to compile if static function has declaration.
+---
+ openbsd-compat/getrrsetbyname.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/openbsd-compat/getrrsetbyname.c b/openbsd-compat/getrrsetbyname.c
+index dc6fe05..18fb376 100644
+--- a/openbsd-compat/getrrsetbyname.c
++++ b/openbsd-compat/getrrsetbyname.c
+@@ -114,7 +114,10 @@ struct __res_state _res;
+  */
+ 
+ #ifndef HAVE__GETSHORT
+-static u_int16_t
++#ifndef HAVE_DECL__GETSHORT
++static
++#endif
++u_int16_t
+ _getshort(msgp)
+ 	register const u_char *msgp;
+ {
+@@ -128,7 +131,10 @@ u_int16_t _getshort(register const u_char *);
+ #endif
+ 
+ #ifndef HAVE__GETLONG
+-static u_int32_t
++#ifndef HAVE_DECL__GETLONG
++static
++#endif
++u_int32_t
+ _getlong(msgp)
+ 	register const u_char *msgp;
+ {
+-- 
+1.9.4.msysgit.0
+
