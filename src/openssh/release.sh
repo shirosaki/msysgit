@@ -86,3 +86,10 @@ pre_install
 (cd "$d" && make install) || die "Could not install"
 
 post_install
+
+# remove non install files from $FILELIST
+(for i in libminires libz libcrypto; do
+echo "/\/lib\/$i\.dll\.a/d"
+sed -e "/\/lib\/$i\.dll\.a/d$" $FILELIST > $FILELIST.tmp
+mv -f $FILELIST.tmp $FILELIST
+done)
