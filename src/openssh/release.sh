@@ -10,7 +10,7 @@ url=http://ftp.OpenBSD.org/pub/OpenBSD/OpenSSH/portable/
 d=openssh-$version
 tar=$d.tar.gz
 
-opt_flags="-O3 -s -march=i386"
+opt_flags="-O3 -march=i386"
 export CFLAGS=${CFLAGS:-"${opt_flags}"}
 export CPPFLAGS="${CPPFLAGS} -D__CYGWIN__"
 export LDFLAGS="${LDFLAGS} -Wl,--enable-auto-import"
